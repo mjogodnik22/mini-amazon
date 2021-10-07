@@ -40,8 +40,8 @@ INSERT INTO ProductReview VALUES
   (0, 102, 4, 'Great! Love Kind Bars and the Cause!'),
   (2, 105, 2, 'Fell apart when I wore it'),
   (1, 104, 3, 'I was nearly eaten by a bear'),
-  (4, 103, 5, 'Give me More Microwaves. I know there's one more. Give it to me'),
-  (3, 101, 1, 'I'm the type of person who would review paper towels on Amazon');   
+  (4, 103, 5, 'Give me More Microwaves. I know there is one more. Give it to me'),
+  (3, 101, 1, 'I am the type of person who would review paper towels on Amazon');   
 
 INSERT INTO SellerReview VALUES
   (0,1,3,'Pretty Mediocre Seller'),
