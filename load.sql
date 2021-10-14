@@ -45,7 +45,7 @@ INSERT INTO ProductReview VALUES
 
 INSERT INTO SellerReview VALUES
   (0,1,3,'Pretty Mediocre Seller'),
-  (4,2,5,'Great. I get all my Microwaves From this guy'),
+  (4,2,5,'Great. I get all my Microwave From this guy'),
   (1,3,1,'Poor quality product.'),
   (2,4,2,'Sells Poor Quality Merchandise, but very nice person.'),
   (3,0,4,'Reliable');
