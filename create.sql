@@ -41,7 +41,7 @@ CREATE ItemsInOrder (
     oid NOT NULL REFERENCES OrderInformation (oid),
     pid INT NOT NULL REFERENCES Products(pid),
     quantity INT NOT NULL, 
-    price_per_unit FLOAT NOT NULL
+    price_per_unit FLOAT NOT NULL,
     fulfilled VARCHAR(32) NOT NULL,
     CHECK(status in ('Not Fulfilled', 'Fulfilled')
     PRIMARY KEY(oid, pid)
