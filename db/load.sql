@@ -1,9 +1,9 @@
 INSERT INTO Users VALUES
-  (0, ‘gogo@gmail.com’, ‘LOOP123’, ‘Gogo’, ‘Gadget’, ‘100 Downey Street’),
-  (1, ‘lugg@rzip.site’, ‘LOOP125’, ‘Pogo’, ‘Power’, ‘102 Downey Street’),
-  (2, ‘uthedm2014t@iprloi.com’, ‘LOOP131’, ‘Togo’, ‘Toulousse’, ‘104 Downey Street’),
-  (3, ‘4eduardo.angel@21jag.com’, ‘LOOP127’, ‘Logo’, ‘Lowry’, ‘106 Downey Street’),
-  (4, ‘dheshammazen627c@outlook.sbs’, ‘LOOP129’, ‘Shogo’, ‘Sheveries’, ‘108 Downey Street’);
+  (0, 'gogo@gmail.com', '123', 'Gogo', 'Gadget', '100 Downey Street'),
+  (1, 'lugg@rzip.site', 'LOOP125', 'Pogo', 'Power', '102 Downey Street'),
+  (2, 'uthedm2014t@iprloi.com', 'LOOP131', 'Togo', 'Toulousse', '104 Downey Street'),
+  (3, '4eduardo.angel@21jag.com', 'LOOP127', 'Logo', 'Lowry', '106 Downey Street'),
+  (4, 'dheshammazen627c@outlook.sbs', 'LOOP129', 'Shogo', 'Sheveries', '108 Downey Street');
   
 INSERT INTO Sellers VALUES
   (0), (1), (2), (3), (4);
@@ -20,14 +20,14 @@ INSERT INTO Products VALUES
   (102, 1, 'Kind Bars', 'All natural bars', 'Food', NULL, 5.99, 4000),
   (103, 2, 'Dyson Microwave', 'Mid service Microwave Oven', 'Electronics', NULL, 79.99, 32),
   (104, 3, 'Snowshoes', 'Perfect for hikes', 'Outdoor', NULL, 49.99, 8),
-  (105, 4, 'Champion Hoodie', 'Decent hoodies and many colors', 'Clothes', NULL, 29.99, 55),
+  (105, 4, 'Champion Hoodie', 'Decent hoodies and many colors', 'Clothes', NULL, 29.99, 55);
 
 INSERT INTO OrderInformation VALUES
-  (1001, 0 '2018-09-06 10:00:00'),
-  (1002, 1 '2018-10-31 13:00:00'),
-  (1003, 2 '2019-10-31 18:00:00'),
-  (1004, 3 '2020-10-31 18:00:00'),
-  (1005, 4 '2020-02-22 07:00:00');
+  (1001, 0, '2018-09-06 10:00:00'),
+  (1002, 1, '2018-10-31 13:00:00'),
+  (1003, 2, '2019-10-31 18:00:00'),
+  (1004, 3, '2020-10-31 18:00:00'),
+  (1005, 4, '2020-02-22 07:00:00');
   
 INSERT INTO ItemsInOrder VALUES
   (1004, 101, 4, 4.99, 'Fulfilled'),
