@@ -6,16 +6,18 @@ from .. import login
 
 
 class User(UserMixin):
-    def __init__(self, id, email, firstname, lastname):
+    def __init__(self, id, email, firstname, lastname, address, balance):
         self.id = id
         self.email = email
         self.firstname = firstname
         self.lastname = lastname
+        self.balance = balance
+        self.address = address
 
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute("""
-SELECT password, id, email, firstname, lastname
+SELECT password, id, email, firstname, lastname, address, balance
 FROM Users
 WHERE email = :email
 """,
@@ -61,9 +63,27 @@ RETURNING id
     @login.user_loader
     def get(id):
         rows = app.db.execute("""
-SELECT id, email, firstname, lastname
+SELECT id, email, firstname, lastname, address, balance
 FROM Users
 WHERE id = :id
 """,
                               id=id)
         return User(*(rows[0])) if rows else None
+
+    @staticmethod
+    def update_balance(id, old_bal, dep_amt, wdr_amt):
+        try:
+            balance = (old_bal+dep_amt)-wdr_amt
+            rows = app.db.execute("""
+UPDATE Users
+SET balance = :balance
+WHERE id = :id
+RETURNING id
+""",
+                              id=id,
+                              balance = balance)
+            return User.get(id)
+        except Exception:
+            # likely user not in system; better error checking and
+            # reporting needed
+            return None

@@ -5,7 +5,12 @@ CREATE TABLE Users (
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     address VARCHAR(255) DEFAULT '100 W. Main St',
+<<<<<<< Updated upstream
     balance DECIMAL DEFAULT 0
+=======
+    balance DECIMAL DEFAULT 0,
+    CHECK(balance >= 0)
+>>>>>>> Stashed changes
 );
 
 CREATE TABLE Sellers (

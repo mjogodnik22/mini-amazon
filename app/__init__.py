@@ -24,4 +24,10 @@ def create_app():
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
 
+    from .myaccount import bp as myaccount_bp
+    app.register_blueprint(myaccount_bp)
+
+    from .updatebalance import bp as updatebalance_bp
+    app.register_blueprint(updatebalance_bp)
+
     return app
