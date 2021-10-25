@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<h2>Update Balance</h2>
+
+<h3>Your Balance: ${{"%0.2f" % current_user.balance}}</h3>
+
+<br>
+
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.deposit.label }}<br/>
+      {{ form.deposit(size=32) }}<br/>
+      {% for error in form.deposit.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </p>
+    <p>
+      {{ form.withdrawal.label }}<br/>
+      {{ form.withdrawal(size=32) }}<br/>
+      {% for error in form.withdrawal.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </p>
+    <p>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+    </p>
+    {{ form.submit(class_="btn btn-black") }}
+  </form>
+
+{% endblock %}

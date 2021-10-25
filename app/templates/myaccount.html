@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<h2>My Account</h2>
+
+<h3>Your Name: {{current_user.firstname}} {{current_user.lastname}}</h3>
+<h3>Your Email: {{current_user.email}}</h3>
+<h3>Your Address: {{current_user.address}}</h3>
+<h3>Your Balance: ${{"%0.2f" % current_user.balance}}</h3>
+
+<br>
+
+<h4>Update Information</h4>
+<h4><a href="{{ url_for('updatebalance.updateBalancePage') }}">Update Balance</a></h4>
+
+{% endblock %}
