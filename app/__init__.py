@@ -29,5 +29,11 @@ def create_app():
 
     from .updatebalance import bp as updatebalance_bp
     app.register_blueprint(updatebalance_bp)
-
+    
+    from .product_summaries import bp as product_summary_bp
+    app.register_blueprint(product_summary_bp)
+    
+    from .add_new_product import bp as add_new_product_bp
+    app.register_blueprint(add_new_product_bp)
+    
     return app

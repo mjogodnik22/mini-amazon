@@ -1,4 +1,5 @@
 from flask import current_app as app
+from flask_login import login_user, logout_user, current_user
 
 
 class Product:
@@ -27,3 +28,28 @@ FROM Products
 ''',
                               available=available)
         return [Product(*row) for row in rows]
+    
+    
+
+    @staticmethod
+    def make_new_product(name, description, category,price, quantity_available):
+        try:
+            print("HI")
+            rows = app.db.execute("""
+INSERT INTO Products(seller_id, name, description, category, picture,price, quantity_available)
+VALUES(:seller_id, :name, :description, :category, :picture,:price, :quantity_available)
+RETURNING seller_id
+""",
+                                  seller_id = current_user.id,
+                                  name = name,
+                                  description = description,
+                                  category = category,
+                                picture = None,
+                                price = price,
+                                quantity_available = quantity_available)
+            id = rows[0][0]
+            return 5
+        except Exception:
+            # likely email already in use; better error checking and
+            # reporting needed
+            return None
