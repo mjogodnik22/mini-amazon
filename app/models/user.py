@@ -72,9 +72,12 @@ WHERE id = :id
         return User(*(rows[0])) if rows else None
 
     @staticmethod
-    def update_balance(id, old_bal, dep_amt, wdr_amt):
+    def update_balance(id, old_bal, change_amt, dep_or_wdr):
         try:
-            balance = (old_bal+dep_amt)-wdr_amt
+            balance = change_amt
+            if dep_or_wdr == "wdr":
+                balance = -balance
+            balance = old_bal + balance
             rows = app.db.execute("""
 UPDATE Users
 SET balance = :balance
@@ -85,6 +88,6 @@ RETURNING id
                               balance = balance)
             return User.get(id)
         except Exception:
-            # likely user not in system; better error checking and
-            # reporting needed
+            if dep_or_wdr == "wdr" and change_amt > old_bal:
+                print("bad")
             return None
