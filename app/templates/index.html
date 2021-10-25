@@ -16,7 +16,7 @@
   <tbody>
     {% for product in avail_products%}
       <tr>
-        <th scope="row">{{product.pid}}</th>
+          <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = product.pid) }}"> {{product.pid}}</a></th>
         <td>{{product.name}}</td>
         <td>{{product.price}}</td>
       </tr>
@@ -45,6 +45,7 @@
     {% endfor %}
   </tbody>
 </table>
+<p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p>
 {% else %}
 <p><a href="{{ url_for('users.login') }}">Log in</a> in order to see your purchase history!</p>
 {% endif %}

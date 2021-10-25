@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+<h2>Product Information:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Category</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th scope="row">{{curr_product.pid}}</th>
+        <td>{{curr_product.name}}</td>
+        <td>{{curr_product.description}}</td>
+        <td>{{curr_product.category}}</td>
+      </tr>
+  </tbody>
+</table>
+
+{% if curr_product.image %}
+<img src= {{curr_product.image}} >
+{% endif %}
+
+<h2>Reviews:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Reviews</th>
+      <th scope="col">Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th scope="row">{{curr_product.review}}</th>
+        <td>{{curr_product.rating}}</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>Sellers:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity Available</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for seller in all_sellers%}
+      <tr>
+        <th scope="row">{{seller.id}}</th>
+        <td>{{seller.first_name}}</td>
+        <td>{{seller.last_name}}</td>
+        <td>{{seller.price}}</td>
+          <td>{{seller.quantity_available}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p> Add buying links somewhere </p>
+{% if bought_product %}
+<p>You've bought this item before! Would you like to leave a review? (to be implemented)</p>
+{% endif %}
+
+<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
+
+
+
+
+{% endblock %}

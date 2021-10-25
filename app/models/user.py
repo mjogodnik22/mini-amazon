@@ -47,7 +47,7 @@ VALUES(:email, :password, :address, :firstname, :lastname)
 RETURNING id
 """,
                                   email=email,
-                                  password=password,
+                                  password=generate_password_hash(password),
                                   address=address,
                                   firstname=firstname,
                                   lastname=lastname)

@@ -1,9 +1,9 @@
 INSERT INTO Users VALUES
-  (0, 'gogo@gmail.com', 'pbkdf2:sha256:150000$IbiV7iVE$065e657a4897d381b1595fc8e872d068ec1730a8d43e1a3921fedf85b50e4d70', 'Gogo', 'Gadget', '100 Downey Street'),
-  (1, 'lugg@rzip.site', 'pbkdf2:sha256:150000$hTaPds9q$4d44bc1d03d6e6e709a73c51f7669f1eb7fe8b6a4374e3297f770b04f425f704', 'Pogo', 'Power', '102 Downey Street'),
-  (2, 'uthedm2014t@iprloi.com', 'pbkdf2:sha256:150000$4nJGFmzT$639f74a1bf1de50fd8febd0789ace86da78455bd4d20614242e0f42b622e37c0', 'Togo', 'Toulousse', '104 Downey Street'),
-  (3, '4eduardo.angel@21jag.com', 'pbkdf2:sha256:150000$kckJ71tP$0953e2a8aa536ca85e07710fc00bda9f23387e97f35ee9441658b5ade327f14c', 'Logo', 'Lowry', '106 Downey Street'),
-  (4, 'dheshammazen627c@outlook.sbs', 'pbkdf2:sha256:150000$wgyF7GEV$4241b691fbb3eabc0bba8343aa715fff8cfd1dc0bce3beddce9ad81a6e7e9ce6', 'Shogo', 'Sheveries', '108 Downey Street');
+  (0, 'gogo@gmail.com', '123', 'Gogo', 'Gadget', '100 Downey Street'),
+  (1, 'lugg@rzip.site', 'LOOP125', 'Pogo', 'Power', '102 Downey Street'),
+  (2, 'uthedm2014t@iprloi.com', 'LOOP131', 'Togo', 'Toulousse', '104 Downey Street'),
+  (3, '4eduardo.angel@21jag.com', 'LOOP127', 'Logo', 'Lowry', '106 Downey Street'),
+  (4, 'dheshammazen627c@outlook.sbs', 'LOOP129', 'Shogo', 'Sheveries', '108 Downey Street');
   
 INSERT INTO Sellers VALUES
   (0), (1), (2), (3), (4);
