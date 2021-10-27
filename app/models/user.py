@@ -88,6 +88,37 @@ RETURNING id
                               balance = balance)
             return User.get(id)
         except Exception:
-            if dep_or_wdr == "wdr" and change_amt > old_bal:
-                print("bad")
+            return None
+
+    @staticmethod
+    def update_information(id, firstname, lastname, email, address):
+        try:
+            rows = app.db.execute("""
+UPDATE Users
+SET firstname = :firstname, lastname = :lastname, email = :email, address = :address
+WHERE id = :id
+RETURNING id
+""",
+                              id=id,
+                              firstname=firstname,
+                              lastname=lastname,
+                              email=email,
+                              address=address)
+            return User.get(id)
+        except Exception:
+            return None
+
+    @staticmethod
+    def update_password(id, password):
+        try:
+            rows = app.db.execute("""
+UPDATE Users
+SET password = :password
+WHERE id = :id
+RETURNING id
+""",
+                              id=id,
+                              password=generate_password_hash(password))
+            return User.get(id)
+        except Exception:
             return None
