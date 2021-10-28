@@ -35,5 +35,11 @@ def create_app():
     
     from .add_new_product import bp as add_new_product_bp
     app.register_blueprint(add_new_product_bp)
+
+    from .updateinformation import bp as updateinformation_bp
+    app.register_blueprint(updateinformation_bp)
+
+    from .updatepassword import bp as updatepassword_bp
+    app.register_blueprint(updatepassword_bp)
     
     return app
