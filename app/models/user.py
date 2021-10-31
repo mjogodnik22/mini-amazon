@@ -122,3 +122,4 @@ RETURNING id
             return User.get(id)
         except Exception:
             return None
+
