@@ -75,7 +75,7 @@ with open('ItemsInOrder.csv', 'w', newline='') as itemsInOrd:
 		pid = i + 100
 		pidOrdered = (pid + 1)
 		if pidOrdered > 2100:
-			pidOrdered = (pidOrdered%2100)+100
+			pidOrdered = (pidOrdered%2101)+101
 		oid = i + 1000
 		status = random.choice(potStatus)
 		quant2 = random.randint(1, random.randint(2,i+2))
@@ -90,7 +90,7 @@ with open('ProductReview.csv', 'w', newline='') as prodRev:
 		pid = i + 100
 		pidOrdered = (pid + 1)
 		if pidOrdered > 2100:
-			pidOrdered = (pidOrdered%2100)+100
+			pidOrdered = (pidOrdered%2101)+101
 		pRating = random.randint(1,5)
 		pDesc = " ".join(random.sample(objAdj, 2))
 		prWriter.writerow([uid, pidOrdered, pRating, pDesc])
@@ -103,12 +103,15 @@ with open('SellerReview.csv', 'w', newline='') as slrRev:
 		uid = i
 		pid = i + 100
 		pidOrdered = (pid + 1)
+		sid = i + 1
 		if pidOrdered > 2100:
-			pidOrdered = (pidOrdered%2100)+100
+			pidOrdered = (pidOrdered%2101)+101
+		if sid > 2000:
+			sid = (sid%2001)+1
 		oid = i + 1000
 		sRating = random.randint(1,5)
 		sRev = " ".join(random.sample(objAdj, 2)) + " seller!!"
-		srWriter.writerow([uid, (uid+1)%2000, sRating, sRev])
+		srWriter.writerow([uid, sid, sRating, sRev])
 
 with open('Carts.csv', 'w', newline='') as carts:
 	#Carts: uid, pid, quantity3
@@ -119,6 +122,7 @@ with open('Carts.csv', 'w', newline='') as carts:
 		pid = i + 100
 		pidOrdered = (pid + 1)
 		if pidOrdered > 2100:
-			pidOrdered = (pidOrdered%2100)+100
+			pidOrdered = (pidOrdered%2101)+101
 		oid = i + 1000
-		ctsWriter.writerow([uid, pidOrdered, random.randint(1, 2)])	
+		pWhenP = round(random.uniform(0,i), 2)
+		ctsWriter.writerow([uid, pidOrdered, random.randint(1, 2), pWhenP])	
