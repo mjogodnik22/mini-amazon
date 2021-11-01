@@ -21,8 +21,8 @@
     {% endfor %}
   </p>
   <p>
-    {{ form.category.label }} (must be existing category, will add a dropdown or something)<br/>
-    {{ form.category(size=32) }}<br/>
+    {{ form.category.label }}<br/>
+    {{ form.category(size=5) }}<br/>
     {% for error in form.category.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}

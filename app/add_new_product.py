@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DecimalField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DecimalField, IntegerField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 
@@ -16,16 +16,17 @@ bp = Blueprint('add_new_product', __name__)
 class NewProductForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
     description = StringField(_l('Description'), validators=[DataRequired()])
-    category = StringField(_l('Category'), validators=[DataRequired()])
+    category = SelectField(_l('Category'), validators=[DataRequired()])
     price = DecimalField(_l('Price'), validators=[DataRequired()])
     quantity_available = IntegerField(_l('Quantity Available'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
     # ADD VALIDATOR FOR CATEGORY AND OTHER STUFF
-
+    #TODO: add image uploading
 
 @bp.route('/new_product', methods=['GET', 'POST'])
 def new_product():
     form = NewProductForm()
+    form.category.choices = Product.get_categories()
     if form.validate_on_submit():
         if Product.make_new_product(form.name.data,
                          form.description.data,
