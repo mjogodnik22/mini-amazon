@@ -45,4 +45,10 @@ def create_app():
     from .myCart import bp as myCart_bp
     app.register_blueprint(myCart_bp)
     
+    from .productPage import bp as productPage_bp
+    app.register_blueprint(productPage_bp)
+    
+    from .updateproduct import bp as updateproduct_bp
+    app.register_blueprint(updateproduct_bp)
+    
     return app
