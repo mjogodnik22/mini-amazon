@@ -41,5 +41,8 @@ def create_app():
 
     from .updatepassword import bp as updatepassword_bp
     app.register_blueprint(updatepassword_bp)
+
+    from .myCart import bp as myCart_bp
+    app.register_blueprint(myCart_bp)
     
     return app
