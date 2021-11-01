@@ -17,5 +17,8 @@ bp = Blueprint('Cart', __name__)
 @bp.route('/myCart')
 def myCart():
     ido = Cartesian.get(current_user.id)
+    print(ido)
+    if ido is None:
+        ido = ["nothing at all","",0,0]
     return render_template('myCart.html',
                             currcart = ido)
