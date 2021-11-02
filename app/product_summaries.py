@@ -9,7 +9,7 @@ from .models.product import Product
 from flask import Blueprint
 bp = Blueprint('productSummary', __name__)
 
-@bp.route('/<pid>')
+@bp.route('/product/<pid>')
 def product_summaries(pid):
     # get all available products for sale:
     products = ProductSummary.get_all(pid)
