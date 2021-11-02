@@ -33,24 +33,45 @@ class NewSortForm(FlaskForm):
     key = SelectField(_l('Sort by Key'), choices = [('name','Name'),('pid','ID'),('price','Price'),('pid','Clear Sort')],validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
-
+class NewPageForm(FlaskForm):
+    page_val = IntegerField(_l('Jump to Page'),validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
 #looking into a better way of implementing
 #weird stuff with none that I will remove the hardcode for when I figure it out
-@bp.route('/products',defaults={'sort_by': 'pid', 'filter_by': None },methods=['GET', 'POST'])
-@bp.route('/products/<sort_by>',defaults={'filter_by': None },methods=['GET', 'POST'])
-@bp.route('/products/<sort_by>/<filter_by>',methods=['GET', 'POST'])
-def productPage(sort_by = 'pid',filter_by = None):
+#this will be cleaned later
+@bp.route('/products',defaults={'page_num' : 1, 'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/products/<page_num>',defaults={'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/products/<page_num>/<sort_by>',defaults={'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/products/<page_num>/<sort_by>/<filter_by>',methods=['GET', 'POST'])
+def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
     # get all available products for sale:
     if filter_by == 'None':
         filter_by = None
-    products = Product.get_all(sort_by = sort_by, filter_by = filter_by)
+    page_num = int(page_num)
+    products = Product.get_all_page(page_num = page_num, sort_by = sort_by, filter_by = filter_by)
     filterform = NewFilterForm()
     filter_categories = Product.get_categories()
     filter_categories.append((None, 'Clear Filter'))
     filterform.category.choices = filter_categories
     sortform = NewSortForm()
+    pageform = NewPageForm()
+    prev_page = page_num - 1
+    #only need to compute page count on addition of a product, will look into this
+    next_page = page_num + 1
+    max_pages = Product.get_page_count()
+    
+    if next_page > max_pages:
+        next_page = 0
     if filterform.validate_on_submit():
-        return redirect(url_for('productPage.productPage', sort_by = sort_by, filter_by = filterform.category.data))
+        return redirect(url_for('productPage.productPage', page_num = page_num, sort_by = sort_by, filter_by = filterform.category.data))
     if sortform.validate_on_submit():
-        return redirect(url_for('productPage.productPage', sort_by = sortform.key.data, filter_by = filter_by))
-    return render_template('productpage.html',form1=filterform, form2 = sortform, avail_products = products)
+        return redirect(url_for('productPage.productPage', page_num = page_num, sort_by = sortform.key.data, filter_by = filter_by))
+    if pageform.validate_on_submit():
+        if pageform.page_val.data < 1 or pageform.page_val.data > max_pages:
+            flash('Please input a page number between 1 and {num1}!'.format(num1 = max_pages))
+            return redirect(url_for('productPage.productPage', page_num = page_num, sort_by = sort_by, filter_by = filter_by))
+        else:
+            return redirect(url_for('productPage.productPage', page_num = pageform.page_val.data, sort_by = sort_by, filter_by = filter_by))
+    
+    return render_template('productpage.html',form1=filterform, form2 = sortform, form3 = pageform,
+                           avail_products = products, next_page=next_page, prev_page=prev_page, curr_sort = sort_by, curr_filter = filter_by)
