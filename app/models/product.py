@@ -35,7 +35,35 @@ WHERE pid = :pid
     ORDER BY {sort_by}
     '''.format(sort_by = sort_by))
         return [Product(*row) for row in rows]
-    
+
+    @staticmethod
+    def get_all_page(available=True, filter_by = None, sort_by = 'pid', limit = 10, page_num = 1):
+        offset_count = (page_num - 1) * limit
+        if filter_by:
+            rows = app.db.execute('''
+    SELECT pid, name, price, quantity_available
+    FROM Products
+    WHERE category = :filter_by
+    ORDER BY {sort_by}
+    LIMIT {limit}
+    OFFSET {offset}
+    '''.format(sort_by = sort_by, limit = limit, offset = offset_count), filter_by = filter_by)
+        else:
+            rows = app.db.execute('''
+    SELECT pid, name, price, quantity_available
+    FROM Products
+    ORDER BY {sort_by}
+    LIMIT {limit}
+    OFFSET {offset}
+    '''.format(sort_by = sort_by, limit = limit, offset = offset_count))
+        return [Product(*row) for row in rows]
+    @staticmethod
+    def get_page_count(limit = 10):
+        rows = app.db.execute('''
+SELECT COUNT(*)
+FROM Products
+''')
+        return int(rows[0][0]/limit)
     @staticmethod
     def get_test(available=True):
         rows = app.db.execute_test('''
