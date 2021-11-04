@@ -72,19 +72,12 @@ WHERE id = :id
         return User(*(rows[0])) if rows else None
 
     @staticmethod
-    def update_balance(id, old_bal, dep_amt, wdr_amt):
-        try:
-            balance = (old_bal+dep_amt)-wdr_amt
-            rows = app.db.execute("""
-UPDATE Users
-SET balance = :balance
-WHERE id = :id
-RETURNING id
-""",
-                              id=id,
-                              balance = balance)
-            return User.get(id)
-        except Exception:
-            # likely user not in system; better error checking and
-            # reporting needed
-            return None
+    def get_products(id):
+        rows = app.db.execute('''
+            SELECT Products.pid, Products.name, Products.price, Products.quantity_available
+            FROM Products
+            WHERE Products.seller_id = :id
+''',
+                              id=id)
+
+        return rows 

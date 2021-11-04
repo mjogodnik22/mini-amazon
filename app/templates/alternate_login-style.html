@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>    
+.login-box {
+    background-color: white;
+    width: 360px;
+    padding: 20px;
+    margin: auto;
+    text-align: center;
+}
+input[type=text] {
+  width: 80%;
+  margin: 0 0 15px;
+  background: #f1f1f1e0;
+  color: #b4b8b3ef;;
+  padding: 15px;
+  border: 0px;
+}
+
+.button {
+  background-color: #7cb95b;
+  width: 50%;
+  margin: 15px;
+}
+</style>
+
+<body style="background-color: #7cb95b;">
+
+<h1>Login</h1>
+
+<br><br>
+<div class = "login-box">
+  <form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <input type="text" placeholder = "email" {{form.email}}
+    <input type="text" placeholder = "password"{{form.password}}
+  
+  <button class = "button" {{form.submit()}} login </button>
+  </form>
+  <p>Not registered? 
+    <a href="{{ url_for('users.register') }}" role="button">Create An Account</a>
+  </p>
+</div>
+
+{% endblock %}

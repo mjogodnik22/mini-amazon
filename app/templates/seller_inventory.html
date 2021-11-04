@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{current_user.firstname}} {{current_user.lastname}}'s Inventory </h2>
+
+<form action="" method="post" novalidate></form>
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity Available</th> 
+        <th scope="col">Edit Product</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in inventory%}
+
+        <tr>
+          <td>{{item.name}}</td>
+          <td>{{item.price}}</td>
+          <td>{{item.quantity_available}}</td>
+          <td>add link to change detail</td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
+
+{% endblock %}
