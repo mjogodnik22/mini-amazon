@@ -1,6 +1,6 @@
 from flask import current_app as app
 
-
+# Might be better for this to be a part of a general seller class
 class ProductSeller:
     # ADD AVERAGE SELLER RATING LATER
     # can also sort by price?
@@ -31,6 +31,7 @@ WHERE pid = :pid AND products.seller_id = Users.id
 ''',
                               pid=pid)
         return [ProductSeller(*row) for row in rows]
+    
     
 
 
