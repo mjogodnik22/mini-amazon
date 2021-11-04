@@ -72,54 +72,12 @@ WHERE id = :id
         return User(*(rows[0])) if rows else None
 
     @staticmethod
-    def update_balance(id, old_bal, change_amt, dep_or_wdr):
-        try:
-            balance = change_amt
-            if dep_or_wdr == "wdr":
-                balance = -balance
-            balance = old_bal + balance
-            rows = app.db.execute("""
-UPDATE Users
-SET balance = :balance
-WHERE id = :id
-RETURNING id
-""",
-                              id=id,
-                              balance = balance)
-            return User.get(id)
-        except Exception:
-            return None
+    def get_products(id):
+        rows = app.db.execute('''
+            SELECT Products.pid, Products.name, Products.price, Products.quantity_available
+            FROM Products
+            WHERE Products.seller_id = :id
+''',
+                              id=id)
 
-    @staticmethod
-    def update_information(id, firstname, lastname, email, address):
-        try:
-            rows = app.db.execute("""
-UPDATE Users
-SET firstname = :firstname, lastname = :lastname, email = :email, address = :address
-WHERE id = :id
-RETURNING id
-""",
-                              id=id,
-                              firstname=firstname,
-                              lastname=lastname,
-                              email=email,
-                              address=address)
-            return User.get(id)
-        except Exception:
-            return None
-
-    @staticmethod
-    def update_password(id, password):
-        try:
-            rows = app.db.execute("""
-UPDATE Users
-SET password = :password
-WHERE id = :id
-RETURNING id
-""",
-                              id=id,
-                              password=generate_password_hash(password))
-            return User.get(id)
-        except Exception:
-            return None
-
+        return rows 

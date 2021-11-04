@@ -36,19 +36,7 @@ def create_app():
     from .add_new_product import bp as add_new_product_bp
     app.register_blueprint(add_new_product_bp)
 
-    from .updateinformation import bp as updateinformation_bp
-    app.register_blueprint(updateinformation_bp)
+    from .seller import bp as seller_inventory_bp
+    app.register_blueprint(seller_inventory_bp)
 
-    from .updatepassword import bp as updatepassword_bp
-    app.register_blueprint(updatepassword_bp)
-
-    from .myCart import bp as myCart_bp
-    app.register_blueprint(myCart_bp)
-    
-    from .productPage import bp as productPage_bp
-    app.register_blueprint(productPage_bp)
-    
-    from .updateproduct import bp as updateproduct_bp
-    app.register_blueprint(updateproduct_bp)
-    
     return app
