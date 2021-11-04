@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Update Product Quantity</h1>
+
+<form action="" method="post">
+  <p>
+    {{ form.hidden_tag() }}
+    {{ form.quantity_available }}<br/>
+    {% for error in form.quantity_available.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  
+  <a class="btn btn-secondary" href="{{ url_for('seller_inventory.seller_inventory') }}" role="button">{{ form.submit }} </a>
+</form>
+
+{% endblock %}

@@ -3,6 +3,7 @@ from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .. import login
+from .product import Product
 
 
 class User(UserMixin):
@@ -88,3 +89,26 @@ RETURNING id
             # likely user not in system; better error checking and
             # reporting needed
             return None
+
+
+    #SELLER METHODS BELOW, Considering Extending Users class but don't know it's necessary
+
+    @staticmethod
+    def is_seller(id):
+        rows = app.db.execute("""
+SELECT id
+FROM Sellers
+WHERE seller.sid = :id
+""",
+                              id=sid) #this method hasn't been tested
+        return len(rows) > 0
+
+    def get_products(id):
+        rows = app.db.execute('''
+            SELECT Products.pid, Products.name, Products.price, Products.quantity_available
+            FROM Products
+            WHERE Products.seller_id = :id
+''',
+                              id=id)
+
+        return rows 

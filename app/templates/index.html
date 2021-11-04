@@ -47,8 +47,10 @@
 </table>
 <h2><a href="{{ url_for('myaccount.myAccountPage') }}">Click here</a> to see account balance and change account information.</h2> <!-- is this link bad?-->
 <p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p>
+<p><a href="{{ url_for('seller_inventory.seller_inventory') }}">Click here</a> to see your to see your product inventory!</p>
 {% else %}
 <p><a href="{{ url_for('users.login') }}">Log in</a> in order to see your purchase history!</p>
-{% endif %}
+
+{% endif %}sdfa
 
 {% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>    
+  .quantity-box {
+      background-color: white;
+      width: 360px;
+      padding: 20px;
+      margin: auto;
+      text-align: center;
+  }
+  input[type=text] {
+    width: 80%;
+    margin: 0 0 15px;
+    background: #f1f1f1e0;
+    color: #b4b8b3ef;;
+    padding: 15px;
+    border: 0px;
+  }
+  
+  .abutton {
+    background-color: #7cb95b;
+    width: 50%;
+    margin: 15px;
+  }
+  </style>
+
+
+<h2>{{current_user.firstname}} {{current_user.lastname}}'s Inventory </h2>
+
+<form action="" method="post" novalidate></form>
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity Available</th> 
+        <th scope="col">Edit Product</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in inventory%}
+
+        <tr>
+          <td>{{item.name}}</td>
+          <td>{{item.price}}</td>
+          <td>{{item.quantity_available}}</td>
+          <td><a href= "{{ url_for('seller_inventory.update_product', product = item) }}" role="button">Change Details</a></td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
+
+{% endblock %}

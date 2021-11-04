@@ -35,5 +35,9 @@ def create_app():
     
     from .add_new_product import bp as add_new_product_bp
     app.register_blueprint(add_new_product_bp)
+
+    from .seller_inventory import bp as seller_inventory_bp
+    app.register_blueprint(seller_inventory_bp)
+    
     
     return app

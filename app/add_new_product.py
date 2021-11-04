@@ -29,7 +29,7 @@ def new_product():
     if form.validate_on_submit():
         if Product.make_new_product(form.name.data,
                          form.description.data,
-                         form.category.data,
+                         form.category.data, 
                          form.price.data,
                          form.quantity_available.data):
             flash('Congratulations, you just added this product!')
