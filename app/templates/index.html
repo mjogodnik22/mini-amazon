@@ -50,6 +50,8 @@
 
 {% else %}
 <p><a href="{{ url_for('users.login') }}">Log in</a> in order to see your purchase history!</p>
+
 {% endif %}
+<p><a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</p>
 
 {% endblock %}

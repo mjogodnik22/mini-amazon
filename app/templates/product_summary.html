@@ -67,12 +67,16 @@
   </tbody>
 </table>
 
-<p> Add buying links somewhere </p>
+<p> Click here to add to cart (not added yet) </p>
 {% if bought_product %}
-<p>You've bought this item before! Would you like to leave a review? (to be implemented)</p>
+<p>You've bought this item before! Would you like to leave a review? (not added yet)</p>
 {% endif %}
-
+{% if sold_product %}
+<p>You're currently selling this item! Would you like to update the information <a href="{{ url_for('updateproduct.updateProductPage', pid = pid) }}">here</a>? </p>
+{% endif %}
 <p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
+<p><a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</p>
+
 
 
 
