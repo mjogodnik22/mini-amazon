@@ -7,13 +7,21 @@ from wtforms.validators import ValidationError, DataRequired
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
-from .models.product import Product
+from .models.generic_queries import *
 
 
 from flask import Blueprint
-bp = Blueprint('seller_inventory', __name__)
+seller_inventory_bp = Blueprint('seller_inventory', __name__)
 
-@bp.route('/seller_inventory')
+seller_orders_bp = Blueprint('seller_orders', __name__)
+
+@seller_inventory_bp.route('/seller_inventory')
 def seller_inventory():
    inventory = User.get_products(current_user.id) 
    return render_template('seller_inventory.html', inventory=inventory)
+
+@seller_orders_bp.route('/seller_orders')
+def seller_orders():
+   orders = get_sellers_orders() 
+   print(orders)
+   return render_template('seller_orders.html', orders=orders)

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{current_user.firstname}} {{current_user.lastname}}'s Orders </h2>
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Order</th>
+        <th scope="col">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders%}
+        <tr>
+          <td>{{order[0]}}</td>
+          <td>Add link for order detail</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
+
+{% endblock %}
