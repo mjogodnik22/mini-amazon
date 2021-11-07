@@ -12,8 +12,8 @@ from .models.generic_queries import *
 
 from flask import Blueprint
 seller_inventory_bp = Blueprint('seller_inventory', __name__)
-
 seller_orders_bp = Blueprint('seller_orders', __name__)
+seller_order_details_bp = Blueprint('seller_order_details', __name__)
 
 @seller_inventory_bp.route('/seller_inventory')
 def seller_inventory():
@@ -23,5 +23,10 @@ def seller_inventory():
 @seller_orders_bp.route('/seller_orders')
 def seller_orders():
    orders = get_sellers_orders() 
-   print(orders)
    return render_template('seller_orders.html', orders=orders)
+
+@seller_order_details_bp.route('/seller_order_details/<oid>')
+def seller_order_details(oid):
+   orderer_info = get_order_purchase_details(oid)
+   purchases = get_sellers_order_details(oid)
+   return render_template('seller_order_details.html', purchases=purchases, orderer_info= orderer_info)

@@ -42,4 +42,23 @@ def create_app():
     from .seller import seller_orders_bp as seller_orders_bp
     app.register_blueprint(seller_orders_bp)
 
+    from .seller import seller_order_details_bp as seller_order_details_bp
+    app.register_blueprint(seller_order_details_bp)
+
+    from .myCart import bp as cart_bp
+    app.register_blueprint(cart_bp)
+
+    from .productPage import bp as product_page_bp
+    app.register_blueprint(product_page_bp)
+
+    from .updateinformation import bp as update_infromation_bp
+    app.register_blueprint(update_infromation_bp)    
+    
+    from .updatepassword import bp as update_password_bp
+    app.register_blueprint(update_password_bp)
+
+    from .updateproduct import bp as update_product_bp
+    app.register_blueprint(update_product_bp)
+
+
     return app

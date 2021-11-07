@@ -15,7 +15,7 @@
       {% for order in orders%}
         <tr>
           <td>{{order[0]}}</td>
-          <td>Add link for order detail</td>
+          <td><a href="{{ url_for('seller_order_details.seller_order_details', oid = order[0]) }}">Veiw Order Details</a></td></td>
         </tr>
       {% endfor %}
     </tbody>
