@@ -85,6 +85,20 @@ FROM Products
         except Exception:
             return None
 
+    
+    @staticmethod
+    def get_all_search(available=True, limit = 10, page_num = 1, search_query = ""):
+        query ='\'%' + search_query + '%\''
+        offset_count = (page_num - 1) * limit
+        rows = app.db.execute('''
+    SELECT Products.pid, Products.name, Products.price, Products.quantity_available
+    FROM Products, ProductSummary
+    WHERE Products.pid = ProductSummary.pid and (Products.name LIKE {query_name} or ProductSummary.description LIKE {query_name})
+    LIMIT {limit}
+    OFFSET {offset}
+    '''.format(query_name = query, query_desc = query,limit = limit, offset = offset_count))
+        return [Product(*row) for row in rows]
+        
     @staticmethod
     def make_new_product(name, description, category,price, quantity_available):
         try:

@@ -36,6 +36,10 @@ class NewSortForm(FlaskForm):
 class NewPageForm(FlaskForm):
     page_val = IntegerField(_l('Jump to Page'),validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
+
+class NewSearchForm(FlaskForm):
+    search_val = StringField(_l('Search:'),validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
 #looking into a better way of implementing
 #weird stuff with none that I will remove the hardcode for when I figure it out
 #this will be cleaned later
@@ -55,6 +59,7 @@ def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
     filterform.category.choices = filter_categories
     sortform = NewSortForm()
     pageform = NewPageForm()
+    searchform = NewSearchForm()
     prev_page = page_num - 1
     #only need to compute page count on addition of a product, will look into this
     next_page = page_num + 1
@@ -72,6 +77,32 @@ def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
             return redirect(url_for('productPage.productPage', page_num = page_num, sort_by = sort_by, filter_by = filter_by))
         else:
             return redirect(url_for('productPage.productPage', page_num = pageform.page_val.data, sort_by = sort_by, filter_by = filter_by))
+    if searchform.validate_on_submit():
+        return redirect(url_for('productPage.productSearchPage', page_num = page_num, query = searchform.search_val.data))
     
-    return render_template('productpage.html',form1=filterform, form2 = sortform, form3 = pageform,
+    return render_template('productpage.html',form1=filterform, form2 = sortform, form3 = pageform,form4 = searchform,
                            avail_products = products, next_page=next_page, prev_page=prev_page, curr_sort = sort_by, curr_filter = filter_by)
+
+@bp.route('/products_search',defaults={'query' :'', 'page_num' : 1},methods=['GET', 'POST'])
+@bp.route('/products_search/<query>',defaults={'page_num': 1 },methods=['GET', 'POST'])
+@bp.route('/products_search/<query>/<page_num>',methods=['GET', 'POST'])
+def productSearchPage(page_num = 1, query = ""):
+    # get all available products for sale:
+    page_num = int(page_num)
+    products = Product.get_all_search(page_num = page_num, search_query = query)
+    prev_page = page_num - 1
+    #only need to compute page count on addition of a product, will look into this
+    next_page = page_num + 1
+    max_pages = Product.get_page_count()
+    pageform = NewPageForm()
+    if next_page > max_pages:
+        next_page = 0
+    if pageform.validate_on_submit():
+        if pageform.page_val.data < 1 or pageform.page_val.data > max_pages:
+            flash('Please input a page number between 1 and {num1}!'.format(num1 = max_pages))
+            return redirect(url_for('productPage.productSearchPage', page_num = page_num, query = query))
+        else:
+            return redirect(url_for('productPage.productSearchPage', page_num = pageform.page_val.data,query = query))
+    
+    return render_template('productsearchpage.html',form1= pageform,
+                           avail_products = products, next_page=next_page, prev_page=prev_page)
