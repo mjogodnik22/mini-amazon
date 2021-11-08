@@ -62,4 +62,12 @@
 {% for mesg in get_flashed_messages() %}
       <h3>{{ mesg }}</h3>
 {% endfor %}
+<form action="" method="post">
+  {{ form4.hidden_tag() }}
+  <p>
+    {{ form4.search_val.label }}<br/>
+    {{ form4.search_val(size=10) }}<br/>
+  </p>
+  <p>{{ form4.submit() }}</p>
+</form>
 {% endblock %}
