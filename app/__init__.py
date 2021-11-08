@@ -36,6 +36,12 @@ def create_app():
     from .add_new_product import bp as add_new_product_bp
     app.register_blueprint(add_new_product_bp)
 
+    from .productPage import bp as productPage_bp
+    app.register_blueprint(productPage_bp)
+    
+    from .updateproduct import bp as updateproduct_bp
+    app.register_blueprint(updateproduct_bp)
+
     from .seller import bp as seller_inventory_bp
     app.register_blueprint(seller_inventory_bp)
 
