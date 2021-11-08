@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{orderer_info.firstname}}'s order</h2>
+Address: {{orderer_info.address}}
+
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">PID</th>
+        <th scope="col">Product</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Fulfillment Status</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for purchase in purchases%}
+       <tr>
+        <td>{{purchase.pid}}</td>
+        <td>{{purchase.name}}</td>
+        <td>{{purchase.quantity}}</td>
+        <td>{{purchase.fulfilled}}</td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
+
+{% endblock %}

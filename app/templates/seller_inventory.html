@@ -11,7 +11,7 @@
         <th scope="col">Product Name</th>
         <th scope="col">Price</th>
         <th scope="col">Quantity Available</th> 
-        <th scope="col">Edit Product</th> 
+        <th scope="col"></th> 
       </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
           <td>{{item.name}}</td>
           <td>{{item.price}}</td>
           <td>{{item.quantity_available}}</td>
-          <td>add link to change detail</td>
+          <td><a href="{{ url_for('updateproduct.updateProductPage', pid = item.pid) }}">Edit Product</a></td>
 
         </tr>
       {% endfor %}
@@ -29,6 +29,6 @@
   </table>
 </form>
 
-<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
+<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
 
 {% endblock %}
