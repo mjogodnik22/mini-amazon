@@ -2,63 +2,53 @@
 <html lang="en">
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini Amazon</title>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/example.css') }}">
-  <style>
-    body {
-        font-family: "Lato", sans-serif;
-    }
-
-    .main-head {
-        height: 150px;
-        background: #FFF;
-    }
-
-    .sidenav {
-        height: 100%;
-        background-color: #000;
-        overflow-x: hidden;
-        padding-top: 20px;
-    }
-
-    .main {
-        padding: 0px 10px;
-    }
-
-    .login-main-text {
-        margin-top: 20%;
-        padding: 60px;
-        color: #fff;
-    }
-
-    .login-main-text h2 {
-        font-weight: 300;
-    }
-
-    .btn-black {
-        background-color: #000 !important;
-        color: #fff;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 </head>
 
 <body>
-  <div class="sidenav">
-    {% block msg %}
-      <h1 style="color:aliceblue">Welcome to CompSci 316 Mini Amazon!</h1>
-      <div style="color: aliceblue; text-align: right; margin-bottom: 25px">
+  {% block msg %}
+    <div class="header">
+      <div class="header_title">
+        <h1><em>DDD</em>-Amazon</h1>
+      </div>
+      <div class="buttons">
+        <li class="top">
+          {% if current_user.is_authenticated %}
+            <ul class="top"><a href="{{ url_for('Cart.myCart') }}" type = "button">My Cart</a></ul>
+            <ul class="top"><a href="{{ url_for('users.logout') }}" type="button">Log out</a></ul>
+            {% else %}
+            <ul class="top"><a href="{{ url_for('users.login') }}" type="button">Log in</a></ul>
+          {% endif %}
+        </li>
+      </div>
+      <div class="header_name">
         {% if current_user.is_authenticated %}
-          Hello {{current_user.firstname}}! 
-          <a href="{{ url_for('Cart.myCart') }}" type="button" class="btn btn-light">My Cart</a>
-          <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-light">Log out</a>
-          {% else %}
-          <a href="{{ url_for('users.login') }}" type="button" class="btn btn-light">Log in</a>
+          <h3>Hello {{current_user.firstname}}</h3>
         {% endif %}
       </div>
-    {% endblock %}
+  {% endblock %}
+  </div>
+  <div class="sidebar">
+    <li class="side">
+      {% if current_user.is_authenticated %}
+      <ul class="side">
+          <a href="{{ url_for('myaccount.myAccountPage') }}">Click here</a> to see account balance and change account information. <!-- is this link bad?-->
+      </ul>
+      <ul class="side">
+          <a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!
+      </ul>
+      {% else %}
+      <ul class="side">
+          <a href="{{ url_for('users.login') }}">Log in</a> to see your purchase history!
+      </ul>
+          {% endif %}
+      <ul class="side">
+          <a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!
+      </ul>
+  </li>
   </div>
   <div class="main">
     {% block content %}{% endblock %}
