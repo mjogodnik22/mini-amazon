@@ -6,27 +6,34 @@
 </br>
 <h3>Your Name: {{current_user.firstname}} {{current_user.lastname}}</h3>
 <h3>Your Email: {{current_user.email}}</h3>
+{% if empty %}
+</br></br>
+<h3>Your Cart is Empty! Go add some items!</h3>
+</br></br>
+{% elif not empty %}
+  <table class='table table-hover table-bordered container'>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Quantity</th>
+          <th scope="col"> Total Price</th>
+          <th scope="col">Remove From Cart</th>
 
-<table class='table table-hover table-bordered container'>
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">Product</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in currcart%}
-        <tr>          
-          <th scope="row">{{item.pid}}</th>
-          <td>{{item.quantity}}</td>
-          <td>{{item.priceatpurchase}}</td>
         </tr>
-      {% endfor %}
+      </thead>
+      <tbody>
+        {% for item in currcart%}
+          <tr>          
+            <th scope="row">{{item.pid}}</th>
+            <td>{{item.quantity}}</td>
+            <td>{{item.priceatpurchase}}</td>
+            <td><p><a href="{{ url_for('addToCart.updateCart', pid = item.pid) }}">Remove From Cart</a></p></td>
+          </tr>
+        {% endfor %}
 
-    </tbody>
-  </table>
-
+      </tbody>
+    </table>
+{% endif %}
 
 <p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
 
