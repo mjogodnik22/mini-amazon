@@ -14,17 +14,6 @@ from .models.product_sellers import ProductSeller
 from flask import Blueprint
 bp = Blueprint('productPage', __name__)
 
-#pagination testing
-#temp = Product.get_test().yield_per(2).partitions()
-#@bp.route('/products/home',methods=['GET'])
-#def view(page=1):
-#    # get all available products for sale:
-#    products = Product.get_all(True)
-#    # find the products current user has bought:
-#    # render the page by adding information to the index.html file
-#    return render_template('index.html',
-#                           avail_products=products)
-
 class NewFilterForm(FlaskForm):
     category = SelectField(_l('Filter by Category'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
