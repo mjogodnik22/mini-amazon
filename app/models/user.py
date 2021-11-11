@@ -124,6 +124,19 @@ RETURNING id
             return None
 
     @staticmethod
+    def get_id_by_email(email):
+        try:
+            rows = app.db.execute("""
+SELECT id
+FROM Users
+WHERE email = :email
+""",
+                              email = email)
+            return rows[0].id
+        except Exception:
+            return None
+
+    @staticmethod
     def get_products(id):
         rows = app.db.execute('''
             SELECT Products.pid, Products.name, Products.price, Products.quantity_available
@@ -131,5 +144,4 @@ RETURNING id
             WHERE Products.seller_id = :id
 ''',
                               id=id)
-
         return rows 

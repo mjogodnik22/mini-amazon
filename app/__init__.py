@@ -63,4 +63,7 @@ def create_app():
     from .seller import seller_page_bp as seller_page_bp
     app.register_blueprint(seller_page_bp)
 
+    from .messages import bp as messages_bp
+    app.register_blueprint(messages_bp)
+
     return app
