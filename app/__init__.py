@@ -60,5 +60,4 @@ def create_app():
     from .updateproduct import bp as update_product_bp
     app.register_blueprint(update_product_bp)
 
-
     return app

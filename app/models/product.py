@@ -142,3 +142,54 @@ RETURNING seller_id
             # likely email already in use; better error checking and
             # reporting needed
             return None
+        
+        
+    @staticmethod
+    def get_all_review():
+        rows = app.db.execute("""
+SELECT *
+FROM ProductReview
+WHERE buyer_id = :id
+""", id = current_user.id)
+        return rows
+    
+    @staticmethod
+    def add_review(buyer_id,product_id, review,rating):
+        try:
+            rows = app.db.execute("""
+INSERT INTO ProductReview(buyer_id,product_id, rating,review)
+VALUES(:buyer_id,:product_id,:rating,:review)
+RETURNING buyer_id
+""",
+                                buyer_id = buyer_id,
+                                 product_id = product_id,
+                                 rating = rating,
+                                 review = review)
+            id = rows[0][0]
+            return 1
+        except Exception:
+            # likely email already in use; better error checking and
+            # reporting needed
+            return None
+        
+    @staticmethod
+    def update_review(buyer_id,product_id, review,rating):
+        try:
+            rows = app.db.execute("""
+UPDATE ProductReview
+SET  rating = :rating, review = :review
+WHERE buyer_id = :buyer_id AND product_id = :product_id
+RETURNING buyer_id
+""",
+                                buyer_id = buyer_id,
+                                 product_id = product_id,
+                                 rating = rating,
+                                 review = review)
+            id = rows[0][0]
+            return 1
+        except Exception as e:
+            print(e)
+            # likely email already in use; better error checking and
+            # reporting needed
+            return None
+        

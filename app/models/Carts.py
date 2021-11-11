@@ -18,25 +18,23 @@ FROM CARTS, Users, Products
 WHERE uid = :uid AND CARTS.uid = Users.id AND CARTS.pid = Products.pid
 ''',
                               uid=uid)
-        print(rows)
         return [Cartesian(*row) for row in rows] if rows else None
 
     @staticmethod
-    def addToCart(id, pid, quantity, price):
+    def addToCart(uid, pid, quantity, price):
         try:
             rows = app.db.execute("""
-INSERT INTO Carts(id, pid, quantity, price_when_placed)
-VALUES(:id, :pid, :quantity, :price)
-WHERE id = :id
-RETURNING id
+INSERT INTO CARTS(uid, pid, quantity, price_when_placed)
+VALUES(:uid, :pid, :quantity, :price)
+RETURNING uid
 """,
-                                  id=id,
+                                  uid=uid,
                                   pid=pid,
                                   quantity=quantity,
-                                  price_when_placed=price)
+                                  price=price)
             id = rows[0][0]
-            return Cartesian.get(id)
-        except Exception:
+            return 1
+        except Exception as e:
             # likely email already in use; better error checking and
             # reporting needed
             return None
