@@ -36,10 +36,12 @@
     </tr>
   </thead>
   <tbody>
+    {% for product in reviews%}
       <tr>
-        <th scope="row">{{curr_product.review}}</th>
-        <td>{{curr_product.rating}}</td>
+        <th scope="row">{{product.review}}</th>
+        <td>{{product.rating}}</td>
       </tr>
+    {% endfor %}
   </tbody>
 </table>
 

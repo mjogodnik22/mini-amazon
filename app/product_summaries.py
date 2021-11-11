@@ -27,6 +27,7 @@ def product_summaries(pid):
                 sold = True
     return render_template('product_summary.html',
                            curr_product=products[0],
+                           reviews = products,
                            all_sellers = sellers,
                            bought_product = bought,
                            sold_product = sold,
