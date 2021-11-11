@@ -27,7 +27,7 @@
             <th scope="row">{{item.pid}}</th>
             <td>{{item.quantity}}</td>
             <td>{{item.priceatpurchase}}</td>
-            <td><p><a href="{{ url_for('addToCart.updateCart', pid = item.pid) }}">Remove From Cart</a></p></td>
+            <td><p><a href="{{ url_for('removeFromCart.updateCart', pid = item.pid) }}">Remove From Cart</a></p></td>
           </tr>
         {% endfor %}
 
