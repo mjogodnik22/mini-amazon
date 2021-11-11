@@ -14,6 +14,7 @@ from flask import Blueprint
 seller_inventory_bp = Blueprint('seller_inventory', __name__)
 seller_orders_bp = Blueprint('seller_orders', __name__)
 seller_order_details_bp = Blueprint('seller_order_details', __name__)
+seller_page_bp = Blueprint('seller', __name__)
 
 @seller_inventory_bp.route('/seller_inventory')
 def seller_inventory():
@@ -22,11 +23,26 @@ def seller_inventory():
 
 @seller_orders_bp.route('/seller_orders')
 def seller_orders():
-   orders = get_sellers_orders() 
-   return render_template('seller_orders.html', orders=orders)
+   orders = get_sellers_orders()
+   fulfillDict = {}
+   orders.sort(key = lambda x:x.oid)
+   for order in orders:
+      if order_fulfilled(order.oid):
+         fulfillDict[order.oid] = 'Fulfilled'
+      else:
+         fulfillDict[order.oid] = 'Not Fulfilled'
+   orders.sort(key = lambda x:fulfillDict[x.oid], reverse=True)
+   return render_template('seller_orders.html', orders=orders, fulfillDict = fulfillDict)
 
 @seller_order_details_bp.route('/seller_order_details/<oid>')
 def seller_order_details(oid):
    orderer_info = get_order_purchase_details(oid)
    purchases = get_sellers_order_details(oid)
    return render_template('seller_order_details.html', purchases=purchases, orderer_info= orderer_info)
+
+@seller_page_bp.route("/seller/<id>")
+def seller(id):
+   reviews = get_seller_information(id)
+   products = get_seller_products(id)
+   return render_template('seller_page.html', reviews=reviews, seller=reviews[0], products=products)
+
