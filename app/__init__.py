@@ -63,4 +63,7 @@ def create_app():
     from .RemoveFromCart import bp as remove_From_Cart_bp
     app.register_blueprint(remove_From_Cart_bp)
 
+    from .seller import seller_page_bp as seller_page_bp
+    app.register_blueprint(seller_page_bp)
+
     return app

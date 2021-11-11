@@ -14,8 +14,8 @@
     <tbody>
       {% for order in orders%}
         <tr>
-          <td>{{order[0]}}</td>
-          <td><a href="{{ url_for('seller_order_details.seller_order_details', oid = order[0]) }}">Veiw Order Details</a></td></td>
+          <td><a href="{{ url_for('seller_order_details.seller_order_details', oid = order[0]) }}">{{order.oid}}</a></td>
+          <td>{{fulfillDict[order.oid]}}</td>
         </tr>
       {% endfor %}
     </tbody>
