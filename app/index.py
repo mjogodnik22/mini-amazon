@@ -4,6 +4,7 @@ import datetime
 
 from .models.product import Product
 from .models.purchase import Purchase
+from .models.messages import *
 
 from flask import Blueprint
 bp = Blueprint('index', __name__)
@@ -13,8 +14,11 @@ bp = Blueprint('index', __name__)
 def index():
     # get all available products for sale:
     products = Product.get_all_page()
+    num_unread = None
     # find the products current user has bought:
     if current_user.is_authenticated:
+        messages = get_messages()
+        num_unread = sum([1 for k in messages if k.msg_read == 'Unread'])
         purchases = Purchase.get_all_by_uid_since(
             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
     else:
@@ -22,4 +26,5 @@ def index():
     # render the page by adding information to the index.html file
     return render_template('index.html',
                            avail_products=products,
-                           purchase_history=purchases)
+                           purchase_history=purchases,
+                           num_unread = num_unread)
