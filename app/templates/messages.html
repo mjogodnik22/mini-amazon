@@ -20,18 +20,49 @@
       {% for message in messages%}
         {% if message.msg_read == 'Unread'%}
         <tr style="background-color: yellow;">
-        <td><a href='http://www.google.com'>{{message.firstname}} {{message.lastname}}</a></td>
+        <td><a href="{{ url_for('message_details.detailed_messages', mid = message.mid) }}">{{message.firstname}} {{message.lastname}}</a></td>
         <td>{{message.subject}}</td>
         </tr>
         {% else %}
         <tr>
-            <td><a href='http://www.google.com'>{{message.firstname}} {{message.lastname}}</a></td>
+            <td><a href="{{ url_for('message_details.detailed_messages', mid = message.mid) }}">{{message.firstname}} {{message.lastname}}</a></td>
             <td>{{message.subject}}</td>
             </tr>
         {% endif %}
       {% endfor %}
     </tbody>
   </table>
+
+  <br>
+
+  <h2>Sent Messages</h2>
+
+
+  <br>
+  
+  <table class='table table-hover table-bordered container'>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Recipient</th>
+          <th scope="col">Subject</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for message in sent_msgs%}
+          {% if message.msg_read == 'Unread'%}
+          <tr style="background-color: yellow;">
+          <td><a href="{{ url_for('message_details.detailed_messages', mid = message.mid) }}">{{message.firstname}} {{message.lastname}}</a></td>
+          <td>{{message.subject}}</td>
+          </tr>
+          {% else %}
+          <tr>
+              <td><a href="{{ url_for('message_details.detailed_messages', mid = message.mid) }}">{{message.firstname}} {{message.lastname}}</a></td>
+              <td>{{message.subject}}</td>
+              </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
 
 <h3>Send a Message:</h3>
 
@@ -72,6 +103,6 @@
     {{ form.submit(class_="btn btn-black") }}
   </form>
 
-
+  <p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
 
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+{% if current_user.id in [message.recipient_id, message.sender_id] %}
+<h2>Message:</h2>
+
+
+<br>
+
+<p>{{message.msg}}</p>
+
+<h3><a href="{{ url_for('messages.messages') }}">Click here</a> to see messages!</h3>
+
+{% else %}
+<h2>You've entered a bad url. Go back <a href="{{ url_for('index.index') }}">home!</a></h2>
+{% endif %}
+{% endblock %}

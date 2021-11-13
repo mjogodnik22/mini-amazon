@@ -14,10 +14,11 @@ bp = Blueprint('index', __name__)
 def index():
     # get all available products for sale:
     products = Product.get_all_page()
-    messages = get_messages()
-    num_unread = sum([1 for k in messages if k.msg_read == 'Unread'])
+    num_unread = None
     # find the products current user has bought:
     if current_user.is_authenticated:
+        messages = get_messages()
+        num_unread = sum([1 for k in messages if k.msg_read == 'Unread'])
         purchases = Purchase.get_all_by_uid_since(
             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
     else:
