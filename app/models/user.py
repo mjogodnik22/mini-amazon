@@ -144,4 +144,48 @@ WHERE email = :email
             WHERE Products.seller_id = :id
 ''',
                               id=id)
-        return rows 
+        return rows
+    
+    @staticmethod
+    def is_seller(id):
+        rows = app.db.execute('''
+            SELECT *
+            FROM Sellers
+            WHERE sid = :id
+''',
+                              id=id)
+        if len(rows) != 0:
+            print(True)
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def max_user():
+        rows = app.db.execute('''
+            SELECT id
+            FROM Users u
+            WHERE id > ALL(SELECT id FROM Users u1 WHERE u.id <> u1.id)
+''')
+        return rows[0].id
+
+    @staticmethod
+    def get_user_by_name(firstname, lastname, email):
+        firstname = firstname + "%"
+        lastname = lastname + "%"
+        email = email + "%"
+        rows = app.db.execute('''
+            SELECT firstname, lastname, id, email
+            FROM Users
+            WHERE firstname LIKE :firstname
+            AND lastname LIKE :lastname
+            AND email LIKE :email
+            ORDER BY firstname, lastname
+''',
+firstname = firstname,
+lastname = lastname,
+email = email)
+        return rows
+
+    
+    

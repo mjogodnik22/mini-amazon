@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
+from werkzeug.datastructures import MultiDict
 
 from .models.user import User
 from .models.messages import *
@@ -12,6 +13,7 @@ from .models.messages import *
 
 from flask import Blueprint
 messages_bp = Blueprint('messages', __name__)
+messages_email_bp = Blueprint('messages_email', __name__)
 message_details_bp = Blueprint('message_details', __name__)
 
 class MessageForm(FlaskForm):
@@ -42,7 +44,30 @@ def messages():
             return redirect(url_for('messages.messages'))
     return render_template('messages.html', title='My Messages', messages=messages, sent_msgs=sent_msgs, form=form)
 
-@message_details_bp.route('/messages/<mid>')
+
+@messages_email_bp.route('/messages/email/<email>', methods=['GET', 'POST'])
+def send_message(email):
+    messages = get_messages()
+    sent_msgs = get_sent_msgs()
+    form = MessageForm()
+    if request.method == 'GET':
+        form = MessageForm(formdata = MultiDict({
+            'recipient_email': email
+        }))
+    if form.validate_on_submit():
+        recipient_id = User.get_id_by_email(form.recipient_email.data)
+        if recipient_id == None:
+            flash('That email is not associated with any user.')
+            return redirect(url_for('messages.messages'))
+        elif form.recipient_email.data == current_user.email:
+            flash('You cannot send yourself a message!')
+            return redirect(url_for('messages.messages'))
+        elif send_message(recipient_id, form.subject.data, form.message.data):
+            flash('Your message has been sent!')
+            return redirect(url_for('messages.messages'))
+    return render_template('messages.html', title='My Messages', messages=messages, sent_msgs=sent_msgs, form=form)
+
+@message_details_bp.route('/messages/msg/<mid>')
 def detailed_messages(mid):
     message = get_message_by_mid(mid)
     if message[1] == 'Unread':
