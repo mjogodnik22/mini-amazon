@@ -72,4 +72,7 @@ def create_app():
     from .messages import message_details_bp as message_details_bp
     app.register_blueprint(message_details_bp)
 
+    from .social import bp as social_bp
+    app.register_blueprint(social_bp)
+
     return app

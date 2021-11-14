@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+  <style>
+    .left {
+      float: left;
+      width: 50%;
+    }
+    .right {
+      float: right;
+      width: 50%;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<br>
+<div class = "left">
+<h2>User</h2>
+
+<h3>Name: {{user.firstname}} {{user.lastname}}</h3>
+<h3>Email: {{user.email}}</h3>
+
+<br>
+
+{% if is_seller %}
+
+<h3>Reviews:</h3>
+
+<h2>Average Review: {{avg}} </h2>
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Review</th>
+        <th scope="col">Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for review in reviews%}
+        <tr>
+          <td>{{review.review}}</td>
+          <td>{{review.rating}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<h3>Selling:</h3>
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product ID</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products%}
+        <tr>
+            <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = product.pid) }}"> {{product.pid}}</a></th>
+          <td>{{product.name}}</td>
+          <td>{{product.price}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% else %}
+
+<h2>User not a seller</h2>
+
+{% endif %}
+
+</div>
+<div class = "right">
+<h2>Search for a user:</h2>
+<form action="" method="post" novalidate>
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.firstname.label }}<br/>
+    {{ form.firstname(size=32) }}<br/>
+    {% for error in form.firstname.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.lastname.label }}<br/>
+    {{ form.lastname(size=32) }}<br/>
+    {% for error in form.lastname.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.email.label }}<br/>
+    {{ form.email(size=32) }}<br/>
+    {% for error in form.email.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+  </p>
+  {{ form.submit(class_="btn btn-black") }}
+</form>
+
+</div>
+
+<a href="{{ url_for('social.social', id=user.id-1) }}" type="button" class="btn btn-light">Previous User</a>
+<a href="{{ url_for('social.social', id=user.id+1) }}" type="button" class="btn btn-light">Next User</a>
+
+{% endblock %}
