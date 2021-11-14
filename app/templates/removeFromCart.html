@@ -4,7 +4,7 @@
 
 <br><br>
 
-<h2>Remove From Cart</h2>
+<h2>Adjust the number of  {{prod.name}} in your cart!</h2>
 
 <br>
 
@@ -34,7 +34,13 @@
     {{ form.hidden_tag() }}
     <p>
       {{ form.confirm.label }}<br/>
-      {{ form.confirm(size=2) }}<br/>
+      {{ form.confirm(size=3) }}<br/>
+    </p>
+    <p>
+      {{form.amount.label}}</br>
+      {{form.amount(size = 32)}}</br>
+
+    
     </p>
     {{ form.submit(class_="btn btn-black") }}
   </form>
