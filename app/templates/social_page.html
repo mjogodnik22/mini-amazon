@@ -119,4 +119,10 @@
 <a href="{{ url_for('social.social', id=user.id-1) }}" type="button" class="btn btn-light">Previous User</a>
 <a href="{{ url_for('social.social', id=user.id+1) }}" type="button" class="btn btn-light">Next User</a>
 
+{% if user.id != current_user.id %}
+
+<h3><a href="{{url_for('messages_email.send_message', email=user.email)}}">Send a message</a> to this user</h3>
+
+{% endif %}
+
 {% endblock %}

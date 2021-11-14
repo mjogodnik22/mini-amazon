@@ -18,6 +18,7 @@ class LookupByName(FlaskForm):
     lastname = StringField(_l('Last Name'))
     email = StringField(_l('Email'))
     submit = SubmitField(_l('Search'))
+    
 
 @bp.route('/social/<id>', methods=['GET', 'POST'])
 def social(id):
