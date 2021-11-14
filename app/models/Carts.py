@@ -52,6 +52,39 @@ RETURNING uid
             return None
 
     @staticmethod
+    def addToCartAgain(uid,pid,quantity,price):
+        try:
+            rows = app.db.execute("""
+UPDATE Carts
+SET quantity = quantity + :quantity, price_when_placed = price_when_placed + (:price)*(:quantity)
+WHERE Carts.uid = :uid AND pid = :pid
+            """, uid = uid,
+                pid = pid,
+                quantity=quantity,
+                price=price)
+            return 1
+        except Exception as l:
+            print(l)
+            return 0
+
+    @staticmethod
+    def subFromCart(uid,pid,quantity,price):
+        try:
+            rows = app.db.execute("""
+UPDATE Carts
+SET quantity = quantity - :quantity, price_when_placed = price_when_placed - (:price)*(:quantity)
+WHERE Carts.uid = :uid AND pid = :pid
+            """, uid = uid,
+                pid = pid,
+                quantity=quantity,
+                price=price)
+            return 1
+        except Exception as l:
+            print(l)
+            return 0
+
+
+    @staticmethod
     def removeFromCart(pid,uid):
         try:
             rows = app.db.execute("""
