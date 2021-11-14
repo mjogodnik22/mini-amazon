@@ -63,7 +63,16 @@ def product_summaries(pid):
             }))
         if buyform.validate_on_submit():
             if buyform.amountToBuy.data <= product_temp.quantity_available:
-                Cartesian.addToCart(current_user.id, int(pid), buyform.amountToBuy.data, product_temp.price*buyform.amountToBuy.data)
+                ido = Cartesian.get(current_user.id)
+                alreadyinCart = False
+                if ido != None:
+                    for i in ido:
+                        if i.pid == int(pid):
+                            alreadyinCart = True
+                if alreadyinCart:
+                    Cartesian.addToCartAgain(current_user.id, int(pid), buyform.amountToBuy.data, product_temp.price*buyform.amountToBuy.data)
+                else:
+                    Cartesian.addToCart(current_user.id, int(pid), buyform.amountToBuy.data, product_temp.price*buyform.amountToBuy.data)
                 flash('You have successfully added this to your cart!')
                 return redirect(url_for('productSummary.product_summaries', pid = pid))
             else:
