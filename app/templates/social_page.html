@@ -121,7 +121,7 @@
 
 {% if user.id != current_user.id %}
 
-<h3><a href="{{url_for('messages_email.send_message', email=user.email)}}">Send a message</a> to this user</h3>
+<h3><a href="{{url_for('messages_email.text', email=user.email)}}">Send a message</a> to this user</h3>
 
 {% endif %}
 

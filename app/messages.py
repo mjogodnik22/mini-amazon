@@ -46,7 +46,7 @@ def messages():
 
 
 @messages_email_bp.route('/messages/email/<email>', methods=['GET', 'POST'])
-def send_message(email):
+def text(email):
     messages = get_messages()
     sent_msgs = get_sent_msgs()
     form = MessageForm()
