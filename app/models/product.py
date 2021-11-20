@@ -192,4 +192,16 @@ RETURNING buyer_id
             # likely email already in use; better error checking and
             # reporting needed
             return None
+
+    @staticmethod
+    def adjustWithOrder(quantity):
+        try:
+            rows = app.db.execute("""
+            UPDATE PRODUCTS
+            SET quantity_available = quantity_available - :quantity
+            """,quantity = quantity)
+            return 1
+        except Exception as lo:
+            print("ERROR:",lo)
+            return 0
         

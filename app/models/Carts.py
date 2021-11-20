@@ -95,3 +95,70 @@ WHERE Carts.uid = :uid AND pid = :pid
         except Exception as l:
             print(l)
             return None
+
+    @staticmethod
+    def placeOrder(uid):
+        try:
+            rows = app.db.execute("""
+    INSERT INTO OrderInformation(uid) 
+    VALUES (:uid)
+    RETURNING *
+            """,uid=uid)
+            for row in rows:
+                print(row)
+            id = rows[0][0]
+            return id
+        except Exception  as y:
+            print(y)
+            return None
+    
+    @staticmethod
+    def addtoOrder(oid,pid,quantity,price_per_unit):
+        try:
+            rows = app.db.execute("""
+    Insert Into ItemsInOrder(oid,pid,quantity,price_per_unit,fulfilled)
+    VALUES (:oid,:pid,:quantity,:price_per_unit,'Not Fulfilled')
+    returning oid
+            """, oid = oid,
+                 pid = pid,
+                 quantity = quantity,
+                 price_per_unit = price_per_unit)
+            return 1
+        except Exception as teey:
+            print(teey)
+            return None
+    
+    @staticmethod
+    def getOrders(uid):
+        try:
+            rows = app.db.execute("""
+        SELECT * FROM OrderInformation
+        WHERE uid = :uid Order By oid DESC
+            """,uid = uid)
+            return [[row.oid,row.time_purchased] for row in rows] if rows else None
+        except Exception as h:
+            print("hello",h)
+            return None
+
+    @staticmethod
+    def getOrderInfo(oid):
+        try:
+            rows = app.db.execute("""
+            SELECT * FROM ItemsInOrder WHERE oid = :oid
+            """,oid = oid)
+            return [[row.pid, row.quantity, row.quantity,row.price_per_unit,row.fulfilled] for row in rows] if rows else None
+        except Exception as gh:
+            print("hello", gh)
+            return 0
+    
+    @staticmethod
+    def getOTime(oid):
+        try:
+            rows = app.db.execute("""
+            SELECT time_purchased FROM OrderInformation WHERE oid = :oid
+            """,oid = oid)
+            return rows[0]
+        except Exception as gh:
+            print("hello", gh)
+            return 0
+

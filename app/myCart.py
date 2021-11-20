@@ -21,15 +21,50 @@ from .models.product_summary import ProductSummary
 from flask import Blueprint
 bp = Blueprint('Cart', __name__)
 
+class placeOrder(FlaskForm):
+    confirm = SelectField(_l('Confirm'), choices = [(1,"I do not confirm"),(2,"I confirm")],validators=[DataRequired()])
+    submit = SubmitField(_l('Place Order'))
+
 @bp.route('/myCart',methods=['GET', 'POST'])
 def myCart():
+    form11 = placeOrder()
     empty = False
     if current_user.is_authenticated:
+        balance = User.get(current_user.id).balance
+        totalcost = 0
         ido = Cartesian.get(current_user.id)
         if ido is None:
-            ido = ["nothing at all","",0,0]
             empty = True
+            return render_template('myCart.html',
+                            form = form11,
+                            currcart = ido,
+                            empty = empty,
+                            balance = balance)
+        for element in ido:
+            totalcost += element.priceatpurchase
+        hasEnough = True
+        if balance < totalcost:
+            hasEnough = False
+        if form11.validate_on_submit:
+            if form11.confirm.data == '2' and hasEnough:
+                albert = Cartesian.placeOrder(current_user.id)
+                if User.update_balance(current_user.id,
+                                   int(balance),
+                                   int(totalcost),
+                                   "wdr"):
+                    flash('Your balance has been updated!')
+                for gangarang in ido:
+                    Cartesian.addtoOrder(albert,gangarang.pid,gangarang.quantity,gangarang.priceatpurchase)
+                    Product.adjustWithOrder(gangarang.quantity)
+                    Cartesian.removeFromCart(gangarang.pid,current_user.id)
+                return redirect(url_for('BuyerOrders.buyer_orders', uid = current_user.id))
+
+        
        
     return render_template('myCart.html',
+                            form = form11,
                             currcart = ido,
-                            empty = empty)
+                            empty = empty,
+                            balance = balance,
+                            totalcost=totalcost,
+                            hasEnough=hasEnough)
