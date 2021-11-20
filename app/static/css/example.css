@@ -68,22 +68,10 @@
 }
 
 
-.right_text{
-	left: 300px;
-	font-family: 'Parisienne', cursive;
-}
-
 ul#horizontal_list li {
     display: inline-block;
 	padding: 8px;
 	vertical-align: top;
   }
 
- 
- ul#horizontal_list_left li {
-    display: inline-block;
-	padding: 8px;
-    vertical-align: top;
-	text-align: left;
-	margin-left: 0px;
-  }
+
