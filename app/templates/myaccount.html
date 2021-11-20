@@ -3,23 +3,29 @@
 {% block content %}
 
 <br><br>
-
+<div class right_text>
 <h2>My Account</h2>
-
 <h3>Your Name: {{current_user.firstname}} {{current_user.lastname}}</h3>
 <h3>Your Email: {{current_user.email}}</h3>
 <h3>Your Address: {{current_user.address}}</h3>
 <h3>Your Balance: ${{"%0.2f" % current_user.balance}}</h3>
 
+</div>
+
 <br>
+
 
 <h4><a href="{{ url_for('updateinformation.updateInformationPage') }}">Update Information</a></h4>
 <h4><a href="{{ url_for('updatepassword.updatePasswordPage') }}">Update Password</a></h4>
 <h4><a href="{{ url_for('updatebalance.updateBalancePage') }}">Update Balance</a></h4>
-<p></p>
-<p><a href="{{ url_for('seller_inventory.seller_inventory') }}">Your Inventory</a> <br>
-<a href="{{ url_for('seller_orders.seller_orders') }}">Your Orders</a></p>
 
+
+{% if current_user.is_authenticated %}
+    <ul id=horizontal_list>
+    <li><a href="{{ url_for('seller_inventory.seller_inventory') }}">Your Inventory</a> </li>
+    <li><a href="{{ url_for('seller_orders.seller_orders') }}">Your Orders</a></li>
+    </ul>
+{% endif %}
 
 
 {% endblock %}

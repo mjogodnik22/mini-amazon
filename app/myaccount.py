@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
+from .models.generic_queries import is_seller
 
 
 from flask import Blueprint
@@ -14,7 +15,7 @@ bp = Blueprint('myaccount', __name__)
 
 @bp.route('/myAccountPage')
 def myAccountPage():
-#     balance = 0
-#     if current_user.is_authenticated:
-#         balance = User.get_balance(current_user.id)
+    balance = 0
+    if current_user.is_authenticated:
+        balance = User.get_balance(current_user.id)
     return render_template('myaccount.html', title='My Account')

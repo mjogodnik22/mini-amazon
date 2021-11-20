@@ -40,12 +40,16 @@ def social(id):
         for rev in reviews:
             sum += rev.rating
             count += 1
-        avg = sum/count
+        if count > 0:
+            avg = sum/count
+        else:
+            avg = "NA"
+        
     if form.validate_on_submit():
         firstname = form.firstname.data
         lastname = form.lastname.data
         email = form.email.data
         results = User.get_user_by_name(firstname, lastname, email)
         return render_template('social_search.html', firstname = firstname, lastname=lastname, email = email, results = results)
-    return render_template('social_page.html', user=social, is_seller=seller, reviews=reviews, seller=reviews[0], products=products, avg=avg, form=form)
+    return render_template('social_page.html', user=social, is_seller=seller, reviews=reviews, seller=id, products=products, avg=avg, form=form)
 

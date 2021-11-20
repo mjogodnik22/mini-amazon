@@ -1,4 +1,4 @@
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -159,6 +159,15 @@ WHERE email = :email
             return True
         else:
             return False
+
+    @staticmethod
+    def get_balance(id):
+        rows = app.db.execute('''
+            SELECT balance
+            FROM Users
+            WHERE id = :uid''',
+        uid = id)
+        return rows[0]
 
     @staticmethod
     def max_user():

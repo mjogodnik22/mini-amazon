@@ -27,7 +27,7 @@ class NewPageForm(FlaskForm):
     submit = SubmitField(_l('Submit'))
 
 class NewSearchForm(FlaskForm):
-    search_val = StringField(_l('Search:'),validators=[DataRequired()])
+    search_val = StringField(_l('Search Product:'),validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 #looking into a better way of implementing
 #weird stuff with none that I will remove the hardcode for when I figure it out

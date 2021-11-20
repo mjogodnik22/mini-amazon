@@ -21,53 +21,61 @@
   </tbody>
 </table>
 <br>
+<ul id=horizontal_list>
+  <li>
+    <form action="" method="post">
+      {{ form1.hidden_tag() }}
+      <p>
+        {{ form1.category.label }}<br/>
+        {{ form1.category(size=5) }}<br/>
+      </p>
+      <p>{{ form1.submit() }}</p>
+    </form>
+  </li>
+  <li>
+      <form action="" method="post">
+        {{ form2.hidden_tag() }}
+        <p>
+          {{ form2.key.label }}<br/>
+          {{ form2.key(size=3) }}<br/>
+        </p>
+        <p>{{ form2.submit() }}</p>
+      </form>
+  </li>
+  <li></li>
+  <li> <form action="" method="post">
+    {{ form3.hidden_tag() }}
+    <p>
+      {{ form3.page_val.label }}<br/>
+      {{ form3.page_val(size=10) }}<br/>
+    </p>
+    <p>{{ form3.submit() }}</p>
+  </form>
+  {% for mesg in get_flashed_messages() %}
+        <h3>{{ mesg }}</h3>
+  {% endfor %} </li>
 
-<form action="" method="post">
-  {{ form1.hidden_tag() }}
-  <p>
-    {{ form1.category.label }}<br/>
-    {{ form1.category(size=5) }}<br/>
-  </p>
-  <p>{{ form1.submit() }}</p>
-</form>
+  {% if prev_page%}
+  <li><a href="{{ url_for('productPage.productPage', page_num=prev_page,sort_by = curr_sort, filter_by = curr_filter) }}">Previous Page</a></li>
+  {% endif %}
+  {% if next_page%}
+  <li><a href="{{ url_for('productPage.productPage', page_num=next_page,sort_by = curr_sort, filter_by = curr_filter) }}">Next Page</a></li>
+  {% endif %}
+  <li>
+  <form action="" method="post">
+    {{ form4.hidden_tag() }}
+    <p>
+      {{ form4.search_val.label }}<br/>
+      {{ form4.search_val(size=10) }}<br/>
+    </p>
+    <p>{{ form4.submit() }}</p>
+  </form>
+  </li>
 
-<form action="" method="post">
-  {{ form2.hidden_tag() }}
-  <p>
-    {{ form2.key.label }}<br/>
-    {{ form2.key(size=3) }}<br/>
-  </p>
-  <p>{{ form2.submit() }}</p>
-</form>
+</ul>
 {% if current_user.is_authenticated %}
 <p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p>
 {% else %}
 <p><a href="{{ url_for('users.login') }}">Log in</a> in order to buy and add products!</p>
 {% endif %}
-<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
-{% if prev_page%}
-<a href="{{ url_for('productPage.productPage', page_num=prev_page,sort_by = curr_sort, filter_by = curr_filter) }}">Previous Page</a>
-{% endif %}
-{% if next_page%}
-<a href="{{ url_for('productPage.productPage', page_num=next_page,sort_by = curr_sort, filter_by = curr_filter) }}">Next Page</a>
-{% endif %}
-<form action="" method="post">
-  {{ form3.hidden_tag() }}
-  <p>
-    {{ form3.page_val.label }}<br/>
-    {{ form3.page_val(size=10) }}<br/>
-  </p>
-  <p>{{ form3.submit() }}</p>
-</form>
-{% for mesg in get_flashed_messages() %}
-      <h3>{{ mesg }}</h3>
-{% endfor %}
-<form action="" method="post">
-  {{ form4.hidden_tag() }}
-  <p>
-    {{ form4.search_val.label }}<br/>
-    {{ form4.search_val(size=10) }}<br/>
-  </p>
-  <p>{{ form4.submit() }}</p>
-</form>
-{% endblock %}
+{% endblock %}  

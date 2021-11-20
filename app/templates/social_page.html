@@ -25,27 +25,31 @@
 <br>
 
 {% if is_seller %}
+  {%if avg == "NA" %}
+  <h3> There are currently no reviews on this seller.</h3>
+  <br>
+  {%else %}
+  <h3>Reviews:</h3>
 
-<h3>Reviews:</h3>
+  <h2>Average Review: {{avg}} </h2>
 
-<h2>Average Review: {{avg}} </h2>
-
-<table class='table table-hover table-bordered container'>
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">Review</th>
-        <th scope="col">Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for review in reviews%}
+  <table class='table table-hover table-bordered container'>
+      <thead class="thead-dark">
         <tr>
-          <td>{{review.review}}</td>
-          <td>{{review.rating}}</td>
+          <th scope="col">Review</th>
+          <th scope="col">Rating</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for review in reviews%}
+          <tr>
+            <td>{{review.review}}</td>
+            <td>{{review.rating}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 
 <h3>Selling:</h3>
 

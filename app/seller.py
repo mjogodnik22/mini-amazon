@@ -9,9 +9,6 @@ from flask_babel import _, lazy_gettext as _l
 from .models.user import User
 from .models.generic_queries import *
 
-class FullfillProductForm(FlaskForm):
-    submit = SubmitField(_l('Fullfill The Adjustment'))
-
 from flask import Blueprint
 seller_inventory_bp = Blueprint('seller_inventory', __name__)
 seller_orders_bp = Blueprint('seller_orders', __name__)

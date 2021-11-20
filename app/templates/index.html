@@ -5,33 +5,44 @@
 
 <br><br>
 {% if current_user.is_authenticated %}
-<h2>Your recent purchases:</h2>
-<table class='table table-hover table-bordered container'>
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Purchase ID</th>
-      <th scope="col">Product ID</th>
-      <th scope="col">Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for purchase in purchase_history%}
-      <tr>
-        <th scope="row">{{purchase.id}}</th>
-        <th ><a href ="{{ url_for('productSummary.product_summaries', pid = purchase.pid) }}"> {{purchase.pid}}</a></th>
-        <td>{{purchase.time_purchased}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<h2><a href="{{ url_for('myaccount.myAccountPage') }}">Click here</a> to see account balance and change account information.</h2> <!-- is this link bad?-->
-<p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p>
-<p><a href="{{ url_for('messages.messages') }}">Click here</a> to check your messages! You have {{num_unread}} unread messages!</p>
+  {% if purchase_history is none%}
+    <h2> You Haven't Purchased Anything, Visit The <a href="{{ url_for('productPage.productPage') }}">Products Page</a> To Get Started!</h2>
+    {% else %}
+    <h2>Your recent purchases:</h2>
+    <table class='table table-hover table-bordered container'>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Purchase ID</th>
+          <th scope="col">Product ID</th>
+          <th scope="col">Price</th>
+        </tr>
 
-{% else %}
-<p><a href="{{ url_for('users.login') }}">Log in</a> to see your purchase history!</p>
+      </thead>
+      <tbody>
+          {% for purchase in purchase_history%}
+            <tr>
+              <th scope="row">{{purchase.id}}</th>
+              <th ><a href ="{{ url_for('productSummary.product_summaries', pid = purchase.pid) }}"> {{purchase.pid}}</a></th>
+              <td>{{purchase.time_purchased}}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  <h2><a href="{{ url_for('myaccount.myAccountPage') }}">Click here</a> to see account balance and change account information.</h2> <!-- is this link bad?-->
+  {% if s %}
+      <p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p>
+    {% else %}
+      <p>Want to become a seller? <a href = "{{url_for('make_seller_pg.make_seller_page')}}">Click here</a></p>
+    <p><a href="{{ url_for('messages.messages') }}">Click here</a> to check your messages! You have {{num_unread}} unread messages!</p>
+  {% if purchase_history is not none%}
+    <h3>Or <a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</h3>
+  {% endif %}
+{% endif%}
+  {% else %}
+    <h1>Hi Welcome To Duke Data Devils Online Retail</h1>
+    <h3><a href="{{ url_for('users.login') }}">Log in</a> to get started!</h3>
+    <h3>Or <a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</h3>
 
 {% endif %}
-<p><a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</p>
-
 {% endblock %}

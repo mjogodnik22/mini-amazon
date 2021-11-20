@@ -82,3 +82,24 @@ def get_seller_products(id):
     ''',
     id=id)
     return rows
+
+def make_seller():
+    rows = app.db.execute('''
+INSERT INTO Sellers(sid)
+VALUES(:seller_id)
+RETURNING sid
+''',
+    seller_id = current_user.id)
+    return 1
+
+def is_seller():
+    rows = app.db.execute('''
+    SELECT sid
+    FROM Sellers
+    WHERE sid=:id
+    ''',
+    id = current_user.id)
+    if len(rows) == 0:
+        return False
+    return True
+    

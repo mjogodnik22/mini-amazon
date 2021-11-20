@@ -81,4 +81,7 @@ def create_app():
     from .social import bp as social_bp
     app.register_blueprint(social_bp)
 
+    from .index import make_seller_bp as make_seller_bp
+    app.register_blueprint(make_seller_bp)
+
     return app

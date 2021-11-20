@@ -32,9 +32,10 @@
 		</ul>
 	</div>
 </div>
-{% block content %}
-{% endblock %}
-
+<div class = "main">
+  {% block content %}
+  {% endblock %}
+</div>
 
 
 <br></br>
@@ -42,23 +43,14 @@
 <br></br>
 <br></br>
 
-
-<style>
-  ul#footer li {
-    display:inline;
-    position: 100%; 
-    padding: 8px;
-  }
-  .navigation_bar {
-    height: 160px;
-  }
-</style>
 
 <div class="navigation_bar">
-  <ul id="footer">
+  <ul id=horizontal_list>
     <li><a href="{{ url_for('index.index') }}">Home</a></li>
     <li><a href="{{ url_for('productPage.productPage') }}">Products</a></li>
+    {% if current_user.is_authenticated %}
     <li><a href="{{url_for('users.logout') }}">Log out</a></li>
+    {% endif %}
   </ul>
 </div>
   </body>
