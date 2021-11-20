@@ -55,7 +55,7 @@ def myCart():
                     flash('Your balance has been updated!')
                 for gangarang in ido:
                     Cartesian.addtoOrder(albert,gangarang.pid,gangarang.quantity,gangarang.priceatpurchase)
-                    Product.adjustWithOrder(gangarang.quantity)
+                    Product.adjustWithOrder(gangarang.pid,gangarang.quantity)
                     Cartesian.removeFromCart(gangarang.pid,current_user.id)
                 return redirect(url_for('BuyerOrders.buyer_orders', uid = current_user.id))
 
