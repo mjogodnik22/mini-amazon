@@ -30,6 +30,35 @@
   </tbody>
 </table>
 
+<h2>Cart Information:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Quantity In Cart</th>
+      <th scope="col">Available</th>
+      <th scope="col">Total Price</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th scope="row">{{amt}}</th>
+        <td>{{avail}}</td>
+        <td>{{tpr}}</td>
+      </tr>
+  </tbody>
+</table>
+<p>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</p>
+
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>
