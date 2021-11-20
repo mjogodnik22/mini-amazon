@@ -78,4 +78,10 @@ def create_app():
     from .social import bp as social_bp
     app.register_blueprint(social_bp)
 
+    from .buyer import buyer_bp as buyer_bp
+    app.register_blueprint(buyer_bp)
+
+    from .seeSpecificOrder import bp as sSO_bp
+    app.register_blueprint(sSO_bp)
+
     return app
