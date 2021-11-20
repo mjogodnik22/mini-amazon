@@ -22,6 +22,8 @@
         background-color: #000;
         overflow-x: hidden;
         padding-top: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     .main {
@@ -51,7 +53,8 @@
       <h1 style="color:aliceblue"><a style="color: aliceblue; text-decoration: none;" href="{{ url_for('index.index') }}">DDD: Mini Amazon</a></h1>
       <div style="color: aliceblue; text-align: right; margin-bottom: 25px">
         {% if current_user.is_authenticated %}
-         Hello <a href="{{  url_for('social.social', id=current_user.id) }}">{{current_user.firstname}}</a>! 
+         Hello <a href="{{  url_for('social.social', id=current_user.id) }}">{{current_user.firstname}}</a>!
+         <p><a href="{{ url_for('messages.messages') }}">{{num_unread}}</a></p>
           <a href="{{ url_for('Cart.myCart') }}" type="button" class="btn btn-light">My Cart</a>
           <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-light">Log out</a>
           {% else %}

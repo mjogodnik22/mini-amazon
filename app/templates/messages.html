@@ -2,10 +2,25 @@
 
 {% block content %}
 
-<br><br>
+<head>
+  <style>
+    .left {
+      width: 50%;
+      float: left;
+      padding-right: 5px;
+    }
+      .right {
+      width: 50%;
+      float: right;
+      padding-left: 5px;
+    }
+  </style>
+</head>
+<br>
+
+<div class="left">
 
 <h2>Messages</h2>
-
 
 <br>
 
@@ -64,7 +79,12 @@
       </tbody>
     </table>
 
-<h3>Send a Message:</h3>
+</div>
+
+<div class="right">
+
+<h2>Send a Message:</h2>
+<br>
 
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
@@ -103,6 +123,6 @@
     {{ form.submit(class_="btn btn-black") }}
   </form>
 
-  <p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
+  </div>
 
 {% endblock %}
