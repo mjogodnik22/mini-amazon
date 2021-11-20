@@ -3,14 +3,13 @@
 {% block content %}
 
 <h2>{{orderer_info.firstname}}'s order</h2>
-Address: {{orderer_info.address}}
-
-
+<p>Address: {{orderer_info.address}}</p>
 <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
       <tr>
         <th scope="col">PID</th>
         <th scope="col">Product</th>
+        <th scope="col"> Unit Price </th>
         <th scope="col">Quantity</th>
         <th scope="col">Fulfillment Status</th>
     </tr>
@@ -21,6 +20,7 @@ Address: {{orderer_info.address}}
         <td>{{purchase.pid}}</td>
         <td>{{purchase.name}}</td>
         <td>{{purchase.quantity}}</td>
+        <td>{{purchase.price}}</td>
         {% if purchase.fulfilled == "Not Fulfilled" %}
         <td><a href="{{url_for('seller_product_fulfillment.seller_product_fulfillment', oid=oid, pid = purchase.pid) }}"> {{purchase.fulfilled}}</a></td>>
         
