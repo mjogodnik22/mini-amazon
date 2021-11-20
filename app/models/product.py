@@ -194,12 +194,14 @@ RETURNING buyer_id
             return None
 
     @staticmethod
-    def adjustWithOrder(quantity):
+    def adjustWithOrder(pid, quantity):
         try:
             rows = app.db.execute("""
             UPDATE PRODUCTS
             SET quantity_available = quantity_available - :quantity
-            """,quantity = quantity)
+            WHERE pid = :pid
+            """,quantity = quantity,
+            pid = pid)
             return 1
         except Exception as lo:
             print("ERROR:",lo)
