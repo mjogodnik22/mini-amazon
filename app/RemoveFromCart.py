@@ -26,18 +26,41 @@ class UpdateCart(FlaskForm):
 def updateCart(pid):
     ido = Cartesian.getspecific(current_user.id,pid)
     product = ProductSummary.get(pid)
+    producto = Product.get(pid)
+    avail = producto.quantity_available
+    amount = ido.quantity
+    avail -= amount
+    totalPrice = producto.price * amount
     form12 = UpdateCart()
     addorsub = False
     if form12.validate_on_submit:
         if form12.confirm.data == '1':
-            Cartesian.addToCartAgain(current_user.id,pid,int(form12.amount.data),product.price)
-            return redirect(url_for('Cart.myCart', uid = current_user.id))
+            if form12.amount.data == '':
+                flash("Please Select a Quantity to add")
+                return redirect(url_for('removeFromCart.updateCart', uid = current_user.id, pid = pid))
+            elif int(form12.amount.data) <= int(avail):
+                Cartesian.addToCartAgain(current_user.id,pid,int(form12.amount.data),product.price)
+                return redirect(url_for('Cart.myCart', uid = current_user.id))
+            else:
+                flash("The seller does not have enough to satisfy this order. Please place fewer items into your cart")
         if form12.confirm.data == '2':
-            Cartesian.subFromCart(current_user.id,pid,int(form12.amount.data),product.price)
-            return redirect(url_for('Cart.myCart', uid = current_user.id))
+            if form12.amount.data == '':
+                flash("Please Select a Quantity to subtract")
+            elif int(form12.amount.data) > amount:
+                flash("You can't delete what you don't have! Please choose delete to remove all items from your cart.")
+            else:
+                if int(form12.amount.data) == amount:
+                    Cartesian.removeFromCart(pid,current_user.id)
+                    return redirect(url_for('Cart.myCart', uid = current_user.id))
+                Cartesian.subFromCart(current_user.id,pid,int(form12.amount.data),product.price)
+                return redirect(url_for('Cart.myCart', uid = current_user.id))
         if form12.confirm.data == '3':
-            print(form12.amount.data)
             Cartesian.removeFromCart(pid,current_user.id)
             return redirect(url_for('Cart.myCart', uid = current_user.id))
 
-    return render_template('removeFromCart.html', title='Update Cart', form=form12, prod = product,currcart = ido)
+    return render_template('removeFromCart.html', title='Update Cart', form=form12,
+                            prod = product,
+                            currcart = ido,
+                            avail=avail,
+                            amt = amount,
+                            tpr = totalPrice)
