@@ -6,9 +6,15 @@
 </br>
 <h3>Your Name: {{current_user.firstname}} {{current_user.lastname}}</h3>
 <h3>Your Email: {{current_user.email}}</h3>
+{% if balance == 0%}
+<h3>Your balance is empty. Cick Here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">Update Balance!</a></h3>
+{%elif balance != 0%}
+<h3>Your Balance: ${{"%0.2f" % balance}}</h3>
+{% endif %}
+
 {% if empty %}
 </br></br>
-<h3>Your Cart is Empty! Go add some items!</h3>
+<h3>Your Cart is Empty! Go <a href="{{ url_for('productPage.productPage') }}">Add Some Items!</a></h3>
 </br></br>
 {% elif not empty %}
   <table class='table table-hover table-bordered container'>
@@ -33,6 +39,20 @@
 
       </tbody>
     </table>
+    <h4>Total Cost Of Potential Purchase: ${{"%0.2f" % totalcost}}</h4>
+    {% if hasEnough == False%}
+    <h4>You Have Insufficient Funds! Cick Here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">Add Funds!</a></h4>
+    {% endif %}
+
+  </br>
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      <p>
+        {{ form.confirm.label }}<br/>
+        {{ form.confirm(size=2) }}<br/>
+      </p>
+      {{ form.submit(class_="btn btn-black") }}
+    </form>
 {% endif %}
 
 <p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
