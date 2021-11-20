@@ -45,6 +45,9 @@ def create_app():
     from .seller import seller_order_details_bp as seller_order_details_bp
     app.register_blueprint(seller_order_details_bp)
 
+    from .seller import seller_product_fulfillment_bp as seller_product_fulfillment_bp
+    app.register_blueprint(seller_product_fulfillment_bp)
+
     from .myCart import bp as cart_bp
     app.register_blueprint(cart_bp)
 

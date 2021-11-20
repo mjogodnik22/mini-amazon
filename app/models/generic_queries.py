@@ -14,19 +14,37 @@ WHERE seller_id = :current_user_id
 def order_fulfilled(oid):
     rows = app.db.execute('''
     SELECT fulfilled
-    FROM ItemsInOrder
+    FROM Products NATURAL JOIN ItemsInOrder
     WHERE oid = :oid
+    AND seller_id = :current_user_id
     ''',
-    oid = oid)
+    oid = oid,
+    current_user_id = current_user.id)
     for row in rows:
         if row.fulfilled == 'Not Fulfilled':
             return False
     return True
 
 
+def fulfillProduct(oid,pid,Fulfilled):
+    rows = app.db.execute('''
+Update ItemsInOrder
+SET fulfilled = :Fulfilled
+WHERE oid = :oid
+AND pid = :pid
+Returning *
+''',
+    pid = int(pid),
+    oid = int(oid),
+    Fulfilled = Fulfilled) 
+    print(rows)
+    print("hi")    
+    return rows
+
+
 def get_sellers_order_details(oid):
     rows = app.db.execute('''
-Select pid, name, quantity, fulfilled
+Select pid, name, price, quantity, fulfilled
 FROM Products NATURAL JOIN ItemsInOrder
 WHERE seller_id = :current_user_id
 AND  oid = :oid

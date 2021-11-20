@@ -21,13 +21,17 @@ Address: {{orderer_info.address}}
         <td>{{purchase.pid}}</td>
         <td>{{purchase.name}}</td>
         <td>{{purchase.quantity}}</td>
+        {% if purchase.fulfilled == "Not Fulfilled" %}
+        <td><a href="{{url_for('seller_product_fulfillment.seller_product_fulfillment', oid=oid, pid = purchase.pid) }}"> {{purchase.fulfilled}}</a></td>>
+        
+        {% else %}
         <td>{{purchase.fulfilled}}</td>
+        {% endif %}
 
         </tr>
       {% endfor %}
     </tbody>
   </table>
 
-<p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p
 
 {% endblock %}
