@@ -47,6 +47,38 @@
     </tbody>
   </table>
 
+{% if bought_from and not left_review%}
+<p>You've bought from this seller before! Would you like to leave a review?</p>
+<form action="" method="post">
+  {{ form2.hidden_tag() }}
+  <p>
+    {{ form2.review.label }}<br/>
+    {{ form2.review(size=32) }}<br/>
+  </p>
+  <p>
+    {{ form2.rating.label }}<br/>
+    {{ form2.rating(size=5) }}<br/>
+  </p>
+  <p>{{ form2.submit2() }}</p>
+</form>
+{% endif %}
+
+{% if bought_from and left_review%}
+<p>You've reviewed this seller before! Would you like to update your review?</p>
+<form action="" method="post">
+  {{ form3.hidden_tag() }}
+  <p>
+    {{ form3.review.label }}<br/>
+    {{ form3.review(size=32) }}<br/>
+  </p>
+  <p>
+    {{ form3.rating.label }}<br/>
+    {{ form3.rating(size=5) }}<br/>
+  </p>
+  <p>{{ form3.submit3() }}</p>
+</form>
+{% endif %}
+
 <h3>Selling:</h3>
 
 <table class='table table-hover table-bordered container'>

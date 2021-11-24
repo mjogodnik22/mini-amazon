@@ -30,7 +30,7 @@
       <tbody>
         {% for item in currcart%}
           <tr>          
-            <th scope="row">{{item.pid}}</th>
+            <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = item.pid) }}">{{item.pid}}</a></th>
             <td>{{item.quantity}}</td>
             <td>{{item.priceatpurchase}}</td>
             <td><p><a href="{{ url_for('removeFromCart.updateCart', pid = item.pid) }}">Alter</a></p></td>

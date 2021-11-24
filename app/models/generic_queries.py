@@ -65,7 +65,7 @@ AND Users.id = OrderInformation.uid
 
 def get_seller_information(id):
     rows = app.db.execute('''
-    SELECT firstname, lastname, rating, review
+    SELECT buyer_id, firstname, lastname, rating, review
     FROM Users, SellerReview
     WHERE id = :id
     AND seller_id = :id
@@ -82,3 +82,34 @@ def get_seller_products(id):
     ''',
     id=id)
     return rows
+
+def add_seller_review(buyer_id,seller_id, review,rating):
+    rows = app.db.execute("""
+INSERT INTO SellerReview(buyer_id,seller_id, rating,review)
+VALUES(:buyer_id,:seller_id,:rating,:review)
+RETURNING buyer_id
+""",
+    buyer_id = buyer_id,
+    seller_id = seller_id,
+    rating = rating,
+    review = review)
+    
+    id = rows[0][0]
+    return 1
+
+def update_seller_review(buyer_id,seller_id, review,rating):
+    
+    rows = app.db.execute("""
+    UPDATE SellerReview
+    SET  rating = :rating, review = :review
+    WHERE buyer_id = :buyer_id AND seller_id = :seller_id
+    RETURNING buyer_id
+    """,
+    buyer_id = buyer_id,
+    seller_id = seller_id,
+    rating = rating,
+    review = review)
+
+    id = rows[0][0]
+    return 1
+  
