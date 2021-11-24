@@ -6,6 +6,7 @@ from wtforms import IntegerField, SubmitField, StringField, SelectField
 from wtforms.validators import ValidationError, DataRequired
 from flask_babel import _, lazy_gettext as _l
 import datetime
+from werkzeug.datastructures import MultiDict
 
 from .models.product_summary import ProductSummary
 from .models.product_sellers import ProductSeller
@@ -72,11 +73,11 @@ def social(id):
                     left_seller_review = True
                     if request.method == 'GET':
                         form3 = UpdateSellerReviewForm(formdata = MultiDict({
-                'review': i[3],
-                'rating': i[2]
+                'review': rev[4],
+                'rating': rev[3]
             }))
     
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.submit.data:
         firstname = form.firstname.data
         lastname = form.lastname.data
         email = form.email.data
@@ -86,11 +87,11 @@ def social(id):
     if form2.submit2.data and form2.validate_on_submit():
         if add_seller_review(current_user.id,int(id), form2.review.data, int(form2.rating.data)):
             flash('You have successfully added a review for this product!')
-        return redirect(url_for('social.social', id=current_user.id))
+        return redirect(url_for('social.social', id=id))
     if form3.submit3.data and form3.validate_on_submit():
         update_seller_review(current_user.id, int(id), form3.review.data, int(form3.rating.data))
         flash('You have successfully updated your review for this product!')
-        return redirect(url_for('social.social', id=current_user.id))
+        return redirect(url_for('social.social', id=id))
     
     return render_template('social_page.html', 
     user=social, 

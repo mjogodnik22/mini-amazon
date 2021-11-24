@@ -23,8 +23,10 @@ def seeSpecificOrder(oid):
     order = Cartesian.getOrderInfo(oid)
     time = Cartesian.getOTime(oid)[0]
     totalPrice = 0
-    for orde in order:
-        totalPrice += orde[3]
-        prod = ProductSummary.get(orde[0])
-        order[order.index(orde)][1] = prod.name
+    for i in range(len(order)):
+        totalPrice += order[i][3]
+        prod = ProductSummary.get(order[i][0])
+        seller = ProductSeller.get_all(order[i][0])[0].id
+        order[i][1] = prod.name
+        order[i].append(seller)
     return render_template('seeSpecificOrder.html', title='Update Cart', orders = order, oid = oid,time=time,totalPrice = totalPrice)
