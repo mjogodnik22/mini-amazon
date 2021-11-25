@@ -37,7 +37,7 @@ def updatePasswordPage():
             else:
                 flash('Unknown error, contact Matt!!')
     else:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('productPage.productPage'))
     return render_template('updatepassword.html', title='Update Password', form=form)
 #     balance = 0
 #     if current_user.is_authenticated:
