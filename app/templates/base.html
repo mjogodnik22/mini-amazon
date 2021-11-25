@@ -18,16 +18,16 @@
 <div class="navigation_bar">
 	<p class="lead">Duke Data Devils Online Retail</p>
 	<div class="header-bar">
-		<h1 class="logo">DDD</h1>
+		<h1 class="logo"><a href="{{url_for('index.index') }}">DDD</a></h1>
 		<ul class="slider-menu">
       {% if current_user.is_authenticated %}
-        <li> <a href="{{url_for('index.index') }}">Home</a></li>
         <li><a href="{{url_for('social.social', id=current_user.id) }}">{{current_user.firstname}}</a></li>
         <li><a href="{{ url_for('Cart.myCart') }}">My Cart</a></li>
+        <li><a href="{{url_for('users.logout') }}">Log Out</a></li>
       {% else %}
         <li><a href="{{ url_for('index.index') }}">Home</a></li>
-        <li><a href="{{ url_for('users.login') }}">Login/Register</a></li>
         <li><a href="{{ url_for('productPage.productPage') }}">Products</a></li>
+        <li><a href="{{ url_for('users.login') }}">Login/Register</a></li>
       {% endif %}
 		</ul>
 	</div>
@@ -58,7 +58,6 @@
   <ul id="footer">
     <li><a href="{{ url_for('index.index') }}">Home</a></li>
     <li><a href="{{ url_for('productPage.productPage') }}">Products</a></li>
-    <li><a href="{{url_for('users.logout') }}">Log out</a></li>
   </ul>
 </div>
   </body>
