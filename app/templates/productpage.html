@@ -1,7 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<head>
+  <style>
+    p, form {
+      display: inline-block;
+      vertical-align: middle;
+      padding-right: 5px;
+    }
+    .filter {
+      text-align: center;
+    }
+  </style>
+</head>
+
 <h2>Products for sale:</h2>
+<div class="filter">
+  <form action="" method="post">
+    {{ form4.hidden_tag() }}
+    <p>
+      {{ form4.search_val.label }}
+      {{ form4.search_val(size=50) }}
+    </p>
+    <p>{{ form4.submit() }}</p>
+  </form>
+  <br>
+  <form action="" method="post">
+    {{ form1.hidden_tag() }}
+    <p>
+      {{ form1.category.label }}<br/>
+      {{ form1.category(size=5) }}<br/>
+    </p>
+    <p>{{ form1.submit() }}</p>
+  </form>
+  
+  <form action="" method="post">
+    {{ form2.hidden_tag() }}
+    <p>
+      {{ form2.key.label }}<br/>
+      {{ form2.key(size=3) }}<br/>
+    </p>
+    <p>{{ form2.submit() }}</p>
+  </form>
+</div>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
@@ -20,54 +62,32 @@
     {% endfor %}
   </tbody>
 </table>
-<br>
+<div class="filter">
+{% if prev_page%}
+  <a href="{{ url_for('productPage.productPage', page_num=prev_page,sort_by = curr_sort, filter_by = curr_filter) }}">Previous Page</a>
+  {% endif %}
+  {% if next_page%}
+  <a href="{{ url_for('productPage.productPage', page_num=next_page,sort_by = curr_sort, filter_by = curr_filter) }}">Next Page</a>
+  {% endif %}
+  <br><br>
+  <form action="" method="post">
+    {{ form3.hidden_tag() }}
+    <p>
+      {{ form3.page_val.label }}
+      {{ form3.page_val(size=10) }}
+    </p>
+    <p>{{ form3.submit() }}</p>
+  </form>
+  {% for mesg in get_flashed_messages() %}
+        <h3>{{ mesg }}</h3>
+  {% endfor %}
+</div>
 
-<form action="" method="post">
-  {{ form1.hidden_tag() }}
-  <p>
-    {{ form1.category.label }}<br/>
-    {{ form1.category(size=5) }}<br/>
-  </p>
-  <p>{{ form1.submit() }}</p>
-</form>
-
-<form action="" method="post">
-  {{ form2.hidden_tag() }}
-  <p>
-    {{ form2.key.label }}<br/>
-    {{ form2.key(size=3) }}<br/>
-  </p>
-  <p>{{ form2.submit() }}</p>
-</form>
 {% if current_user.is_authenticated %}
-<p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p>
+<p><a href="{{ url_for('add_new_product.new_product') }}">Click here</a> to add a new product for sale!</p><br>
 {% else %}
-<p><a href="{{ url_for('users.login') }}">Log in</a> in order to buy and add products!</p>
+<p><a href="{{ url_for('users.login') }}">Log in</a> in order to buy and add products!</p><br>
 {% endif %}
 <p><a href="{{ url_for('index.index') }}">Click here</a> to go back to the main page!</p>
-{% if prev_page%}
-<a href="{{ url_for('productPage.productPage', page_num=prev_page,sort_by = curr_sort, filter_by = curr_filter) }}">Previous Page</a>
-{% endif %}
-{% if next_page%}
-<a href="{{ url_for('productPage.productPage', page_num=next_page,sort_by = curr_sort, filter_by = curr_filter) }}">Next Page</a>
-{% endif %}
-<form action="" method="post">
-  {{ form3.hidden_tag() }}
-  <p>
-    {{ form3.page_val.label }}<br/>
-    {{ form3.page_val(size=10) }}<br/>
-  </p>
-  <p>{{ form3.submit() }}</p>
-</form>
-{% for mesg in get_flashed_messages() %}
-      <h3>{{ mesg }}</h3>
-{% endfor %}
-<form action="" method="post">
-  {{ form4.hidden_tag() }}
-  <p>
-    {{ form4.search_val.label }}<br/>
-    {{ form4.search_val(size=10) }}<br/>
-  </p>
-  <p>{{ form4.submit() }}</p>
-</form>
+
 {% endblock %}
