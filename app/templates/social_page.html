@@ -7,6 +7,7 @@
     .left {
       float: left;
       width: 50%;
+      margin-bottom: 80px;
     }
     .right {
       float: right;
@@ -15,7 +16,7 @@
     }
   </style>
 </head>
-<br>
+
 <div class = "left">
 <h2>User</h2>
 
@@ -25,6 +26,8 @@
 <br>
 
 {% if is_seller %}
+
+{% if num_reviews > 0 %}
 
 <h3>Reviews:</h3>
 
@@ -46,6 +49,12 @@
       {% endfor %}
     </tbody>
   </table>
+
+{% else %}
+
+<h3>No reviews for this seller</h3>
+
+{% endif %}
 
 {% if bought_from and not left_review%}
 <p>You've bought from this seller before! Would you like to leave a review?</p>
@@ -94,7 +103,7 @@
         <tr>
             <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = product.pid) }}"> {{product.pid}}</a></th>
           <td>{{product.name}}</td>
-          <td>{{product.price}}</td>
+          <td>{{"$%.2f" | format(product.price|float)}}</td>
         </tr>
       {% endfor %}
     </tbody>
@@ -145,15 +154,15 @@
   </p>
   {{ form.submit(class_="btn btn-black") }}
 </form>
-
-</div>
-
+<br>
 <a href="{{ url_for('social.social', id=user.id-1) }}" type="button" class="btn btn-light">Previous User</a>
 <a href="{{ url_for('social.social', id=user.id+1) }}" type="button" class="btn btn-light">Next User</a>
+<h3><a href="{{url_for('messages_email.text', email=user.email)}}">Send a message</a> to this user</h3>
+</div>
 
 {% if user.id != current_user.id %}
 
-<h3><a href="{{url_for('messages_email.text', email=user.email)}}">Send a message</a> to this user</h3>
+
 
 {% endif %}
 

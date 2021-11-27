@@ -38,8 +38,7 @@ class LookupByName(FlaskForm):
 
 @bp.route('/social/<id>', methods=['GET', 'POST'])
 def social(id):
-    max_uid = User.max_user()
-    if int(id) > int(max_uid) or int(id) < 1:
+    if int(id) < 1:
         flash('This user does not exist')
         return redirect(url_for('social.social', id=current_user.id))
     form = LookupByName()
@@ -55,12 +54,13 @@ def social(id):
     if seller:
         reviews = get_seller_information(id)
         products = get_seller_products(id)
-        sum = 0
-        count = 0
-        for rev in reviews:
-            sum += rev.rating
-            count += 1
-        avg = sum/count
+        if len(reviews) > 0:
+            sum = 0
+            count = 0
+            for rev in reviews:
+                sum += rev.rating
+                count += 1
+            avg = sum/count
         if current_user.is_authenticated:
             purchases = Purchase.get_all_by_uid_since(
                 current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
@@ -97,12 +97,12 @@ def social(id):
     user=social, 
     is_seller=seller, 
     reviews=reviews, 
-    seller=reviews[0], 
     products=products, 
     avg=avg, 
     form = form,
     form2 = form2,
     form3 = form3,
     bought_from = bought_from,
-    left_review = left_seller_review)
+    left_review = left_seller_review,
+    num_reviews = len(reviews))
 

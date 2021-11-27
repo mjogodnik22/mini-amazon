@@ -33,9 +33,9 @@ class NewSearchForm(FlaskForm):
 #weird stuff with none that I will remove the hardcode for when I figure it out
 #this will be cleaned later
 @bp.route('/',defaults={'page_num' : 1, 'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
-@bp.route('/<page_num>',defaults={'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
-@bp.route('/<page_num>/<sort_by>',defaults={'filter_by': 'None' },methods=['GET', 'POST'])
-@bp.route('/<page_num>/<sort_by>/<filter_by>',methods=['GET', 'POST'])
+@bp.route('/page/<page_num>',defaults={'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/page/<page_num>/<sort_by>',defaults={'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/page/<page_num>/<sort_by>/<filter_by>',methods=['GET', 'POST'])
 def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
     # get all available products for sale:
     if filter_by == 'None':

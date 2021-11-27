@@ -102,6 +102,12 @@ FROM Products
     @staticmethod
     def make_new_product(name, description, category,price, quantity_available):
         try:
+            rows_useless = app.db.execute("""
+            INSERT INTO Sellers(sid)
+            VALUES(:sid)
+            RETURNING sid
+            """,
+            sid=current_user.id)
             rows = app.db.execute("""
 INSERT INTO Products(seller_id, name, description, category, picture,price, quantity_available)
 VALUES(:seller_id, :name, :description, :category, :picture,:price, :quantity_available)
