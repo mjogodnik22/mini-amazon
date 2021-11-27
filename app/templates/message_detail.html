@@ -2,7 +2,6 @@
 
 {% block content %}
 
-<br><br>
 {% if current_user.id in [message.recipient_id, message.sender_id] %}
 <h2>Message:</h2>
 
