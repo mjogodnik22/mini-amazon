@@ -70,6 +70,6 @@ def text(email):
 @message_details_bp.route('/messages/msg/<mid>')
 def detailed_messages(mid):
     message = get_message_by_mid(mid)
-    if message[1] == 'Unread':
+    if message[1] == 'Unread' and current_user.id == message.recipient_id:
         mark_message_read(mid)
     return render_template('message_detail.html', title = 'Your Message', message=message)
