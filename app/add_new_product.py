@@ -34,5 +34,5 @@ def new_product():
                          form.price.data,
                          form.quantity_available.data):
             flash('Congratulations, you just added this product!')
-            return redirect(url_for('index.index'))
+            return redirect(url_for('productPage.productPage'))
     return render_template('add_product_for_sale.html', title='Add Product', form=form)

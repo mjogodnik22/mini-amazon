@@ -18,9 +18,6 @@ def create_app():
     login.init_app(app)
     babel.init_app(app)
 
-    from .index import bp as index_bp
-    app.register_blueprint(index_bp)
-
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
 

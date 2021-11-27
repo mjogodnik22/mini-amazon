@@ -32,10 +32,10 @@ class NewSearchForm(FlaskForm):
 #looking into a better way of implementing
 #weird stuff with none that I will remove the hardcode for when I figure it out
 #this will be cleaned later
-@bp.route('/products',defaults={'page_num' : 1, 'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
-@bp.route('/products/<page_num>',defaults={'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
-@bp.route('/products/<page_num>/<sort_by>',defaults={'filter_by': 'None' },methods=['GET', 'POST'])
-@bp.route('/products/<page_num>/<sort_by>/<filter_by>',methods=['GET', 'POST'])
+@bp.route('/',defaults={'page_num' : 1, 'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/<page_num>',defaults={'sort_by': 'pid', 'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/<page_num>/<sort_by>',defaults={'filter_by': 'None' },methods=['GET', 'POST'])
+@bp.route('/<page_num>/<sort_by>/<filter_by>',methods=['GET', 'POST'])
 def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
     # get all available products for sale:
     if filter_by == 'None':
@@ -69,7 +69,7 @@ def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
     if searchform.validate_on_submit():
         return redirect(url_for('productPage.productSearchPage', page_num = page_num, query = searchform.search_val.data))
     
-    return render_template('productpage.html',form1=filterform, form2 = sortform, form3 = pageform,form4 = searchform,
+    return render_template('index.html',form1=filterform, form2 = sortform, form3 = pageform,form4 = searchform,
                            avail_products = products, next_page=next_page, prev_page=prev_page, curr_sort = sort_by, curr_filter = filter_by)
 
 @bp.route('/products_search',defaults={'query' :'', 'page_num' : 1},methods=['GET', 'POST'])

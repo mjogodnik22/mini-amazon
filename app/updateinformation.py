@@ -47,7 +47,7 @@ def updateInformationPage():
             else:
                 flash('This email is already in use.')
     else:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('productPage.productPage'))
     return render_template('updateinformation.html', title='Update Information', form=form)
 #     balance = 0
 #     if current_user.is_authenticated:

@@ -32,7 +32,7 @@ def updateBalancePage():
                 flash('You cannot withdraw more than your balance. Please try again!')
                 return redirect(url_for('updatebalance.updateBalancePage'))
     else:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('productPage.productPage'))
     return render_template('updatebalance.html', title='Update Balance', form=form)
 #     balance = 0
 #     if current_user.is_authenticated:
