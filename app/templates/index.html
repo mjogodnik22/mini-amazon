@@ -57,7 +57,7 @@
       <tr>
           <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = product.pid) }}"> {{product.pid}}</a></th>
         <td>{{product.name}}</td>
-        <td>{{product.price}}</td>
+        <td>{{"$%.2f" | format(product.price|float)}}</td>
       </tr>
     {% endfor %}
   </tbody>

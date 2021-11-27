@@ -24,7 +24,7 @@
         <td>{{curr_product.name}}</td>
         <td>{{curr_product.description}}</td>
         <td>{{curr_product.category}}</td>
-          <td>{{curr_product_2.price}}</td>
+          <td>{{"$%.2f" | format(curr_product_2.price|float)}}</td>
         <td>{{curr_product_2.quantity_available}}</td>
       </tr>
   </tbody>
@@ -111,7 +111,7 @@
         <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = seller.pid) }}"> {{seller.pid}}</a></th>
         <td><a href = "{{ url_for('social.social', id = seller.id) }}">{{seller.first_name}}</a></td>
         <td>{{seller.last_name}}</td>
-        <td>{{seller.price}}</td>
+        <td>{{"$%.2f" | format(seller.price|float)}}</td>
           <td>{{seller.quantity_available}}</td>
       </tr>
     {% endfor %}
