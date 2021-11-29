@@ -10,8 +10,6 @@
 
 <p>{{message.msg}}</p>
 
-<h3><a href="{{ url_for('messages.messages') }}">Click here</a> to see messages!</h3>
-
 {% else %}
 <h2>You've entered a bad url. Go back <a href="{{ url_for('productPage.productPage') }}">home!</a></h2>
 {% endif %}

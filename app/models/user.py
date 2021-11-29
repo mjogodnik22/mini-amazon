@@ -177,5 +177,11 @@ lastname = lastname,
 email = email)
         return rows
 
-    
+    @staticmethod
+    def count_users():
+        rows = app.db.execute('''
+            SELECT *
+            FROM Users
+''')
+        return len(rows)
     
