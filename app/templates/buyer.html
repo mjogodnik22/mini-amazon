@@ -15,10 +15,8 @@
       <tr>
         <th scope="col">Order ID</th>
         <th scope="col">Time Of Purchase</th>
-
+        <th scope="col">Fulfillment Status</th>
         <th scope="col">See Order</th>
-
-
 
     </tr>
     </thead>
@@ -27,6 +25,8 @@
        <tr>
         <td>{{order[0]}}</td>
         <td>{{order[1]}}</td>
+        <td>{{order[2]}}</td>
+
 
         <td><p><a href="{{ url_for('seeSpecificOrder.seeSpecificOrder', oid = order[0]) }}">See Specific Order</a></p></td>
 

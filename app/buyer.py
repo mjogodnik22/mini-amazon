@@ -18,6 +18,7 @@ buyer_bp = Blueprint('BuyerOrders', __name__)
 def buyer_orders():
    empty = False
    borders = Cartesian.getOrders(current_user.id)
+   print(borders)
    if borders is None:
       empty = True
    return render_template('buyer.html', orders=borders, empty= empty)

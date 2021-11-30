@@ -127,18 +127,20 @@ WHERE Carts.uid = :uid AND pid = :pid
         except Exception as teey:
             print(teey)
             return None
-    
+
     @staticmethod
     def getOrders(uid):
         try:
             rows = app.db.execute("""
         SELECT * FROM OrderInformation
         WHERE uid = :uid Order By oid DESC
-            """,uid = uid)
-            return [[row.oid,row.time_purchased] for row in rows] if rows else None
+            """,uid = uid) 
+            return [[row.oid,row.time_purchased, order_fulfilled(row.oid)] for row in rows] if rows else None
         except Exception as h:
             print("hello",h)
             return None
+
+    
 
     @staticmethod
     def getOrderInfo(oid):
@@ -162,3 +164,15 @@ WHERE Carts.uid = :uid AND pid = :pid
             print("hello", gh)
             return 0
 
+
+def order_fulfilled(oid):
+        rows = app.db.execute('''
+        SELECT fulfilled
+        FROM Products NATURAL JOIN ItemsInOrder
+        WHERE oid = :oid
+        ''',
+        oid = oid)
+        for row in rows:
+            if row.fulfilled == 'Not Fulfilled':
+                return 'Not Fulfilled'
+        return 'Fulfilled'
