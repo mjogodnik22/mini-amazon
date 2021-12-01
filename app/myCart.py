@@ -16,6 +16,7 @@ from app.models import Carts
 from .models.Carts import Cartesian
 from .models.user import User
 from .models.product_summary import ProductSummary
+from .models.generic_queries import who_sells
 
 
 from flask import Blueprint
@@ -53,6 +54,10 @@ def myCart():
                                    int(totalcost),
                                    "wdr"):
                     flash('Your balance has been updated!')
+                    for product in ido:
+                        seller = who_sells(product.pid)
+                        balance = User.get(seller).balance
+                        User.update_balance(seller, int(balance), int(product.priceatpurchase), "dep")
                 for gangarang in ido:
                     Cartesian.addtoOrder(albert,gangarang.pid,gangarang.quantity,gangarang.priceatpurchase)
                     Product.adjustWithOrder(gangarang.pid,gangarang.quantity)

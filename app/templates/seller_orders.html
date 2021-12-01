@@ -8,14 +8,21 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col">Order</th>
-        <th scope="col">Details</th>
+        <th scope="col">Number of Items</th>
+        <th scope="col">Revenue</th>
+        <th scope="col">Fullfilment Status</th>
+        <th scope="col">Purchase Date</th>
       </tr>
     </thead>
     <tbody>
       {% for order in orders%}
         <tr>
-          <td><a href="{{ url_for('seller_order_details.seller_order_details', oid = order[0]) }}">{{order.oid}}</a></td>
-          <td>{{fulfillDict[order.oid]}}</td>
+          <td><a href="{{url_for('seller_order_details.seller_order_details', oid = order[0])}}">{{order.oid}}</a></td>
+          <td>{{fulfillDict[order.oid][2]}}</td>
+          <td>{{fulfillDict[order.oid][1]}}</td>
+          <td>{{fulfillDict[order.oid][0]}}</td>
+          <td>{{order[1]}}</td>
+
         </tr>
       {% endfor %}
     </tbody>

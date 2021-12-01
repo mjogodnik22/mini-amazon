@@ -28,13 +28,18 @@ def seller_inventory():
 def seller_orders():
    orders = get_sellers_orders()
    fulfillDict = {}
-   orders.sort(key = lambda x:x.oid)
+   orders.sort(key = lambda x:x[1], reverse = True)
+
    for order in orders:
-      if order_fulfilled(order.oid):
-         fulfillDict[order.oid] = 'Fulfilled'
+      purchases = get_sellers_order_details(order.oid)
+      totalPrice = sum([purchase.price * purchase.quantity for purchase in purchases])
+      Quant = sum([purchase.quantity for purchase in purchases])
+      if seller_order_fulfilled(order.oid):
+         fulfillDict[order.oid] = ('Fulfilled', totalPrice, Quant)
       else:
-         fulfillDict[order.oid] = 'Not Fulfilled'
-   orders.sort(key = lambda x:fulfillDict[x.oid], reverse=True)
+         fulfillDict[order.oid] = ('Not Fulfilled', totalPrice, Quant)
+   
+
    return render_template('seller_orders.html', orders=orders, fulfillDict = fulfillDict)
 
 @seller_order_details_bp.route('/seller_order_details/<oid>')

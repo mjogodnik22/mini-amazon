@@ -4,14 +4,28 @@ from flask_login import current_user
 
 def get_sellers_orders():
     rows = app.db.execute('''
-Select DISTINCT oid
-FROM Products NATURAL JOIN ItemsInOrder
+Select DISTINCT oid, time_purchased
+FROM Products NATURAL JOIN ItemsInOrder NATURAL JOIN OrderInformation
 WHERE seller_id = :current_user_id
+ORDER BY oid, time_purchased
 ''',
     current_user_id = current_user.id)     
     return rows
 
 def order_fulfilled(oid):
+        rows = app.db.execute('''
+        SELECT fulfilled
+        FROM Products NATURAL JOIN ItemsInOrder
+        WHERE oid = :oid
+        ''',
+        oid = oid)
+        for row in rows:
+            if row.fulfilled == 'Not Fulfilled':
+                return 'Not Fulfilled'
+        return 'Fulfilled'
+
+
+def seller_order_fulfilled(oid):
     rows = app.db.execute('''
     SELECT fulfilled
     FROM Products NATURAL JOIN ItemsInOrder
@@ -36,9 +50,7 @@ Returning *
 ''',
     pid = int(pid),
     oid = int(oid),
-    Fulfilled = Fulfilled) 
-    print(rows)
-    print("hi")    
+    Fulfilled = Fulfilled)   
     return rows
 
 
@@ -112,4 +124,13 @@ def update_seller_review(buyer_id,seller_id, review,rating):
 
     id = rows[0][0]
     return 1
+
+def who_sells(id):
+    rows = app.db.execute("""
+    SELECT seller_id
+    FROM Products
+    WHERE pid= :pid
+    """, 
+    pid=id)
+    return rows[0][0]
   
