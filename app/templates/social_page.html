@@ -18,10 +18,16 @@
 </head>
 
 <div class = "left">
-<h2>User</h2>
+<h2>User {{user.id}}</h2>
 
 <h3>Name: {{user.firstname}} {{user.lastname}}</h3>
 <h3>Email: {{user.email}}</h3>
+
+{% if is_seller %}
+
+<h3>Address: {{user.address}}</h3>
+
+{% endif %}
 
 <br>
 
@@ -155,15 +161,15 @@
   {{ form.submit(class_="btn btn-black") }}
 </form>
 <br>
+{% if user.id != 1 %}
 <a href="{{ url_for('social.social', id=user.id-1) }}" type="button" class="btn btn-light">Previous User</a>
-<a href="{{ url_for('social.social', id=user.id+1) }}" type="button" class="btn btn-light">Next User</a>
-<h3><a href="{{url_for('messages_email.text', email=user.email)}}">Send a message</a> to this user</h3>
-</div>
-
-{% if user.id != current_user.id %}
-
-
-
 {% endif %}
+{% if user.id != last_page %}
+<a href="{{ url_for('social.social', id=user.id+1) }}" type="button" class="btn btn-light">Next User</a>
+{% endif %}
+{% if user.id != current_user.id %}
+<h3><a href="{{url_for('messages_email.text', email=user.email)}}">Send a message</a> to this user</h3>
+{% endif %}
+</div>
 
 {% endblock %}

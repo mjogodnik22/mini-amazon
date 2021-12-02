@@ -28,10 +28,10 @@
 <p><a href="{{ url_for('users.login') }}">Log in</a> in order to buy and add products!</p>
 {% endif %}
 {% if prev_page%}
-<a href="{{ url_for('productPage.productPage', page_num=prev_page,sort_by = curr_sort, filter_by = curr_filter) }}">Previous Page</a>
+<a href="{{ url_for('productPage.productSearchPage', page_num = prev_page, query = query) }}">Previous Page</a>
 {% endif %}
 {% if next_page%}
-<a href="{{ url_for('productPage.productPage', page_num=next_page,sort_by = curr_sort, filter_by = curr_filter) }}">Next Page</a>
+<a href="{{ url_for('productPage.productSearchPage', page_num = next_page, query = query) }}">Next Page</a>
 {% endif %}
 <form action="" method="post">
   {{ form1.hidden_tag() }}

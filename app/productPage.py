@@ -94,4 +94,4 @@ def productSearchPage(page_num = 1, query = ""):
             return redirect(url_for('productPage.productSearchPage', page_num = pageform.page_val.data,query = query))
     
     return render_template('productsearchpage.html',form1= pageform,
-                           avail_products = products, next_page=next_page, prev_page=prev_page)
+                           avail_products = products, next_page=next_page, prev_page=prev_page, query=query)

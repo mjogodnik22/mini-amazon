@@ -91,9 +91,10 @@ FROM Products
         query ='\'%' + search_query + '%\''
         offset_count = (page_num - 1) * limit
         rows = app.db.execute('''
-    SELECT Products.pid, Products.name, Products.price, Products.quantity_available
+    SELECT DISTINCT Products.pid, Products.name, Products.price, Products.quantity_available
     FROM Products, ProductSummary
     WHERE Products.pid = ProductSummary.pid and (Products.name LIKE {query_name} or ProductSummary.description LIKE {query_name})
+    ORDER BY Products.pid ASC
     LIMIT {limit}
     OFFSET {offset}
     '''.format(query_name = query, query_desc = query,limit = limit, offset = offset_count))
