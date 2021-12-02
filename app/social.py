@@ -38,9 +38,6 @@ class LookupByName(FlaskForm):
 
 @bp.route('/social/<id>', methods=['GET', 'POST'])
 def social(id):
-    if int(id) < 1:
-        flash('This user does not exist')
-        return redirect(url_for('social.social', id=current_user.id))
     form = LookupByName()
     form2 = SellerReviewForm()
     form3 = UpdateSellerReviewForm()
@@ -107,5 +104,6 @@ def social(id):
     left_review = left_seller_review,
     num_reviews = len(reviews),
     product_reviews = product_reviews,
-    seller_reviews= seller_reviews)
+    seller_reviews= seller_reviews,
+    last_page = User.count_users())
 

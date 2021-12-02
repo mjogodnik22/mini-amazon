@@ -7,6 +7,7 @@ def get_messages():
     FROM Messages, Users
     WHERE recipient_id = :id
     AND sender_id = Users.id
+    ORDER BY msg_read DESC, firstname ASC
     ''',
     id = current_user.id)
     return rows
@@ -48,6 +49,7 @@ def get_sent_msgs():
     FROM Messages, Users
     WHERE sender_id = :id
     AND recipient_id = Users.id
+    ORDER BY msg_read DESC, firstname ASC
     ''',
     id = current_user.id)
     return rows

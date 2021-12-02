@@ -68,8 +68,10 @@
 <div class="footer">
   <ul id="footer">
     <li><a href="{{ url_for('productPage.productPage') }}">Home</a></li>
+    {% if current_user.is_authenticated %}
     <li><a href="{{ url_for('myaccount.myAccountPage') }}">My Account</a></li>
     <li><a href="{{url_for('messages.messages')}}">Messages</a></li>
+    {% endif %}
   </ul>
 </div>
   </body>
