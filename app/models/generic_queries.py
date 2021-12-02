@@ -133,4 +133,92 @@ def who_sells(id):
     """, 
     pid=id)
     return rows[0][0]
+
+def save_for_later(uid, pid, quantity):
+    rows0 = app.db.execute("""
+    SELECT *
+    FROM SaveForLater
+    WHERE uid = :uid
+    AND pid = :pid
+    """,
+    uid = uid,
+    pid = pid)
+    if len(rows0) == 0:
+        rows = app.db.execute("""
+        INSERT INTO SaveForLater(uid, pid, quantity)
+        VALUES(:uid, :pid, :quantity)
+        RETURNING uid
+        """,
+        uid = uid,
+        pid = pid,
+        quantity = quantity)
+    else:
+        rows = app.db.execute("""
+        UPDATE SaveForLater
+        SET quantity = :quantity
+        WHERE uid = :uid
+        AND pid = :pid
+        RETURNING uid
+        """,
+        quantity = rows0[0].quantity + int(quantity),
+        uid = uid,
+        pid = pid)
+    rows2 = app.db.execute("""
+    DELETE FROM CARTS
+    WHERE uid = :uid
+    AND pid = :pid
+    RETURNING uid
+    """,
+    uid = uid,
+    pid = pid)
+    return 1
   
+def delete_saved(uid, pid):
+    rows = app.db.execute("""
+    DELETE FROM SaveForLater
+    WHERE uid = :uid
+    AND pid = :pid
+    RETURNING uid
+    """,
+    uid = uid,
+    pid = pid)
+    return 1
+
+def back_in_cart(uid, pid, quantity):
+    rows0 = app.db.execute("""
+    SELECT *
+    FROM CARTS
+    WHERE uid = :uid
+    AND pid = :pid
+    """,
+    uid = uid,
+    pid = pid)
+    if len(rows0) == 0:
+        rows = app.db.execute("""
+        INSERT INTO CARTS(uid, pid, quantity)
+        VALUES(:uid, :pid, :quantity)
+        RETURNING :uid
+        """,
+        uid = uid,
+        pid = pid,
+        quantity = quantity)
+    else:
+        rows = app.db.execute("""
+        UPDATE CARTS
+        SET quantity = :quantity
+        WHERE uid = :uid
+        AND pid = :pid
+        RETURNING :uid
+        """,
+        quantity = rows0[0].quantity + int(quantity),
+        uid = uid,
+        pid = pid)
+    rows2 = app.db.execute("""
+    DELETE FROM SaveForLater
+    WHERE uid = :uid
+    AND pid = :pid
+    RETURNING :uid
+    """,
+    uid = uid,
+    pid = pid)
+    return 1

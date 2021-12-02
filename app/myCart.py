@@ -16,7 +16,7 @@ from app.models import Carts
 from .models.Carts import Cartesian
 from .models.user import User
 from .models.product_summary import ProductSummary
-from .models.generic_queries import who_sells
+from .models.generic_queries import *
 
 
 from flask import Blueprint
@@ -34,15 +34,18 @@ def myCart():
         balance = User.get(current_user.id).balance
         totalcost = 0
         ido = Cartesian.get(current_user.id)
+        save_for_later = Cartesian.getSaved(current_user.id)
         if ido is None:
             empty = True
             return render_template('myCart.html',
                             form = form11,
                             currcart = ido,
                             empty = empty,
-                            balance = balance)
+                            balance = balance,
+                            saved = save_for_later,
+                            any_saved = len(save_for_later))
         for element in ido:
-            totalcost += element.priceatpurchase
+            totalcost += element.price*element.quantity
         hasEnough = True
         if balance < totalcost:
             hasEnough = False
@@ -57,9 +60,9 @@ def myCart():
                     for product in ido:
                         seller = who_sells(product.pid)
                         balance = User.get(seller).balance
-                        User.update_balance(seller, int(balance), int(product.priceatpurchase), "dep")
+                        User.update_balance(seller, int(balance), int(product.price) * int(product.quantity), "dep")
                 for gangarang in ido:
-                    Cartesian.addtoOrder(albert,gangarang.pid,gangarang.quantity,gangarang.priceatpurchase)
+                    Cartesian.addtoOrder(albert,gangarang.pid,gangarang.quantity,gangarang.price)
                     Product.adjustWithOrder(gangarang.pid,gangarang.quantity)
                     Cartesian.removeFromCart(gangarang.pid,current_user.id)
                 return redirect(url_for('BuyerOrders.buyer_orders', uid = current_user.id))
@@ -72,4 +75,21 @@ def myCart():
                             empty = empty,
                             balance = balance,
                             totalcost=totalcost,
-                            hasEnough=hasEnough)
+                            hasEnough=hasEnough,
+                            saved = save_for_later,
+                            any_saved = len(save_for_later))
+
+@bp.route('/myCart/<uid>/<pid>/<quantity>',methods=['GET', 'POST'])
+def saveForLater(uid, pid, quantity):
+    save_for_later(uid, pid, quantity)
+    return redirect(url_for('Cart.myCart'))
+
+@bp.route('/myCart/delete/<uid>/<pid>',methods=['GET', 'POST'])
+def deleteSaved(uid, pid):
+    delete_saved(uid, pid)
+    return redirect(url_for('Cart.myCart'))
+
+@bp.route('/myCart/add/<uid>/<pid>/<quantity>',methods=['GET', 'POST'])
+def addCart(uid, pid, quantity):
+    back_in_cart(uid, pid, quantity)
+    return redirect(url_for('Cart.myCart'))

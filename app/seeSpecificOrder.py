@@ -24,7 +24,7 @@ def seeSpecificOrder(oid):
     time = Cartesian.getOTime(oid)[0]
     totalPrice = 0
     for i in range(len(order)):
-        totalPrice += order[i][3]
+        totalPrice += order[i][3]*order[i][2]
         prod = ProductSummary.get(order[i][0])
         seller = ProductSeller.get_all(order[i][0])[0].id
         order[i][1] = prod.name

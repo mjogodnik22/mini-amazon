@@ -56,7 +56,8 @@ CREATE TABLE ProductReview (
     rating INT NOT NULL,
     review VARCHAR(1023),
     CHECK(rating in (1,2,3,4,5)),
-    PRIMARY KEY(buyer_id,product_id)
+    PRIMARY KEY(buyer_id,product_id),
+    time_rev timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE SellerReview (
@@ -65,14 +66,14 @@ CREATE TABLE SellerReview (
     rating INT NOT NULL,
     review VARCHAR(1023),
     CHECK(rating in (1,2,3,4,5)),
-    PRIMARY KEY(buyer_id, seller_id)
+    PRIMARY KEY(buyer_id, seller_id),
+    time_rev timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE CARTS (
     uid INTEGER REFERENCES Users(id),
     pid INTEGER REFERENCES Products(pid),
-    quantity INT NOT NULL, 
-    price_when_placed FLOAT NOT NULL,
+    quantity INT NOT NULL,
     CHECK(quantity > 0)
     -- Check if Carts(pid).price_when_placed = Products(pid).price when refrenced
     -- if not equal show a message and update uid, pid, quantity, price_when_placed not null
@@ -85,7 +86,16 @@ CREATE TABLE Messages (
     subject VARCHAR(255) NOT NULL,
     msg VARCHAR(1023) NOT NULL,
     msg_read VARCHAR(255) DEFAULT 'Unread',
-    CHECK(msg_read in ('Unread', 'Read'))
+    CHECK(msg_read in ('Unread', 'Read')),
+    time_rev timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
+);
+
+CREATE TABLE SaveForLater (
+    uid INTEGER REFERENCES Users(id),
+    pid INTEGER REFERENCES Products(pid),
+    quantity INT NOT NULL,
+    PRIMARY KEY(uid, pid),
+    CHECK(quantity > 0)
 );
 
 -- Make check before insertion of reviews that user has purchase product/product from seller

@@ -70,9 +70,9 @@ def product_summaries(pid):
                         if i.pid == int(pid):
                             alreadyinCart = True
                 if alreadyinCart:
-                    Cartesian.addToCartAgain(current_user.id, int(pid), buyform.amountToBuy.data, product_temp.price*buyform.amountToBuy.data)
+                    Cartesian.addToCartAgain(current_user.id, int(pid), buyform.amountToBuy.data)
                 else:
-                    Cartesian.addToCart(current_user.id, int(pid), buyform.amountToBuy.data, product_temp.price*buyform.amountToBuy.data)
+                    Cartesian.addToCart(current_user.id, int(pid), buyform.amountToBuy.data)
                 flash('You have successfully added this to your cart!')
                 return redirect(url_for('productSummary.product_summaries', pid = pid))
             else:
