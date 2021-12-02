@@ -12,16 +12,14 @@
 {% endif %}
 
 {% if empty %}
-</br></br>
 <h3>Your Cart is Empty! Go <a href="{{ url_for('productPage.productPage') }}">Add Some Items!</a></h3>
-</br></br>
 {% elif not empty %}
   <table class='table table-hover table-bordered container'>
       <thead class="thead-dark">
         <tr>
           <th scope="col">Product</th>
           <th scope="col">Quantity</th>
-          <th scope="col">Total Cost</th>
+          <th scope="col">Unit Cost</th>
           <th scope="col">Change Quantity</th>
 
         </tr>
@@ -31,8 +29,8 @@
           <tr>          
             <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = item.pid) }}">{{item.pid}}</a></th>
             <td>{{item.quantity}}</td>
-            <td>{{item.priceatpurchase}}</td>
-            <td><p><a href="{{ url_for('removeFromCart.updateCart', pid = item.pid) }}">Alter</a></p></td>
+            <td>{{"$%.2f" | format(item.price|float)}}</td>
+            <td><a href="{{ url_for('removeFromCart.updateCart', pid = item.pid) }}">Alter</a<br> <a href="{{ url_for('Cart.saveForLater', uid = current_user.id, pid = item.pid, quantity = item.quantity) }}">Save For Later</a></td>
           </tr>
         {% endfor %}
 
@@ -43,16 +41,38 @@
     <h4>You Have Insufficient Funds! Cick Here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">Add Funds!</a></h4>
     {% endif %}
 
-  </br>
     <form action="" method="post">
       {{ form.hidden_tag() }}
       <p>
-        {{ form.confirm.label }}<br/>
-        {{ form.confirm(size=2) }}<br/>
+        {{ form.confirm.label }}
+        {{ form.confirm(size=2) }}
       </p>
       {{ form.submit(class_="btn btn-black") }}
     </form>
 {% endif %}
 
-
+{% if any_saved > 0 %}
+<br>
+<h2>Saved For Later:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Unit Cost</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in saved%}
+      <tr>          
+        <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = item.pid) }}">{{item.pid}}</a></th>
+        <td>{{item.quantity}}</td>
+        <td>{{"$%.2f" | format(item.price|float)}}</td>
+        <td><a href="{{ url_for('Cart.deleteSaved', uid = current_user.id, pid = item.pid) }}" type="button" class="btn btn-light">X</a>  <a href="{{ url_for('Cart.addCart', uid = current_user.id, pid = item.pid, quantity = item.quantity) }}" type="button" class="btn btn-light">Add Back</a></td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+{% endif %}
 {% endblock %}

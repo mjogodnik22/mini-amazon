@@ -6,14 +6,14 @@ class Cartesian:
     def __init__(self, uid, pid, quantity, price):
         self.uid = uid
         self.pid = pid
-        self.priceatpurchase = price
+        self.price = price
         self.quantity = quantity
 
     
     @staticmethod
     def get(uid):
         rows = app.db.execute('''
-SELECT Users.firstname, Products.pid, CARTS.quantity, CARTS.price_when_placed
+SELECT Users.firstname, Products.pid, CARTS.quantity, Products.price
 FROM CARTS, Users, Products
 WHERE uid = :uid AND CARTS.uid = Users.id AND CARTS.pid = Products.pid
 ''',
@@ -23,7 +23,7 @@ WHERE uid = :uid AND CARTS.uid = Users.id AND CARTS.pid = Products.pid
     @staticmethod
     def getspecific(uid,pid):
         rows = app.db.execute('''
-SELECT Users.firstname, Products.pid, CARTS.quantity, CARTS.price_when_placed
+SELECT Users.firstname, Products.pid, CARTS.quantity, Products.price
 FROM CARTS, Users, Products
 WHERE uid = :uid AND Products.pid = :pid AND CARTS.uid = Users.id AND CARTS.pid = Products.pid
 ''',
@@ -33,11 +33,17 @@ WHERE uid = :uid AND Products.pid = :pid AND CARTS.uid = Users.id AND CARTS.pid 
 
 
     @staticmethod
-    def addToCart(uid, pid, quantity, price):
+    def addToCart(uid, pid, quantity):
         try:
             rows = app.db.execute("""
-INSERT INTO CARTS(uid, pid, quantity, price_when_placed)
-VALUES(:uid, :pid, :quantity, :price)
+            SELECT price
+            FROM Products
+            WHERE pid = :pid
+            """, pid=pid)
+            price = rows[0].price
+            rows = app.db.execute("""
+INSERT INTO CARTS(uid, pid, quantity)
+VALUES(:uid, :pid, :quantity)
 RETURNING uid
 """,
                                   uid=uid,
@@ -52,16 +58,15 @@ RETURNING uid
             return None
 
     @staticmethod
-    def addToCartAgain(uid,pid,quantity,price):
+    def addToCartAgain(uid,pid,quantity):
         try:
             rows = app.db.execute("""
 UPDATE Carts
-SET quantity = quantity + :quantity, price_when_placed = price_when_placed + (:price)*(:quantity)
+SET quantity = quantity + :quantity
 WHERE Carts.uid = :uid AND pid = :pid
             """, uid = uid,
                 pid = pid,
-                quantity=quantity,
-                price=price)
+                quantity=quantity)
             return 1
         except Exception as l:
             print(l)
@@ -72,7 +77,7 @@ WHERE Carts.uid = :uid AND pid = :pid
         try:
             rows = app.db.execute("""
 UPDATE Carts
-SET quantity = quantity - :quantity, price_when_placed = price_when_placed - (:price)*(:quantity)
+SET quantity = quantity - :quantity
 WHERE Carts.uid = :uid AND pid = :pid
             """, uid = uid,
                 pid = pid,
@@ -163,6 +168,21 @@ WHERE Carts.uid = :uid AND pid = :pid
         except Exception as gh:
             print("hello", gh)
             return 0
+
+    @staticmethod
+    def getSaved(uid):
+        try:
+            rows = app.db.execute("""
+            SELECT uid, SaveForLater.pid, SaveForLater.quantity, Products.price
+            FROM SaveForLater, Products
+            WHERE uid = :uid
+            AND SaveForLater.pid = Products.pid
+            ORDER BY pid
+            """,uid = uid)
+            return rows
+        except:
+            print("None")
+        
 
 
 def order_fulfilled(oid):
