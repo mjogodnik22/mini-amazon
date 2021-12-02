@@ -22,13 +22,27 @@ from .models.generic_queries import who_sells
 from flask import Blueprint
 bp = Blueprint('Cart', __name__)
 
+class UpdateInformationForm(FlaskForm):
+    firstname = StringField(_l('First Name'), validators=[DataRequired()])
+    lastname = StringField(_l('Last Name'), validators=[DataRequired()])
+    email = StringField(_l('Email'), validators=[DataRequired(), Email()])
+    password = PasswordField(_l('Password'), validators=[DataRequired()])
+    submit = SubmitField(_l('Update Information'))
+
+
+
 class placeOrder(FlaskForm):
     confirm = SelectField(_l('Confirm'), choices = [(1,"I do not confirm"),(2,"I confirm")],validators=[DataRequired()])
+    address = StringField(_l('Address'), validators=[DataRequired()])
     submit = SubmitField(_l('Place Order'))
 
 @bp.route('/myCart',methods=['GET', 'POST'])
 def myCart():
     form11 = placeOrder()
+    if request.method == 'GET':
+        form11= placeOrder(formdata = MultiDict({
+            'address': current_user.address
+        }))
     empty = False
     if current_user.is_authenticated:
         balance = User.get(current_user.id).balance
@@ -48,7 +62,7 @@ def myCart():
             hasEnough = False
         if form11.validate_on_submit:
             if form11.confirm.data == '2' and hasEnough:
-                albert = Cartesian.placeOrder(current_user.id)
+                albert = Cartesian.placeOrder(current_user.id, form11.address)
                 if User.update_balance(current_user.id,
                                    int(balance),
                                    int(totalcost),

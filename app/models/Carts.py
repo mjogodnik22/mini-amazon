@@ -97,7 +97,8 @@ WHERE Carts.uid = :uid AND pid = :pid
             return None
 
     @staticmethod
-    def placeOrder(uid):
+    #INSERT ADDRESS INTO DATABASE 
+    def placeOrder(uid, address):
         try:
             rows = app.db.execute("""
     INSERT INTO OrderInformation(uid) 

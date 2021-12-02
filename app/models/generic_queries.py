@@ -133,4 +133,18 @@ def who_sells(id):
     """, 
     pid=id)
     return rows[0][0]
-  
+
+def users_reviews(uid):
+    product_reviews = app.db.execute("""
+    SELECT product_id, name, rating, review
+    FROM ProductReview, Products 
+    WHERE buyer_id= :id AND pid = product_id
+    """, 
+    id=uid)
+    seller_reviews = app.db.execute("""
+    SELECT seller_id, firstname, lastname, rating, review
+    FROM SellerReview, Users
+    WHERE buyer_id= :uid AND users.id = seller_id
+    """, 
+    uid=uid) 
+    return (product_reviews, seller_reviews)
