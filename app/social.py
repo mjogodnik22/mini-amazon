@@ -43,6 +43,7 @@ def social(id):
     form3 = UpdateSellerReviewForm()
     social = User.get(id)
     seller = User.is_seller(id)
+    (product_reviews, seller_reviews) = users_reviews(id)
     bought_from = False
     left_seller_review = False
     reviews = [0,1]
@@ -102,5 +103,7 @@ def social(id):
     bought_from = bought_from,
     left_review = left_seller_review,
     num_reviews = len(reviews),
+    product_reviews = product_reviews,
+    seller_reviews= seller_reviews,
     last_page = User.count_users())
 

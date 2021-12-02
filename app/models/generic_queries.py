@@ -134,6 +134,7 @@ def who_sells(id):
     pid=id)
     return rows[0][0]
 
+<<<<<<< HEAD
 def save_for_later(uid, pid, quantity):
     rows0 = app.db.execute("""
     SELECT *
@@ -222,3 +223,19 @@ def back_in_cart(uid, pid, quantity):
     uid = uid,
     pid = pid)
     return 1
+=======
+def users_reviews(uid):
+    product_reviews = app.db.execute("""
+    SELECT product_id, name, rating, review
+    FROM ProductReview, Products 
+    WHERE buyer_id= :id AND pid = product_id
+    """, 
+    id=uid)
+    seller_reviews = app.db.execute("""
+    SELECT seller_id, firstname, lastname, rating, review
+    FROM SellerReview, Users
+    WHERE buyer_id= :uid AND users.id = seller_id
+    """, 
+    uid=uid) 
+    return (product_reviews, seller_reviews)
+>>>>>>> 06d799e7dc2a9f0fbaac48c9d2ae51baa41b15aa
