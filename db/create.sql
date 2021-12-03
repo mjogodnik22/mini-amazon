@@ -97,8 +97,6 @@ CREATE TABLE Messages (
 
 -- Added saved for later (same schema as )
 
--- Just to test out using views, product summary implementation will change later
-
 CREATE VIEW ProductSummary(pid, name, description, category, price, review, rating, picture) AS
 SELECT Products.pid, Products.name, Products.description, Products.category, Products.price, 
 ProductReview.review,ProductReview.rating, Products.picture

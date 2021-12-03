@@ -29,6 +29,9 @@ class NewUpdateReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators = [DataRequired()])
     rating = SelectField(_l('Rating'), choices = [(1,1),(2,2),(3,3),(4,4),(5,5)],validators=[DataRequired()])
     submit3 = SubmitField(_l('Update Review'))
+
+class NewDeleteReviewForm(FlaskForm):
+    submit4 = SubmitField(_l('Delete Review'))
     
 @bp.route('/product/<pid>',methods=['GET', 'POST'])
 def product_summaries(pid):
@@ -43,7 +46,7 @@ def product_summaries(pid):
     buyform = NewBuyingProductForm()
     reviewform = NewReviewForm()
     updatereviewform = NewUpdateReviewForm()
-        
+    deleteform = NewDeleteReviewForm()
     if current_user.is_authenticated:
         purchases = Purchase.get_all_by_uid_since(
             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
@@ -86,6 +89,10 @@ def product_summaries(pid):
             Product.update_review(current_user.id, int(pid), updatereviewform.review.data, int(updatereviewform.rating.data))
             flash('You have successfully updated your review for this product!')
             return redirect(url_for('productSummary.product_summaries', pid = pid))
+        if deleteform.validate_on_submit():
+            Product.delete_review(current_user.id, int(pid))
+            flash('You have successfully updated your review for this product!')
+            return redirect(url_for('productSummary.product_summaries', pid = pid))
             
     return render_template('product_summary.html',
                            curr_product=products[0],
@@ -98,4 +105,5 @@ def product_summaries(pid):
                            left_review = left_review,
                           form1 = buyform,
                           form2 = reviewform,
-                          form3 = updatereviewform)
+                          form3 = updatereviewform,
+                          form4 = deleteform)

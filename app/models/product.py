@@ -3,18 +3,24 @@ from flask_login import login_user, logout_user, current_user
 from sqlalchemy import text
 
 class Product:
-    def __init__(self, pid, name, price, quantity_available):
+    def __init__(self, pid, name, price, quantity_available,avg_rating):
         self.pid = pid
         self.name = name
         self.price = price
         self.quantity_available = quantity_available
+        self.avg_rating = avg_rating
 
     @staticmethod
     def get(pid):
         rows = app.db.execute('''
-SELECT pid, name, price, quantity_available
+SELECT Products.pid, name, price, quantity_available, avg_rating
 FROM Products
-WHERE pid = :pid
+    LEFT JOIN (
+              SELECT pid, AVG(rating) avg_rating
+              FROM ProductSummary 
+              GROUP BY pid
+            ) r ON r.pid = Products.pid
+WHERE Products.pid = :pid
 ''',
                               pid=pid)
         return Product(*(rows[0])) if rows is not None else None
@@ -37,26 +43,42 @@ WHERE pid = :pid
         return [Product(*row) for row in rows]
 
     @staticmethod
-    def get_all_page(available=True, filter_by = None, sort_by = 'pid', limit = 10, page_num = 1):
+    def get_all_page(available=True, filter_by = None, sort_by = 'pid', limit = 10, page_num = 1, range_filter = 'price', bottom = -1, top = 1000000):
         offset_count = (page_num - 1) * limit
+        ordering = 'ASC'
+        if sort_by[-4:] == 'DESC':
+            ordering = 'DESC'
+            sort_by = sort_by[:-4]
         if filter_by:
             rows = app.db.execute('''
-    SELECT pid, name, price, quantity_available
+    SELECT Products.pid, name, price, quantity_available,  avg_rating
     FROM Products
-    WHERE category = :filter_by
-    ORDER BY {sort_by}
+    LEFT JOIN (
+              SELECT pid, AVG(rating) avg_rating
+              FROM ProductSummary 
+              GROUP BY pid
+            ) r ON r.pid = Products.pid
+    WHERE category = :filter_by AND {range_filter} BETWEEN :bottom AND :top  
+    ORDER BY COALESCE({sort_by},-1) {order}
     LIMIT {limit}
     OFFSET {offset}
-    '''.format(sort_by = sort_by, limit = limit, offset = offset_count), filter_by = filter_by)
+    '''.format(sort_by = sort_by, limit = limit, offset = offset_count,range_filter = range_filter, order = ordering), bottom = bottom, top = top, filter_by = filter_by)
         else:
             rows = app.db.execute('''
-    SELECT pid, name, price, quantity_available
+    SELECT Products.pid, name, price, quantity_available,avg_rating
     FROM Products
-    ORDER BY {sort_by}
+    LEFT JOIN (
+              SELECT pid ppid, AVG(rating) avg_rating
+              FROM ProductSummary 
+              GROUP BY pid
+            ) r ON r.ppid = Products.pid
+    WHERE {range_filter} BETWEEN :bottom AND :top 
+    ORDER BY COALESCE({sort_by},-1) {order}
     LIMIT {limit}
     OFFSET {offset}
-    '''.format(sort_by = sort_by, limit = limit, offset = offset_count))
+    '''.format(sort_by = sort_by, limit = limit, offset = offset_count,range_filter = range_filter, order = ordering), bottom = bottom, top = top)
         return [Product(*row) for row in rows]
+    
     @staticmethod
     def get_page_count(limit = 10):
         rows = app.db.execute('''
@@ -99,9 +121,10 @@ FROM Products
     OFFSET {offset}
     '''.format(query_name = query, query_desc = query,limit = limit, offset = offset_count))
         return [Product(*row) for row in rows]
-        
+    
+    
     @staticmethod
-    def make_new_product(name, description, category,price, quantity_available):
+    def make_new_seller():
         try:
             rows_useless = app.db.execute("""
             INSERT INTO Sellers(sid)
@@ -109,6 +132,14 @@ FROM Products
             RETURNING sid
             """,
             sid=current_user.id)
+            return 1
+        except Exception:
+            return None
+        
+    @staticmethod
+    def make_new_product(name, description, category,price, quantity_available, image):
+        try:
+            temp = Product.make_new_seller()
             rows = app.db.execute("""
 INSERT INTO Products(seller_id, name, description, category, picture,price, quantity_available)
 VALUES(:seller_id, :name, :description, :category, :picture,:price, :quantity_available)
@@ -118,17 +149,15 @@ RETURNING seller_id
                                   name = name,
                                   description = description,
                                   category = category,
-                                picture = None,
+                                picture = image,
                                 price = price,
                                 quantity_available = quantity_available)
             id = rows[0][0]
             return 1
         except Exception:
-            # likely email already in use; better error checking and
-            # reporting needed
             return None
     @staticmethod
-    def update_product(name, description, category,price, quantity_available):
+    def update_product(name, description, category,price, quantity_available, image):
         try:
             rows = app.db.execute("""
 UPDATE Products
@@ -140,7 +169,7 @@ RETURNING seller_id
                                   name = name,
                                   description = description,
                                   category = category,
-                                picture = None,
+                                picture = image,
                                 price = price,
                                 quantity_available = quantity_available)
             id = rows[0][0]
@@ -200,6 +229,23 @@ RETURNING buyer_id
             # reporting needed
             return None
 
+    @staticmethod
+    def delete_review(buyer_id,product_id):
+        try:
+            rows = app.db.execute("""
+DELETE FROM ProductReview
+WHERE buyer_id = :buyer_id AND product_id = :product_id
+RETURNING buyer_id
+""",
+                                buyer_id = buyer_id,
+                                 product_id = product_id)
+            id = rows[0][0]
+            return 1
+        except Exception as e:
+            print(e)
+            # likely email already in use; better error checking and
+            # reporting needed
+            return None 
     @staticmethod
     def adjustWithOrder(pid, quantity):
         try:
