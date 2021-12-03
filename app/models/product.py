@@ -54,12 +54,12 @@ WHERE Products.pid = :pid
     SELECT Products.pid, name, price, quantity_available,  avg_rating
     FROM Products
     LEFT JOIN (
-              SELECT pid, AVG(rating) avg_rating
+              SELECT pid ppid, AVG(rating) avg_rating
               FROM ProductSummary 
               GROUP BY pid
-            ) r ON r.pid = Products.pid
+            ) r ON r.ppid = Products.pid
     WHERE category = :filter_by AND {range_filter} BETWEEN :bottom AND :top  
-    ORDER BY COALESCE({sort_by},-1) {order}
+    ORDER BY {sort_by} {order} NULLS LAST
     LIMIT {limit}
     OFFSET {offset}
     '''.format(sort_by = sort_by, limit = limit, offset = offset_count,range_filter = range_filter, order = ordering), bottom = bottom, top = top, filter_by = filter_by)
@@ -73,7 +73,7 @@ WHERE Products.pid = :pid
               GROUP BY pid
             ) r ON r.ppid = Products.pid
     WHERE {range_filter} BETWEEN :bottom AND :top 
-    ORDER BY COALESCE({sort_by},-1) {order}
+    ORDER BY {sort_by} {order} NULLS LAST
     LIMIT {limit}
     OFFSET {offset}
     '''.format(sort_by = sort_by, limit = limit, offset = offset_count,range_filter = range_filter, order = ordering), bottom = bottom, top = top)
@@ -157,12 +157,12 @@ RETURNING seller_id
         except Exception:
             return None
     @staticmethod
-    def update_product(name, description, category,price, quantity_available, image):
+    def update_product(name, description, category,price, quantity_available, image,pid):
         try:
             rows = app.db.execute("""
 UPDATE Products
 SET name = :name, description  = :description, category = :category, picture = :picture,price = :price, quantity_available = :quantity_available
-WHERE seller_id = :seller_id
+WHERE seller_id = :seller_id AND pid = :pid
 RETURNING seller_id
 """,
                                   seller_id = current_user.id,
@@ -171,7 +171,8 @@ RETURNING seller_id
                                   category = category,
                                 picture = image,
                                 price = price,
-                                quantity_available = quantity_available)
+                                quantity_available = quantity_available,
+                                 pid = pid)
             id = rows[0][0]
             return 1
         except Exception:
