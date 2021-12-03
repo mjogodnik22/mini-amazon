@@ -1,6 +1,5 @@
 from flask import current_app as app
 
-#TODO: maybe merge this with product
 class ProductSummary:
     def __init__(self, pid, name, description, category, price, review, rating, image):
         self.pid = pid

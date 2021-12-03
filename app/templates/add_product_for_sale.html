@@ -4,7 +4,7 @@
 
 <h1>Add Product for Sale</h1>
 
-<form action="" method="post">
+<form action="" method="post", enctype="multipart/form-data">
   {{ form.hidden_tag() }}
   <p>
     {{ form.name.label }}<br/>
@@ -38,6 +38,20 @@
     {{ form.quantity_available.label }}<br/>
     {{ form.quantity_available(size=32) }}<br/>
     {% for error in form.quantity_available.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+    <p>
+    {{ form.image.label }}<br/>
+    {{ form.image(size=32) }}<br/>
+    {% for error in form.image.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+    <p>
+    {{ form.image2.label }}<br/>
+    {{ form.image2(size=32) }}<br/>
+    {% for error in form.image2.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>

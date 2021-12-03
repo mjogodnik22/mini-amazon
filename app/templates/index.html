@@ -41,7 +41,27 @@
       {{ form2.key.label }}<br/>
       {{ form2.key(size=3) }}<br/>
     </p>
+    <p>
+      {{ form2.direction.label }}<br/>
+      {{ form2.direction(size=2) }}<br/>
+    </p>
     <p>{{ form2.submit() }}</p>
+  </form>
+    <form action="" method="post">
+    {{ form5.hidden_tag() }}
+    <p>
+      {{ form5.filter_type.label }}<br/>
+      {{ form5.filter_type(size=2) }}<br/>
+    </p>
+    <p>
+      {{ form5.lower.label }}<br/>
+      {{ form5.lower(size=3) }}<br/>
+    </p>
+    <p>
+      {{ form5.upper.label }}<br/>
+      {{ form5.upper(size=3) }}<br/>
+    </p>
+    <p>{{ form5.submit() }}</p>
   </form>
 </div>
 <table class='table table-hover table-bordered container'>
@@ -50,6 +70,7 @@
       <th scope="col">Product ID</th>
       <th scope="col">Product Name</th>
       <th scope="col">Price</th>
+      <th scope="col">Average Rating</th>
     </tr>
   </thead>
   <tbody>
@@ -58,6 +79,11 @@
           <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = product.pid) }}"> {{product.pid}}</a></th>
         <td>{{product.name}}</td>
         <td>{{"$%.2f" | format(product.price|float)}}</td>
+        {% if product.avg_rating%}
+            <td>{{"%.2f" | format(product.avg_rating|float)}}</td>
+        {% else %}
+            <td>N/A</td>
+        {% endif %}
       </tr>
     {% endfor %}
   </tbody>

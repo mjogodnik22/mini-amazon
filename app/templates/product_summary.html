@@ -13,8 +13,9 @@
       <th scope="col">Name</th>
       <th scope="col">Description</th>
       <th scope="col">Category</th>
-        <th scope="col">Price</th>
+      <th scope="col">Price</th>
       <th scope="col">Quantity</th>
+      <th scope="col">Average Rating</th>
     </tr>
   </thead>
   <tbody>
@@ -23,8 +24,13 @@
         <td>{{curr_product.name}}</td>
         <td>{{curr_product.description}}</td>
         <td>{{curr_product.category}}</td>
-          <td>{{"$%.2f" | format(curr_product_2.price|float)}}</td>
+        <td>{{"$%.2f" | format(curr_product_2.price|float)}}</td>
         <td>{{curr_product_2.quantity_available}}</td>
+        {% if curr_product_2.avg_rating%}
+            <td>{{"%.2f" | format(curr_product_2.avg_rating|float)}}</td>
+        {% else %}
+            <td>N/A</td>
+        {% endif %}
       </tr>
   </tbody>
 </table>
@@ -90,6 +96,11 @@
     {{ form3.rating(size=5) }}<br/>
   </p>
   <p>{{ form3.submit3() }}</p>
+</form>
+<p>Click here if you would like to delete your review.</p>
+<form action="" method="post">
+  {{ form4.hidden_tag() }}
+  <p>{{ form4.submit4() }}</p>
 </form>
 {% endif %}
 
