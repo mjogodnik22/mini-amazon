@@ -83,7 +83,7 @@ def productPage(page_num = 1, sort_by = 'pid',filter_by = 'None'):
         else:
             return redirect(url_for('productPage.productPage', page_num = pageform.page_val.data, sort_by = sort_by, filter_by = filter_by))
     if searchform.validate_on_submit():
-        return redirect(url_for('productPage.productSearchPage', page_num = page_num, query = searchform.search_val.data))
+        return redirect(url_for('productPage.productSearchPage', page_num = 1, query = searchform.search_val.data))
     if rangefilterform.validate_on_submit():
         filter_type = rangefilterform.filter_type.data
         lower_bound = rangefilterform.lower.data

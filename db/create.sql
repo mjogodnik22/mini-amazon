@@ -116,3 +116,13 @@ CREATE VIEW Purchases(id, uid, pid, time_purchased) AS
 SELECT OrderInformation.oid, OrderInformation.uid, ItemsInOrder.pid, OrderInformation.time_purchased
 FROM OrderInformation, ItemsInOrder
 WHERE OrderInformation.oid = ItemsInOrder.oid;
+
+CREATE VIEW AverageProductRating(pid, avg_rating) AS
+SELECT Products.pid, avg_rating
+FROM Products
+LEFT JOIN (
+  SELECT product_id, AVG(rating) avg_rating
+  FROM ProductReview 
+  GROUP BY product_id
+) r ON r.product_id = Products.pid
+

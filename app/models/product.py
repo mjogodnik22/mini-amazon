@@ -14,34 +14,22 @@ class Product:
     def get(pid):
         rows = app.db.execute('''
 SELECT Products.pid, name, price, quantity_available, avg_rating
-FROM Products
-    LEFT JOIN (
-              SELECT pid, AVG(rating) avg_rating
-              FROM ProductSummary 
-              GROUP BY pid
-            ) r ON r.pid = Products.pid
-WHERE Products.pid = :pid
+FROM Products, AverageProductRating
+WHERE Products.pid = :pid AND Products.pid = AverageProductRating.pid
 ''',
                               pid=pid)
         return Product(*(rows[0])) if rows is not None else None
-
+    
     @staticmethod
-    def get_all(available=True, filter_by = None, sort_by = 'pid'):
-        if filter_by:
-            rows = app.db.execute('''
-    SELECT pid, name, price, quantity_available
-    FROM Products
-    WHERE category = :filter_by
-    ORDER BY {sort_by}
-    '''.format(sort_by = sort_by), filter_by = filter_by)
-        else:
-            rows = app.db.execute('''
-    SELECT pid, name, price, quantity_available
-    FROM Products
-    ORDER BY {sort_by}
-    '''.format(sort_by = sort_by))
-        return [Product(*row) for row in rows]
-
+    def check_valid_input(sort_by, range_filter):
+        # Because you need to use .format and can't use the default parameter passing to put in column names in the query, 
+        # we do an additional check on the sorting/range queries to make sure that it is valid and not an attack.
+        valid_sorts = ['name','pid','price','avg_rating']
+        valid_range = ['price','avg_rating']
+        if sort_by in valid_sorts and range_filter in valid_range:
+            return True
+        return False
+    
     @staticmethod
     def get_all_page(available=True, filter_by = None, sort_by = 'pid', limit = 10, page_num = 1, range_filter = 'price', bottom = -1, top = 1000000):
         offset_count = (page_num - 1) * limit
@@ -49,34 +37,26 @@ WHERE Products.pid = :pid
         if sort_by[-4:] == 'DESC':
             ordering = 'DESC'
             sort_by = sort_by[:-4]
+        if not Product.check_valid_input(sort_by,range_filter):
+            return []
         if filter_by:
             rows = app.db.execute('''
     SELECT Products.pid, name, price, quantity_available,  avg_rating
-    FROM Products
-    LEFT JOIN (
-              SELECT pid ppid, AVG(rating) avg_rating
-              FROM ProductSummary 
-              GROUP BY pid
-            ) r ON r.ppid = Products.pid
-    WHERE category = :filter_by AND {range_filter} BETWEEN :bottom AND :top  
+    FROM Products, AverageProductRating
+    WHERE Products.pid = AverageProductRating.pid AND category = :filter_by AND {range_filter} BETWEEN :bottom AND :top  
     ORDER BY {sort_by} {order} NULLS LAST
-    LIMIT {limit}
-    OFFSET {offset}
-    '''.format(sort_by = sort_by, limit = limit, offset = offset_count,range_filter = range_filter, order = ordering), bottom = bottom, top = top, filter_by = filter_by)
+    LIMIT :limit
+    OFFSET :offset
+    '''.format(sort_by = sort_by,range_filter = range_filter, order = ordering), bottom = bottom, top = top, filter_by = filter_by,limit = limit, offset = offset_count)
         else:
             rows = app.db.execute('''
     SELECT Products.pid, name, price, quantity_available,avg_rating
-    FROM Products
-    LEFT JOIN (
-              SELECT pid ppid, AVG(rating) avg_rating
-              FROM ProductSummary 
-              GROUP BY pid
-            ) r ON r.ppid = Products.pid
-    WHERE {range_filter} BETWEEN :bottom AND :top 
+    FROM Products, AverageProductRating
+    WHERE Products.pid = AverageProductRating.pid AND {range_filter} BETWEEN :bottom AND :top 
     ORDER BY {sort_by} {order} NULLS LAST
-    LIMIT {limit}
-    OFFSET {offset}
-    '''.format(sort_by = sort_by, limit = limit, offset = offset_count,range_filter = range_filter, order = ordering), bottom = bottom, top = top)
+    LIMIT :limit
+    OFFSET :offset
+    '''.format(sort_by = sort_by,range_filter = range_filter, order = ordering), bottom = bottom, top = top,limit = limit, offset = offset_count)
         return [Product(*row) for row in rows]
     
     @staticmethod
@@ -110,17 +90,17 @@ FROM Products
     
     @staticmethod
     def get_all_search(available=True, limit = 10, page_num = 1, search_query = ""):
-        query ='\'%' + search_query + '%\''
+        query ='%' + search_query + '%'
         offset_count = (page_num - 1) * limit
         rows = app.db.execute('''
     SELECT DISTINCT Products.pid, Products.name, Products.price, Products.quantity_available
-    FROM Products, ProductSummary
-    WHERE Products.pid = ProductSummary.pid and (Products.name LIKE {query_name} or ProductSummary.description LIKE {query_name})
+    FROM Products, ProductSummary, AverageProductRating
+    WHERE Products.pid = ProductSummary.pid AND ProductSummary.pid = AverageProductRating.pid AND (Products.name LIKE :query_name or ProductSummary.description LIKE :query_name)
     ORDER BY Products.pid ASC
-    LIMIT {limit}
-    OFFSET {offset}
-    '''.format(query_name = query, query_desc = query,limit = limit, offset = offset_count))
-        return [Product(*row) for row in rows]
+    LIMIT :limit
+    OFFSET :offset
+    ''', query_name = query,limit = limit, offset = offset_count)
+        return rows
     
     
     @staticmethod
@@ -176,8 +156,6 @@ RETURNING seller_id
             id = rows[0][0]
             return 1
         except Exception:
-            # likely email already in use; better error checking and
-            # reporting needed
             return None
         
         
@@ -205,8 +183,6 @@ RETURNING buyer_id
             id = rows[0][0]
             return 1
         except Exception:
-            # likely email already in use; better error checking and
-            # reporting needed
             return None
         
     @staticmethod
@@ -225,9 +201,6 @@ RETURNING buyer_id
             id = rows[0][0]
             return 1
         except Exception as e:
-            print(e)
-            # likely email already in use; better error checking and
-            # reporting needed
             return None
 
     @staticmethod
@@ -243,9 +216,6 @@ RETURNING buyer_id
             id = rows[0][0]
             return 1
         except Exception as e:
-            print(e)
-            # likely email already in use; better error checking and
-            # reporting needed
             return None 
     @staticmethod
     def adjustWithOrder(pid, quantity):
