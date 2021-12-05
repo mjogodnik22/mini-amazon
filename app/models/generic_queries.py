@@ -222,7 +222,6 @@ def back_in_cart(uid, pid, quantity):
     uid = uid,
     pid = pid)
     return 1
-
 def users_reviews(uid):
     product_reviews = app.db.execute("""
     SELECT product_id, name, rating, review
