@@ -39,7 +39,7 @@ def product_summaries(pid):
     products = ProductSummary.get_all(pid)
     product_temp = Product.get(pid)
     product_name = product_temp.name
-    sellers = ProductSeller.get_all(pid)
+    sellers = ProductSeller.get_all_name(product_name)
     bought = False
     sold = False
     left_review = False

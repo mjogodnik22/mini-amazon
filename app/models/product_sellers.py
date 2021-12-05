@@ -1,9 +1,6 @@
 from flask import current_app as app
 
-# Might be better for this to be a part of a general seller class
 class ProductSeller:
-    # ADD AVERAGE SELLER RATING LATER
-    # can also sort by price?
     def __init__(self,pid, id, first_name, last_name,price, quantity_available):
         self.pid = pid
         self.id = id
