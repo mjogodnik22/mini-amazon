@@ -36,10 +36,10 @@
 </table>
 
 {% if curr_product.image %}
-<img src= {{curr_product.image}} >
+<img src= {{curr_product.image}} width="500" height="auto">
 {% endif %}
-
-<p> Add to cart?</p>
+<br>
+<h2> Add to cart?</h2>
 <form action="" method="post">
   {{ form1.hidden_tag() }}
   <p>
