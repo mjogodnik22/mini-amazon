@@ -120,8 +120,8 @@
     {% for seller in all_sellers%}
       <tr>
         <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = seller.pid) }}"> {{seller.pid}}</a></th>
-        <td><a href = "{{ url_for('social.social', id = seller.id) }}">{{seller.first_name}}</a></td>
-        <td>{{seller.last_name}}</td>
+        <td><a href = "{{ url_for('social.social', id = seller.id) }}">{{seller.firstname}}</a></td>
+        <td>{{seller.lastname}}</td>
         <td>{{"$%.2f" | format(seller.price|float)}}</td>
           <td>{{seller.quantity_available}}</td>
           {% if seller.avg_rating%}
