@@ -33,12 +33,12 @@ WHERE pid = :pid AND products.seller_id = Users.id
     @staticmethod
     def get_all_name(name):
         rows = app.db.execute('''
-SELECT Products.pid, Products.seller_id, Users.firstname, Users.lastname, Products.price, Products.quantity_available
-FROM Products, Users
-WHERE name = :name AND products.seller_id = Users.id
+SELECT Products.pid, Products.seller_id, Users.firstname, Users.lastname, Products.price, Products.quantity_available, AverageProductRating.avg_rating
+FROM Products, Users, AverageProductRating
+WHERE Products.pid = AverageProductRating.pid AND name = :name AND products.seller_id = Users.id
 ''',
                               name = name)
-        return [ProductSeller(*row) for row in rows]
+        return rows
     
     
 

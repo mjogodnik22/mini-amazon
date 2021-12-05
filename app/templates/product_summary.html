@@ -113,6 +113,7 @@
       <th scope="col">Last Name</th>
       <th scope="col">Price</th>
       <th scope="col">Quantity Available</th>
+    <th scope="col">Average Rating</th>
     </tr>
   </thead>
   <tbody>
@@ -123,6 +124,11 @@
         <td>{{seller.last_name}}</td>
         <td>{{"$%.2f" | format(seller.price|float)}}</td>
           <td>{{seller.quantity_available}}</td>
+          {% if seller.avg_rating%}
+            <td>{{"%.2f" | format(seller.avg_rating|float)}}</td>
+        {% else %}
+            <td>N/A</td>
+          {% endif %}
       </tr>
     {% endfor %}
   </tbody>
