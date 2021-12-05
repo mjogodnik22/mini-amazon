@@ -6,7 +6,7 @@
 <h3>Your Name: {{current_user.firstname}} {{current_user.lastname}}</h3>
 <h3>Your Email: {{current_user.email}}</h3>
 {% if balance == 0%}
-<h3>Your balance is empty. Cick Here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">Update Balance!</a></h3>
+<h3>Your balance is empty. Click here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">update balance!</a></h3>
 {%elif balance != 0%}
 <h3>Your Balance: ${{"%0.2f" % balance}}</h3>
 {% endif %}
@@ -38,8 +38,8 @@
     </table>
     <h4>Total Cost Of Potential Purchase: ${{"%0.2f" % totalcost}}</h4>
     {% if hasEnough == False%}
-    <h4>You Have Insufficient Funds! Cick Here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">Add Funds!</a></h4>
-    {% endif %}
+    <h4>You Have Insufficient Funds! Click here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">add funds!</a></h4>
+    {% else %}
 
     <form action="" method="post">
       {{ form.hidden_tag() }}
@@ -51,6 +51,7 @@
       </p>
       {{ form.submit(class_="btn btn-black") }}
     </form>
+    {% endif %}
 {% endif %}
 
 {% if any_saved > 0 %}

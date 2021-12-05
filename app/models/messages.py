@@ -3,11 +3,11 @@ from flask_login import current_user
 
 def get_messages():
     rows=app.db.execute('''
-    SELECT mid, sender_id, firstname, lastname, recipient_id, msg, subject, msg_read
+    SELECT mid, sender_id, firstname, lastname, recipient_id, msg, subject, msg_read, time_rev
     FROM Messages, Users
     WHERE recipient_id = :id
     AND sender_id = Users.id
-    ORDER BY msg_read DESC, firstname ASC
+    ORDER BY time_rev DESC
     ''',
     id = current_user.id)
     return rows
@@ -49,7 +49,7 @@ def get_sent_msgs():
     FROM Messages, Users
     WHERE sender_id = :id
     AND recipient_id = Users.id
-    ORDER BY msg_read DESC, firstname ASC
+    ORDER BY time_rev DESC
     ''',
     id = current_user.id)
     return rows

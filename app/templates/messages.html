@@ -2,12 +2,7 @@
 
 {% block content %}
 
-<br><br>
-
 <h2>Messages</h2>
-
-
-<br>
 
 <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
@@ -26,7 +21,7 @@
         {% else %}
         <tr>
             <td><a href="{{ url_for('message_details.detailed_messages', mid = message.mid) }}">{{message.firstname}} {{message.lastname}}</a></td>
-            <td>{{message.subject}}</td>
+            <td>{{message.subject}}q</td>
             </tr>
         {% endif %}
       {% endfor %}
@@ -37,8 +32,6 @@
 
   <h2>Sent Messages</h2>
 
-
-  <br>
   
   <table class='table table-hover table-bordered container'>
       <thead class="thead-dark">
