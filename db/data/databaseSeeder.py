@@ -52,68 +52,56 @@ def generateRandomData(numUsers, numProducts, numOrders):
 	# 		if random.randint(1, 4) == 1: # 25% chance of a given user also being a seller
 	# 			sWriter.writerow([i])
 	# 			sellersArr.append(i)
-
 		
-	with open('db/data/Products.csv', 'w', newline='') as prods:
-		#Products: pid, deleted, sid, name, desc, category, pic, price, quantity
-		file = open('db/data/Sellers.csv')
-		csvreader = csv.reader(file)
-		for row in csvreader:
-			sellersArr.append(row[0])
-		pWriter = csv.writer(prods)
-		for i in range(1, numProducts+1):
-			pid = i
-			deleted = False
-			if 5 == i % 200:
-				deleted = True
-			uid = random.choice(sellersArr)
-			itemDesc = fake.sentence(nb_words=random.randint(10,20))
-			category = random.choice(categories)
-			catList = category.split(" ")
-			if "&" in catList:
-				catList.remove("&")
-			objName = fake.word().capitalize() + " " + random.choice(catList)
-			price = round(random.uniform(0.99, 100), 2) + random.choice([0, 0, 0, 0, 0, 100])
-			quant1 = random.choice([1, 2, 3, 5, 5, 5, 5, 10, 10, 10, 10, 20, 20, 100, 100])+random.randint(1, 9)
-			picture = category.split(" ")[0].lower()
-			pData = [pid, deleted, uid, objName, itemDesc, category, '/static/images/' + picture + ".jpg", price, quant1]
-			pWriter.writerow(pData)
-
-
-			
-			
+	# with open('db/data/Products.csv', 'w', newline='') as prods:
+	# 	#Products: pid, sid, name, desc, category, pic, price, quantity
+	# 	pWriter = csv.writer(prods)
+	# 	for i in range(1, numProducts+1):
+	# 		pid = i
+	# 		uid = random.choice(sellersArr)
+	# 		itemDesc = fake.sentence(nb_words=random.randint(10,20))
+	# 		category = random.choice(categories)
+	# 		catList = category.split(" ")
+	# 		if "&" in catList:
+	# 			catList.remove("&")
+	# 		objName = fake.word().capitalize() + " " + random.choice(catList)
+	# 		price = round(random.uniform(0.99, 100), 2) + random.choice([0, 0, 0, 0, 0, 100])
+	# 		quant1 = random.choice([1, 2, 3, 5, 5, 5, 5, 10, 10, 10, 10, 20, 20, 100, 100])+random.randint(1, 9)
+	# 		picture = category.split(" ")[0].lower()
+	# 		pData = [pid, uid, objName, itemDesc, category, '/static/images/' + picture + ".jpg", price, quant1]
+	# 		pWriter.writerow(pData)
 		
-	"""with open('db/data/OrderInformation.csv', 'w', newline='') as ordInfo:
-		#OrderInformation: oid, uid, date
-		oiWriter = csv.writer(ordInfo)
-		for i in range(1, numOrders+1):
-			uid = random.randint(1, numUsers)
-			oid = i
-			date = fake.date_time_this_year()
-			address = fake.simple_profile()['address']
-			oiWriter.writerow([oid, uid, date, address])
+	# with open('db/data/OrderInformation.csv', 'w', newline='') as ordInfo:
+	# 	#OrderInformation: oid, uid, date
+	# 	oiWriter = csv.writer(ordInfo)
+	# 	for i in range(1, numOrders+1):
+	# 		uid = random.randint(1, numUsers)
+	# 		oid = i
+	# 		date = fake.date_time_this_year()
+	# 		address = fake.simple_profile()['address']
+	# 		oiWriter.writerow([oid, uid, date, address])
 
-	with open('db/data/ItemsInOrder.csv', 'w', newline='') as itemsInOrd:
-		#ItemsInOrder: oid, pid, quantity2, price, status
-		iioWriter = csv.writer(itemsInOrd)
-		for i in range(1, numOrders+1):
-			pids = []
-			oid = i
-			totallyFulfilled = random.choice([True, True, True, False])
-			for j in range(1, random.randint(2, 7)):
-				pid = random.randint(1, numProducts)
-				while pid in pids:
-					pid = random.randint(1, numProducts)
-				status = random.choice(potStatus)
-				time_fulfilled = ''
-				if totallyFulfilled:
-					status = "Fulfilled"
-				if status == "Fulfilled":
-					time_fulfilled = fake.date_time_this_year()
-				quant2 = random.choice([1, 1, 1, 1, 2, 2, 3, 4])
-				pids.append(pid)
-				price = round(random.uniform(0.99, 100), 2) + random.choice([0, 0, 0, 0, 0, 100])
-				iioWriter.writerow([oid, pid, quant2, price, status, time_fulfilled])"""
+	# with open('db/data/ItemsInOrder.csv', 'w', newline='') as itemsInOrd:
+	# 	#ItemsInOrder: oid, pid, quantity2, price, status
+	# 	iioWriter = csv.writer(itemsInOrd)
+	# 	for i in range(1, numOrders+1):
+	# 		pids = []
+	# 		oid = i
+	# 		totallyFulfilled = random.choice([True, True, True, False])
+	# 		for j in range(1, random.randint(2, 7)):
+	# 			pid = random.randint(1, numProducts)
+	# 			while pid in pids:
+	# 				pid = random.randint(1, numProducts)
+	# 			status = random.choice(potStatus)
+	# 			time_fulfilled = ''
+	# 			if totallyFulfilled:
+	# 				status = "Fulfilled"
+	# 			if status == "Fulfilled":
+	# 				time_fulfilled = fake.date_time_this_year()
+	# 			quant2 = random.choice([1, 1, 1, 1, 2, 2, 3, 4])
+	# 			pids.append(pid)
+	# 			price = round(random.uniform(0.99, 100), 2) + random.choice([0, 0, 0, 0, 0, 100])
+	# 			iioWriter.writerow([oid, pid, quant2, price, status, time_fulfilled])
 
 	# with open('db/data/ProductReview.csv', 'w', newline='') as prodRev:
 	# 	#ProductReview: uid, pid, rating, desc
