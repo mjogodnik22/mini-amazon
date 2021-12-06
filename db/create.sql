@@ -46,7 +46,7 @@ CREATE TABLE ItemsInOrder (
     quantity INT NOT NULL, 
     price_per_unit DECIMAl NOT NULL,
     fulfilled VARCHAR(32) NOT NULL,
-    date_time timestamp without time zone DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
+    date_time timestamp without time zone DEFAULT NULL,
     CHECK(fulfilled in ('Not Fulfilled', 'Fulfilled')),
     PRIMARY KEY(oid, pid)
 );

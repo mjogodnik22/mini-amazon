@@ -240,12 +240,14 @@ def users_reviews(uid):
     SELECT product_id, name, rating, review
     FROM ProductReview, Products 
     WHERE buyer_id= :id AND pid = product_id
+    ORDER BY rating ASC
     """, 
     id=uid)
     seller_reviews = app.db.execute("""
     SELECT seller_id, firstname, lastname, rating, review
     FROM SellerReview, Users
     WHERE buyer_id= :uid AND users.id = seller_id
+    ORDER BY rating ASC
     """, 
     uid=uid) 
     return (product_reviews, seller_reviews)

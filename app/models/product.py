@@ -96,8 +96,8 @@ FROM Products
         rows = app.db.execute('''
     SELECT Distinct Products.pid, Products.name, Products.price, Products.quantity_available, avg_rating
     FROM Products, ProductSummary, AverageProductRating
-    WHERE Products.pid = ProductSummary.pid AND ProductSummary.pid = AverageProductRating.pid AND (Products.name LIKE :query_name or ProductSummary.description LIKE :query_name)
-          AND Product.deleted = False
+    WHERE Products.pid = ProductSummary.pid AND ProductSummary.pid = AverageProductRating.pid AND (Products.name iLIKE :query_name or ProductSummary.description iLIKE :query_name)
+          AND Products.deleted = False
     ORDER BY Products.pid ASC
     LIMIT :limit
     OFFSET :offset

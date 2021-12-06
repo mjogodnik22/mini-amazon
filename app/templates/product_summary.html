@@ -49,7 +49,7 @@
   <p>{{ form1.submit1() }}</p>
 </form>
 
-<h2>Reviews:</h2>
+<h2>Reviews ({{num_reviews}}):</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
@@ -97,7 +97,6 @@
   </p>
   <p>{{ form3.submit3() }}</p>
 </form>
-<p>Click here if you would like to delete your review.</p>
 <form action="" method="post">
   {{ form4.hidden_tag() }}
   <p>{{ form4.submit4() }}</p>
@@ -138,9 +137,6 @@
 {% if sold_product %}
 <p>You're currently selling this item! Would you like to update the information <a href="{{ url_for('updateproduct.updateProductPage', pid = pid) }}">here</a>? </p>
 {% endif %}
-
-
-<p><a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</p>
 
 
 

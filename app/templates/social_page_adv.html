@@ -26,10 +26,9 @@
 {% if is_seller %}
 
 <h3>Address: {{user.address}}</h3>
+<h3>Seller: Yes</h3>
 
 {% endif %}
-
-<br>
 
 {% if is_seller %}
 
@@ -118,65 +117,66 @@
 
 {% else %}
 
-<h2>User not a seller</h2>
+<h3>Seller: No</h3>
+<br>
 
 {% endif %}
 
-</div>
-<div class = "right">
-  <br>
-  <br>
-  <h3>Users Reviews of Others Products</h3>
-  {% if product_reviews != [] %}
-    <table class='table table-hover table-bordered container'>
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Product ID</th>
-          <th scope="col">Product Name</th>
-          <th scope="col">Review</th>
-          <th scope="col">Rating</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for review in product_reviews%}
-          <tr>
-            <td><a href ="{{ url_for('productSummary.product_summaries', pid = review.product_id) }}"> {{review.product_id}}</a></td>
-            <td>{{review.name}}</td>
-            <td>{{review.review}}</td>
-            <td>{{review.rating}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% endif %}
-  
-  
-  
-  
-  <h3>Users Reviews of Other Sellers</h3>
-  {% if seller_reviews != [] %}
+{% if product_reviews != [] %}
+<h3>Users Reviews of Others Products</h3>
   <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
       <tr>
-        <th scope="col">Seller </th>
+        <th scope="col">Product ID</th>
+        <th scope="col">Product Name</th>
         <th scope="col">Review</th>
         <th scope="col">Rating</th>
       </tr>
     </thead>
     <tbody>
-      {% for review in seller_reviews%}
+      {% for review in product_reviews%}
         <tr>
-          <td><a href="{{ url_for('social.social', id=review.seller_id)}}">{{review.firstname}} {{review.lastname}} </a></td>
+          <td><a href ="{{ url_for('productSummary.product_summaries', pid = review.product_id) }}"> {{review.product_id}}</a></td>
+          <td>{{review.name}}</td>
           <td>{{review.review}}</td>
           <td>{{review.rating}}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-  {% endif %}
+  {% else %}
+  <h3>{{user.firstname}} {{user.lastname}} has no product reviews.</h3>
+{% endif %}
 
-<br> 
-<br> 
+
+
+{% if seller_reviews != [] %}
+<h3>Users Reviews of Other Sellers</h3>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Seller </th>
+      <th scope="col">Review</th>
+      <th scope="col">Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in seller_reviews%}
+      <tr>
+        <td><a href="{{ url_for('social.social', id=review.seller_id)}}">{{review.firstname}} {{review.lastname}} </a></td>
+        <td>{{review.review}}</td>
+        <td>{{review.rating}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3>{{user.firstname}} {{user.lastname}} has no seller reviews.</h3>
+{% endif %}
+
+</div>
+<div class = "right">
+
 <h2>Search for a user:</h2>
 <form action="" method="post" novalidate>
   {{ form.hidden_tag() }}
