@@ -18,11 +18,21 @@ seller_orders_bp = Blueprint('seller_orders', __name__)
 seller_order_details_bp = Blueprint('seller_order_details', __name__)
 seller_page_bp = Blueprint('seller', __name__)
 seller_product_fulfillment_bp = Blueprint('seller_product_fulfillment', __name__)
+deletion_page_bp = Blueprint('delete_product', __name__)
+restore_bp = Blueprint('restore_product', __name__)
+
 
 @seller_inventory_bp.route('/seller_inventory')
 def seller_inventory():
-   inventory = User.get_products(current_user.id) 
-   return render_template('seller_inventory.html', inventory=inventory)
+   inventory = User.get_products(current_user.id)
+   current = []
+   deleted = []
+   for product in inventory:
+      if product.deleted == True:
+         deleted.append(product)
+      else:
+         current.append(product)
+   return render_template('seller_inventory.html', current=current, deleted=deleted)
 
 @seller_orders_bp.route('/seller_orders')
 def seller_orders():
@@ -63,3 +73,23 @@ def seller(id):
    reviews = get_seller_information(id)
    products = get_seller_products(id)
    return render_template('seller_page.html', reviews=reviews, seller=reviews[0], products=products)
+
+
+@deletion_page_bp.route("/delete/<pid>")
+def delete_product_page(pid):
+   prods = get_seller_products(current_user.id)
+   for product in prods:
+      if int(product.pid) == int(pid):
+         delete_product(pid)
+         break
+   return redirect(url_for('seller_inventory.seller_inventory'))
+
+@restore_bp.route("/restore/<pid>")
+def restore_page(pid):
+   prods = get_all_seller_products(current_user.id)
+   for product in prods:
+      if int(product.pid) == int(pid):
+         print("hi")
+         restore_product(pid)
+         break
+   return redirect(url_for('seller_inventory.seller_inventory'))

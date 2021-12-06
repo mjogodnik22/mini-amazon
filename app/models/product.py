@@ -43,7 +43,7 @@ WHERE Products.pid = :pid AND Products.pid = AverageProductRating.pid
             rows = app.db.execute('''
     SELECT Distinct Products.pid, name, price, quantity_available,  avg_rating
     FROM Products, AverageProductRating
-    WHERE Products.pid = AverageProductRating.pid AND category = :filter_by AND {range_filter} BETWEEN :bottom AND :top  
+    WHERE Products.pid = AverageProductRating.pid AND category = :filter_by AND {range_filter} BETWEEN :bottom AND :top AND Products.deleted = False
     ORDER BY {sort_by} {order} NULLS LAST
     LIMIT :limit
     OFFSET :offset
@@ -52,7 +52,7 @@ WHERE Products.pid = :pid AND Products.pid = AverageProductRating.pid
             rows = app.db.execute('''
     SELECT Distinct Products.pid, name, price, quantity_available,avg_rating
     FROM Products, AverageProductRating
-    WHERE Products.pid = AverageProductRating.pid AND {range_filter} BETWEEN :bottom AND :top 
+    WHERE Products.pid = AverageProductRating.pid AND {range_filter} BETWEEN :bottom AND :top And Products.deleted = False
     ORDER BY {sort_by} {order} NULLS LAST
     LIMIT :limit
     OFFSET :offset
@@ -64,6 +64,7 @@ WHERE Products.pid = :pid AND Products.pid = AverageProductRating.pid
         rows = app.db.execute('''
 SELECT COUNT(*)
 FROM Products
+Where Deleted = False
 ''')
         return int(rows[0][0]/limit)
     @staticmethod
@@ -87,7 +88,7 @@ FROM Products
         except Exception:
             return None
 
-    
+    "Does not get deleted items"
     @staticmethod
     def get_all_search(available=True, limit = 10, page_num = 1, search_query = ""):
         query ='%' + search_query + '%'
@@ -96,6 +97,7 @@ FROM Products
     SELECT Distinct Products.pid, Products.name, Products.price, Products.quantity_available
     FROM Products, ProductSummary, AverageProductRating
     WHERE Products.pid = ProductSummary.pid AND ProductSummary.pid = AverageProductRating.pid AND (Products.name LIKE :query_name or ProductSummary.description LIKE :query_name)
+          AND Product.deleted = False
     ORDER BY Products.pid ASC
     LIMIT :limit
     OFFSET :offset
