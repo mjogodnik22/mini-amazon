@@ -1,5 +1,6 @@
 from flask import current_app as app
 from flask_login import login_user, logout_user, current_user
+from datetime import datetime
 from .. import login
 
 class Cartesian:
@@ -102,14 +103,13 @@ WHERE Carts.uid = :uid AND pid = :pid
             return None
 
     @staticmethod
-    #INSERT ADDRESS INTO DATABASE 
     def placeOrder(uid, address):
         try:
             rows = app.db.execute("""
-    INSERT INTO OrderInformation(uid) 
-    VALUES (:uid)
+    INSERT INTO OrderInformation(uid, order_address) 
+    VALUES (:uid, :address)
     RETURNING *
-            """,uid=uid)
+            """,uid=uid, address = address)
             for row in rows:
                 print(row)
             id = rows[0][0]
@@ -140,7 +140,8 @@ WHERE Carts.uid = :uid AND pid = :pid
             rows = app.db.execute("""
         SELECT * FROM OrderInformation
         WHERE uid = :uid Order By oid DESC
-            """,uid = uid) 
+            """,uid = uid)
+            print(rows)
             return [[row.oid,row.time_purchased, order_fulfilled(row.oid)] for row in rows] if rows else None
         except Exception as h:
             print("hello",h)
@@ -154,7 +155,7 @@ WHERE Carts.uid = :uid AND pid = :pid
             rows = app.db.execute("""
             SELECT * FROM ItemsInOrder WHERE oid = :oid
             """,oid = oid)
-            return [[row.pid, row.quantity, row.quantity,row.price_per_unit,row.fulfilled] for row in rows] if rows else None
+            return [[row.pid, row.quantity, row.quantity,row.price_per_unit,row.fulfilled, row.date_time] for row in rows] if rows else None #.strftime("%H:%M:%S")
         except Exception as gh:
             print("hello", gh)
             return 0
@@ -169,6 +170,18 @@ WHERE Carts.uid = :uid AND pid = :pid
         except Exception as gh:
             print("hello", gh)
             return 0
+
+    @staticmethod
+    def getOAddress(oid):
+        try:
+            rows = app.db.execute("""
+            SELECT order_address FROM OrderInformation WHERE oid = :oid
+            """,oid = oid)
+            return rows[0]
+        except Exception as gh:
+            print("hello", gh)
+            return
+
 
     @staticmethod
     def getSaved(uid):

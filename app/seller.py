@@ -47,6 +47,9 @@ def seller_order_details(oid):
    order_id = oid
    orderer_info = get_order_purchase_details(oid)
    purchases = get_sellers_order_details(oid)
+   print(purchases[-1][-1])
+   print(type(purchases[-1][-1]))
+
    return render_template('seller_order_details.html', purchases=purchases, orderer_info= orderer_info, oid=order_id)
 
 

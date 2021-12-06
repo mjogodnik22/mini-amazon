@@ -3,35 +3,36 @@
 {% block content %}
 
 <h2>{{orderer_info.firstname}}'s order</h2>
-Address: {{orderer_info.address}}
+Address: {{orderer_info.order_address}}
 
 
 <table class='table table-hover table-bordered container'>
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">PID</th>
-        <th scope="col">Product</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Fulfillment Status</th>
-    </tr>
-    </thead>
-    <tbody>
-      {% for purchase in purchases%}
-       <tr>
-        <td>{{purchase.pid}}</td>
-        <td>{{purchase.name}}</td>
-        <td>{{purchase.quantity}}</td>
-        {% if purchase.fulfilled == "Not Fulfilled" %}
-        <td><a href="{{url_for('seller_product_fulfillment.seller_product_fulfillment', oid=oid, pid = purchase.pid) }}"> {{purchase.fulfilled}}</a></td>>
-        
-        {% else %}
-        <td>{{purchase.fulfilled}}</td>
-        {% endif %}
-
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">PID</th>
+      <th scope="col">Product</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Fulfillment Status</th>
+      <th scope="col">Time Fulfilled</th>
+  </tr>
+  </thead>
+  <tbody>
+    {% for purchase in purchases%}
+      <tr> 
+      <td>{{purchase.pid}}</td>
+      <td>{{purchase.name}}</td>
+      <td>{{purchase.quantity}}</td>
+      {% if purchase.fulfilled == "Not Fulfilled" %}
+      <td><a href="{{url_for('seller_product_fulfillment.seller_product_fulfillment', oid=oid, pid = purchase.pid) }}"> {{purchase.fulfilled}}</a></td>
+      
+      {% else %}
+      <td>{{purchase.fulfilled}}</td>
+      <td>{{purchase.date_time}}</td>
+      {% endif %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 
 {% endblock %}

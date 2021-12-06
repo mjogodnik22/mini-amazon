@@ -78,6 +78,9 @@ def create_app():
     from .social import bp as social_bp
     app.register_blueprint(social_bp)
 
+    from .social import bp2 as social_bp_adv
+    app.register_blueprint(social_bp_adv)
+
     from .buyer import buyer_bp as buyer_bp
     app.register_blueprint(buyer_bp)
 

@@ -20,17 +20,19 @@
           <th scope="col">Product</th>
           <th scope="col">Quantity</th>
           <th scope="col">Unit Cost</th>
-          <th scope="col">Change Quantity</th>
+          <th scope="col">Alter</th>
+          <th scope="col"></th>
 
         </tr>
       </thead>
       <tbody>
         {% for item in currcart%}
           <tr>          
-            <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = item.pid) }}">{{item.pid}}</a></th>
+            <td scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = item.pid) }}">{{item.pid}}</a></td>
             <td>{{item.quantity}}</td>
             <td>{{"$%.2f" | format(item.price|float)}}</td>
-            <td><a href="{{ url_for('removeFromCart.updateCart', pid = item.pid) }}">Alter</a<br> <a href="{{ url_for('Cart.saveForLater', uid = current_user.id, pid = item.pid, quantity = item.quantity) }}">Save For Later</a></td>
+            <td><a href="{{ url_for('removeFromCart.updateCart', pid = item.pid) }}">Change Quantity or Remove </a></td>
+            <td><a href="{{ url_for('Cart.saveForLater', uid = current_user.id, pid = item.pid, quantity = item.quantity) }}">Save Item For Later</a></td>
           </tr>
         {% endfor %}
 
@@ -72,7 +74,7 @@
         <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = item.pid) }}">{{item.pid}}</a></th>
         <td>{{item.quantity}}</td>
         <td>{{"$%.2f" | format(item.price|float)}}</td>
-        <td><a href="{{ url_for('Cart.deleteSaved', uid = current_user.id, pid = item.pid) }}" type="button" class="btn btn-light">X</a>  <a href="{{ url_for('Cart.addCart', uid = current_user.id, pid = item.pid, quantity = item.quantity) }}" type="button" class="btn btn-light">Add Back</a></td>
+        <td><a href="{{ url_for('Cart.deleteSaved', uid = current_user.id, pid = item.pid) }}" type="button" class="btn btn-light">X</a>  <a href="{{ url_for('Cart.addCart', uid = current_user.id, pid = item.pid, quantity = item.quantity) }}" type="button" class="btn btn-light">Add Back To Cart</a></td>
       </tr>
       {% endfor %}
   </tbody>

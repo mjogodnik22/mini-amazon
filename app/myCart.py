@@ -65,7 +65,7 @@ def myCart():
             hasEnough = False
         if form11.validate_on_submit:
             if form11.confirm.data == '2' and hasEnough:
-                albert = Cartesian.placeOrder(current_user.id, form11.address)
+                albert = Cartesian.placeOrder(current_user.id, form11.address.data)
                 if User.update_balance(current_user.id,
                                    int(balance),
                                    int(totalcost),

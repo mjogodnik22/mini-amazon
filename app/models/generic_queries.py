@@ -1,5 +1,6 @@
 from flask import current_app as app
 from flask_login import current_user
+from datetime import datetime
 
 
 def get_sellers_orders():
@@ -43,20 +44,21 @@ def seller_order_fulfilled(oid):
 def fulfillProduct(oid,pid,Fulfilled):
     rows = app.db.execute('''
 Update ItemsInOrder
-SET fulfilled = :Fulfilled
+SET fulfilled = :Fulfilled, date_time=:now 
 WHERE oid = :oid
 AND pid = :pid
 Returning *
 ''',
     pid = int(pid),
     oid = int(oid),
-    Fulfilled = Fulfilled)   
+    Fulfilled = Fulfilled,
+    now = datetime.now())  
     return rows
 
 
 def get_sellers_order_details(oid):
     rows = app.db.execute('''
-Select pid, name, price, quantity, fulfilled
+Select pid, name, price, quantity, fulfilled, date_time
 FROM Products NATURAL JOIN ItemsInOrder
 WHERE seller_id = :current_user_id
 AND  oid = :oid
@@ -67,7 +69,7 @@ AND  oid = :oid
 
 def get_order_purchase_details(oid):
     orderer = app.db.execute('''
-Select Distinct firstname, address
+Select Distinct firstname, order_address
 FROM OrderInformation, Users
 WHERE oid = :oid
 AND Users.id = OrderInformation.uid

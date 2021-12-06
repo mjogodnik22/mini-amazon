@@ -22,11 +22,13 @@ bp = Blueprint('seeSpecificOrder', __name__)
 def seeSpecificOrder(oid):
     order = Cartesian.getOrderInfo(oid)
     time = Cartesian.getOTime(oid)[0]
+    address = Cartesian.getOAddress(oid)[0]
     totalPrice = 0
     for i in range(len(order)):
+        print(order[i][3])
         totalPrice += order[i][3]*order[i][2]
         prod = ProductSummary.get(order[i][0])
         seller = ProductSeller.get_all(order[i][0])[0].id
         order[i][1] = prod.name
         order[i].append(seller)
-    return render_template('seeSpecificOrder.html', title='Update Cart', orders = order, oid = oid,time=time,totalPrice = totalPrice)
+    return render_template('seeSpecificOrder.html', title='Update Cart', orders = order, oid = oid,time=time,totalPrice = totalPrice, address= address)

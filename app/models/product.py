@@ -41,7 +41,7 @@ WHERE Products.pid = :pid AND Products.pid = AverageProductRating.pid
             return []
         if filter_by:
             rows = app.db.execute('''
-    SELECT Products.pid, name, price, quantity_available,  avg_rating
+    SELECT Distinct Products.pid, name, price, quantity_available,  avg_rating
     FROM Products, AverageProductRating
     WHERE Products.pid = AverageProductRating.pid AND category = :filter_by AND {range_filter} BETWEEN :bottom AND :top  
     ORDER BY {sort_by} {order} NULLS LAST
@@ -50,7 +50,7 @@ WHERE Products.pid = :pid AND Products.pid = AverageProductRating.pid
     '''.format(sort_by = sort_by,range_filter = range_filter, order = ordering), bottom = bottom, top = top, filter_by = filter_by,limit = limit, offset = offset_count)
         else:
             rows = app.db.execute('''
-    SELECT Products.pid, name, price, quantity_available,avg_rating
+    SELECT Distinct Products.pid, name, price, quantity_available,avg_rating
     FROM Products, AverageProductRating
     WHERE Products.pid = AverageProductRating.pid AND {range_filter} BETWEEN :bottom AND :top 
     ORDER BY {sort_by} {order} NULLS LAST
@@ -93,7 +93,7 @@ FROM Products
         query ='%' + search_query + '%'
         offset_count = (page_num - 1) * limit
         rows = app.db.execute('''
-    SELECT DISTINCT Products.pid, Products.name, Products.price, Products.quantity_available
+    SELECT Distinct Products.pid, Products.name, Products.price, Products.quantity_available
     FROM Products, ProductSummary, AverageProductRating
     WHERE Products.pid = ProductSummary.pid AND ProductSummary.pid = AverageProductRating.pid AND (Products.name LIKE :query_name or ProductSummary.description LIKE :query_name)
     ORDER BY Products.pid ASC
