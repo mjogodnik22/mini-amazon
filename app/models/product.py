@@ -1,6 +1,7 @@
 from flask import current_app as app
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import text
+from datetime import datetime
 
 class Product:
     def __init__(self, pid, name, price, quantity_available,avg_rating):
@@ -172,14 +173,15 @@ WHERE buyer_id = :id
     def add_review(buyer_id,product_id, review,rating):
         try:
             rows = app.db.execute("""
-INSERT INTO ProductReview(buyer_id,product_id, rating,review)
-VALUES(:buyer_id,:product_id,:rating,:review)
+INSERT INTO ProductReview(buyer_id,product_id, rating,review, time_rev)
+VALUES(:buyer_id,:product_id,:rating,:review,:time_rev)
 RETURNING buyer_id
 """,
                                 buyer_id = buyer_id,
                                  product_id = product_id,
                                  rating = rating,
-                                 review = review)
+                                 review = review,
+                                 time_rev = datetime.now())
             id = rows[0][0]
             return 1
         except Exception:
@@ -190,14 +192,15 @@ RETURNING buyer_id
         try:
             rows = app.db.execute("""
 UPDATE ProductReview
-SET  rating = :rating, review = :review
+SET  rating = :rating, review = :review, time_rev = :time_rev
 WHERE buyer_id = :buyer_id AND product_id = :product_id
 RETURNING buyer_id
 """,
                                 buyer_id = buyer_id,
                                  product_id = product_id,
                                  rating = rating,
-                                 review = review)
+                                 review = review,
+                                 time_rev = datetime.now())
             id = rows[0][0]
             return 1
         except Exception as e:

@@ -27,6 +27,7 @@ WHERE pid = :pid
 SELECT pid, name, description, category, price, review, rating, picture
 FROM ProductSummary
 WHERE pid = :pid
+ORDER BY rating DESC
 ''',
                               pid=pid)
         return [ProductSummary(*row) for row in rows]

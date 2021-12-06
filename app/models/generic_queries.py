@@ -84,6 +84,7 @@ def get_seller_information(id):
     WHERE id = :id
     AND seller_id = :id
     AND id = seller_id
+    ORDER BY rating DESC
     ''',
     id = id)
     return rows
@@ -99,14 +100,15 @@ def get_seller_products(id):
 
 def add_seller_review(buyer_id,seller_id, review,rating):
     rows = app.db.execute("""
-INSERT INTO SellerReview(buyer_id,seller_id, rating,review)
-VALUES(:buyer_id,:seller_id,:rating,:review)
+INSERT INTO SellerReview(buyer_id,seller_id, rating,review, time_rev)
+VALUES(:buyer_id,:seller_id,:rating,:review,:time_rev)
 RETURNING buyer_id
 """,
     buyer_id = buyer_id,
     seller_id = seller_id,
     rating = rating,
-    review = review)
+    review = review,
+    time_rev = datetime.now())
     
     id = rows[0][0]
     return 1
@@ -115,16 +117,27 @@ def update_seller_review(buyer_id,seller_id, review,rating):
     
     rows = app.db.execute("""
     UPDATE SellerReview
-    SET  rating = :rating, review = :review
+    SET  rating = :rating, review = :review, time_rev = :time_rev
     WHERE buyer_id = :buyer_id AND seller_id = :seller_id
     RETURNING buyer_id
     """,
     buyer_id = buyer_id,
     seller_id = seller_id,
     rating = rating,
-    review = review)
+    review = review,
+    time_rev = datetime.now())
 
     id = rows[0][0]
+    return 1
+
+def delete_seller_review(buyer_id,seller_id):
+    rows = app.db.execute("""
+DELETE FROM SellerReview
+WHERE (buyer_id = :buyer_id) AND (seller_id = :seller_id)
+RETURNING buyer_id;
+""",
+    buyer_id = buyer_id,
+    seller_id = seller_id)
     return 1
 
 def who_sells(id):
