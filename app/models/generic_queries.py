@@ -239,15 +239,18 @@ def back_in_cart(uid, pid, quantity):
     return 1
 def users_reviews(uid):
     product_reviews = app.db.execute("""
-    SELECT product_id, name, rating, review
+    SELECT product_id, name, rating, review, time_rev
     FROM ProductReview, Products 
     WHERE buyer_id= :id AND pid = product_id
+    ORDER BY time_rev DESC
+    
     """, 
     id=uid)
     seller_reviews = app.db.execute("""
-    SELECT seller_id, firstname, lastname, rating, review
+    SELECT seller_id, firstname, lastname, rating, review, time_rev
     FROM SellerReview, Users
     WHERE buyer_id= :uid AND users.id = seller_id
+    ORDER BY time_rev DESC
     """, 
     uid=uid) 
     return (product_reviews, seller_reviews)
