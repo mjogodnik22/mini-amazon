@@ -48,7 +48,18 @@
   ul#footer li {
     display:inline;
     position: 100%; 
-    padding: 8px;
+    padding: 10px;
+  }
+  ul#footer li:hover {
+    background-color: #f0d094;
+    font-weight: 700;
+  }
+  a {
+    color: #f0eed4;
+  }
+  a:hover {
+    text-decoration: none;
+    color: #f0eed4;
   }
   .navigation_bar {
     height: 160px;
@@ -71,6 +82,9 @@
     {% if current_user.is_authenticated %}
     <li><a href="{{ url_for('myaccount.myAccountPage') }}">My Account</a></li>
     <li><a href="{{url_for('messages.messages')}}">Messages</a></li>
+    <li><a href="{{ url_for('BuyerOrders.buyer_orders') }}">My Orders</a></li>
+    <li><a href="{{ url_for('seller_inventory.seller_inventory') }}">My Inventory</a></li>
+    <li><a href="{{ url_for('seller_orders.seller_orders') }}">Orders to Fulfill</a></li>
     {% endif %}
   </ul>
 </div>
