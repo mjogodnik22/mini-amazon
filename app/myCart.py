@@ -17,6 +17,7 @@ from .models.Carts import Cartesian
 from .models.user import User
 from .models.product_summary import ProductSummary
 from .models.generic_queries import *
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -39,6 +40,7 @@ class placeOrder(FlaskForm):
 @bp.route('/myCart',methods=['GET', 'POST'])
 def myCart():
     form11 = placeOrder()
+    unread = num_unread()
     if request.method == 'GET':
         form11= placeOrder(formdata = MultiDict({
             'address': current_user.address

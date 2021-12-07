@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -17,4 +18,5 @@ def myAccountPage():
 #     balance = 0
 #     if current_user.is_authenticated:
 #         balance = User.get_balance(current_user.id)
-    return render_template('myaccount.html', title='My Account')
+    unread = num_unread()
+    return render_template('myaccount.html', title='My Account', unread = unread)

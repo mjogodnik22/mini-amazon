@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -22,7 +23,9 @@ class LoginForm(FlaskForm):
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    unread = None
     if current_user.is_authenticated:
+        unread=num_unread()
         return redirect(url_for('productPage.productPage'))
     form = LoginForm()
     if form.validate_on_submit():
@@ -36,7 +39,7 @@ def login():
             next_page = url_for('productPage.productPage')
 
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', unread=unread,title='Sign In', form=form)
 
 
 class RegistrationForm(FlaskForm):
@@ -57,7 +60,9 @@ class RegistrationForm(FlaskForm):
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
+    unread=None
     if current_user.is_authenticated:
+        unread=num_unread()
         return redirect(url_for('productPage.productPage'))
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -68,7 +73,7 @@ def register():
                          form.lastname.data):
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', unread=unread,title='Register', form=form)
 
 
 @bp.route('/logout')

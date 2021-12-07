@@ -8,6 +8,7 @@ from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
 from .models.generic_queries import *
+from .models.messages import *
 
 class FullfillProductForm(FlaskForm):
     submit = SubmitField(_l('Fullfill The Adjustment'))
@@ -27,15 +28,17 @@ def seller_inventory():
    inventory = User.get_products(current_user.id)
    current = []
    deleted = []
+   unread = num_unread()
    for product in inventory:
       if product.deleted == True:
          deleted.append(product)
       else:
          current.append(product)
-   return render_template('seller_inventory.html', current=current, deleted=deleted)
+   return render_template('seller_inventory.html', unread= unread,current=current, deleted=deleted)
 
 @seller_orders_bp.route('/seller_orders')
 def seller_orders():
+   unread = num_unread()
    orders = get_sellers_orders()
    fulfillDict = {}
    orders.sort(key = lambda x:x[1], reverse = True)
@@ -50,17 +53,18 @@ def seller_orders():
          fulfillDict[order.oid] = ('Not Fulfilled', totalPrice, Quant)
    
 
-   return render_template('seller_orders.html', orders=orders, fulfillDict = fulfillDict)
+   return render_template('seller_orders.html', unread=unread,orders=orders, fulfillDict = fulfillDict)
 
 @seller_order_details_bp.route('/seller_order_details/<oid>')
 def seller_order_details(oid):
+   unread = num_unread()
    order_id = oid
    orderer_info = get_order_purchase_details(oid)
    purchases = get_sellers_order_details(oid)
    print(purchases[-1][-1])
    print(type(purchases[-1][-1]))
 
-   return render_template('seller_order_details.html', purchases=purchases, orderer_info= orderer_info, oid=order_id)
+   return render_template('seller_order_details.html', unread=unread,purchases=purchases, orderer_info= orderer_info, oid=order_id)
 
 
 @seller_product_fulfillment_bp.route("/seller_product_fulfillment/<oid>/<pid>", methods=['GET', 'POST'])
@@ -70,9 +74,10 @@ def seller_product_fulfillment(oid, pid):
 
 @seller_page_bp.route("/seller/<id>")
 def seller(id):
+   unread = num_unread()
    reviews = get_seller_information(id)
    products = get_seller_products(id)
-   return render_template('seller_page.html', reviews=reviews, seller=reviews[0], products=products)
+   return render_template('seller_page.html', unread = unread,reviews=reviews, seller=reviews[0], products=products)
 
 
 @deletion_page_bp.route("/delete/<pid>")

@@ -53,3 +53,13 @@ def get_sent_msgs():
     ''',
     id = current_user.id)
     return rows
+
+def num_unread():
+    rows=app.db.execute('''
+    SELECT *
+    FROM Messages
+    WHERE recipient_id = :id
+    AND msg_read = 'Unread'
+    ''',
+    id = current_user.id)
+    return len(rows)

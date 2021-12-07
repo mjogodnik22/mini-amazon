@@ -12,6 +12,7 @@ from .models.product_summary import ProductSummary
 from .models.purchase import Purchase
 from .models.product_sellers import ProductSeller
 from .models.product import Product
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -20,6 +21,7 @@ bp = Blueprint('seeSpecificOrder', __name__)
 
 @bp.route('/seeSpecificOrder/<oid>', methods=['GET', 'POST'])
 def seeSpecificOrder(oid):
+    unread = num_unread()
     order = Cartesian.getOrderInfo(oid)
     time = Cartesian.getOTime(oid)[0]
     address = Cartesian.getOAddress(oid)[0]
@@ -31,4 +33,4 @@ def seeSpecificOrder(oid):
         seller = ProductSeller.get_all(order[i][0])[0].id
         order[i][1] = prod.name
         order[i].append(seller)
-    return render_template('seeSpecificOrder.html', title='Update Cart', orders = order, oid = oid,time=time,totalPrice = totalPrice, address= address)
+    return render_template('seeSpecificOrder.html', title='Update Cart', unread = unread, orders = order, oid = oid,time=time,totalPrice = totalPrice, address= address)

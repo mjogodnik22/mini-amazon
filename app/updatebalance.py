@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -19,6 +20,7 @@ class UpdateBalanceForm(FlaskForm):
 
 @bp.route('/updateBalancePage', methods=['GET', 'POST'])
 def updateBalancePage():
+    unread=num_unread()
     form = UpdateBalanceForm()
     if current_user.is_authenticated:
         if form.validate_on_submit():
@@ -33,7 +35,7 @@ def updateBalancePage():
                 return redirect(url_for('updatebalance.updateBalancePage'))
     else:
         return redirect(url_for('productPage.productPage'))
-    return render_template('updatebalance.html', title='Update Balance', form=form)
+    return render_template('updatebalance.html', unread=unread,title='Update Balance', form=form)
 #     balance = 0
 #     if current_user.is_authenticated:
 #         balance = User.get_balance(current_user.id)

@@ -29,6 +29,7 @@ class MessageForm(FlaskForm):
 @messages_bp.route('/messages', methods=['GET', 'POST'])
 def messages():
     messages = get_messages()
+    unread = num_unread()
     sent_msgs = get_sent_msgs()
     form = MessageForm()
     if form.validate_on_submit():
@@ -42,12 +43,13 @@ def messages():
         elif send_message(recipient_id, form.subject.data, form.message.data):
             flash('Your message has been sent!')
             return redirect(url_for('messages.messages'))
-    return render_template('messages.html', title='My Messages', messages=messages, sent_msgs=sent_msgs, form=form)
+    return render_template('messages.html', title='My Messages', unread = unread, messages=messages, sent_msgs=sent_msgs, form=form)
 
 
 @messages_email_bp.route('/messages/email/<email>', methods=['GET', 'POST'])
 def text(email):
     messages = get_messages()
+    unread = num_unread()
     sent_msgs = get_sent_msgs()
     form = MessageForm()
     if request.method == 'GET':
@@ -65,11 +67,12 @@ def text(email):
         elif send_message(recipient_id, form.subject.data, form.message.data):
             flash('Your message has been sent!')
             return redirect(url_for('messages.messages'))
-    return render_template('messages.html', title='My Messages', messages=messages, sent_msgs=sent_msgs, form=form)
+    return render_template('messages.html', title='My Messages', messages=messages, unread = unread, sent_msgs=sent_msgs, form=form)
 
 @message_details_bp.route('/messages/msg/<mid>')
 def detailed_messages(mid):
     message = get_message_by_mid(mid)
+    unread = num_unread()
     if message[1] == 'Unread' and current_user.id == message.recipient_id:
         mark_message_read(mid)
-    return render_template('message_detail.html', title = 'Your Message', message=message)
+    return render_template('message_detail.html', unread= unread,title = 'Your Message', message=message)
