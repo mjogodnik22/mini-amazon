@@ -54,9 +54,6 @@ def myCart():
     dform = changeDiscountCode() 
     DiscountCode = usersCode.dCode
     #if request.method == 'GET':
-    form11= placeOrder(formdata = MultiDict({
-        'address': current_user.address
-    }))
     empty = False
     unread = None
     if current_user.is_authenticated:
