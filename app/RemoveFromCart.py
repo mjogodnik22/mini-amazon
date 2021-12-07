@@ -41,7 +41,7 @@ def updateCart(pid):
                 flash("Please Select a Quantity to add")
                 return redirect(url_for('removeFromCart.updateCart', uid = current_user.id, pid = pid))
             elif int(form12.amount.data) <= int(avail):
-                Cartesian.addToCartAgain(current_user.id,pid,int(form12.amount.data),product.price)
+                Cartesian.addToCartAgain(current_user.id,pid,int(form12.amount.data))
                 return redirect(url_for('Cart.myCart', uid = current_user.id))
             else:
                 flash("The seller does not have enough to satisfy this order. Please place fewer items into your cart")
@@ -54,7 +54,7 @@ def updateCart(pid):
                 if int(form12.amount.data) == amount:
                     Cartesian.removeFromCart(pid,current_user.id)
                     return redirect(url_for('Cart.myCart', uid = current_user.id))
-                Cartesian.subFromCart(current_user.id,pid,int(form12.amount.data),product.price)
+                Cartesian.subFromCart(current_user.id,pid,int(form12.amount.data))
                 return redirect(url_for('Cart.myCart', uid = current_user.id))
         if form12.confirm.data == '3':
             Cartesian.removeFromCart(pid,current_user.id)

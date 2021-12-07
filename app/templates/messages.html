@@ -21,7 +21,7 @@
         {% else %}
         <tr>
             <td><a href="{{ url_for('message_details.detailed_messages', mid = message.mid) }}">{{message.firstname}} {{message.lastname}}</a></td>
-            <td>{{message.subject}}q</td>
+            <td>{{message.subject}}</td>
             </tr>
         {% endif %}
       {% endfor %}

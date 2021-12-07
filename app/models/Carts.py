@@ -74,7 +74,7 @@ WHERE Carts.uid = :uid AND pid = :pid
             return 0
 
     @staticmethod
-    def subFromCart(uid,pid,quantity,price):
+    def subFromCart(uid,pid,quantity):
         try:
             rows = app.db.execute("""
 UPDATE Carts
@@ -82,8 +82,7 @@ SET quantity = quantity - :quantity
 WHERE Carts.uid = :uid AND pid = :pid
             """, uid = uid,
                 pid = pid,
-                quantity=quantity,
-                price=price)
+                quantity=quantity)
             return 1
         except Exception as l:
             print(l)

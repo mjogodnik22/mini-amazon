@@ -40,13 +40,14 @@ class placeOrder(FlaskForm):
 @bp.route('/myCart',methods=['GET', 'POST'])
 def myCart():
     form11 = placeOrder()
-    unread = num_unread()
+    unread = None
     if request.method == 'GET':
         form11= placeOrder(formdata = MultiDict({
             'address': current_user.address
         }))
     empty = False
     if current_user.is_authenticated:
+        unread = num_unread()
         balance = User.get(current_user.id).balance
         totalcost = 0
         ido = Cartesian.get(current_user.id)
@@ -69,14 +70,14 @@ def myCart():
             if form11.confirm.data == '2' and hasEnough:
                 albert = Cartesian.placeOrder(current_user.id, form11.address.data)
                 if User.update_balance(current_user.id,
-                                   int(balance),
-                                   int(totalcost),
+                                   balance,
+                                   totalcost,
                                    "wdr"):
                     flash('Your balance has been updated!')
                     for product in ido:
                         seller = who_sells(product.pid)
                         balance = User.get(seller).balance
-                        User.update_balance(seller, int(balance), int(product.price) * int(product.quantity), "dep")
+                        User.update_balance(seller, balance, product.price * product.quantity, "dep")
                 for gangarang in ido:
                     Cartesian.addtoOrder(albert,gangarang.pid,gangarang.quantity,gangarang.price)
                     Product.adjustWithOrder(gangarang.pid,gangarang.quantity)
@@ -86,6 +87,7 @@ def myCart():
         
        
     return render_template('myCart.html',
+    unread=unread,
                             form = form11,
                             currcart = ido,
                             empty = empty,

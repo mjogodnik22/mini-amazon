@@ -14,11 +14,8 @@
 <h4><a href="{{ url_for('updateinformation.updateInformationPage') }}">Update Information</a></h4>
 <h4><a href="{{ url_for('updatepassword.updatePasswordPage') }}">Update Password</a></h4>
 <h4><a href="{{ url_for('updatebalance.updateBalancePage') }}">Update Balance</a></h4>
-<p></p>
-<p><a href="{{ url_for('seller_inventory.seller_inventory') }}">Your Inventory</a></p>
-<p><a href="{{ url_for('seller_orders.seller_orders') }}">Seller Orders</a></p>
-<p><a href="{{ url_for('BuyerOrders.buyer_orders') }}">Buyer Orders</a></p>
-<p><a href="{{url_for('social_adv.social', id=current_user.id)}}">Your Reviews</a><p></p>
+<br>
+<h4><a href="{{url_for('social_adv.social', id=current_user.id)}}">Your Reviews</a></h4>
 
 
 
