@@ -62,7 +62,6 @@
 </form>
 
 <br>
-<br>
 {% if deleted[0] == True %}
 <a class="btn btn-secondary" href="{{ url_for('restore_product.restore_page', pid = pid) }}" role="button">Undelete Product</a>
 {% else %}

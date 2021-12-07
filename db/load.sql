@@ -17,4 +17,3 @@ SELECT pg_catalog.setval('public.orderinformation_oid_seq',
 \COPY SellerReview FROM 'data/SellerReview.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY CARTS FROM 'data/Carts.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY SaveForLater FROM 'data/SaveForLater.csv' WITH DELIMITER ',' NULL '' CSV
-\COPY DiscountCode FROM 'data/DiscountCode.csv' WITH DELIMITER ',' NULL '' CSV

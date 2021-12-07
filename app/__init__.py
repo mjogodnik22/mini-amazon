@@ -92,17 +92,5 @@ def create_app():
 
     from .seller import restore_bp as restore_bp
     app.register_blueprint(restore_bp)
-    
-    from .seller import bpDiscountP as add_product_code_bp
-    app.register_blueprint(add_product_code_bp)
-
-    from .seller import bpDiscountPage as bpDiscountPage
-    app.register_blueprint(bpDiscountPage)
-
-    from .seller import deleteProdCode_bp as deleteProdCode_bp
-    app.register_blueprint(deleteProdCode_bp)
-
-    from .seller import deleteSellerCode_bp as deleteSellerCode_bp
-    app.register_blueprint(deleteSellerCode_bp)
 
     return app
