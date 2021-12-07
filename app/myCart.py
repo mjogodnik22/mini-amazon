@@ -6,6 +6,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Decim
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 from werkzeug.datastructures import MultiDict
+from decimal import Decimal
 
 from .models.product_summary import ProductSummary
 from .models.purchase import Purchase
@@ -30,25 +31,40 @@ class UpdateInformationForm(FlaskForm):
     submit = SubmitField(_l('Update Information'))
 
 
-
 class placeOrder(FlaskForm):
     confirm = SelectField(_l('Confirm'), choices = [(1,"I do not confirm"),(2,"I confirm")],validators=[DataRequired()])
     address = StringField(_l('Address'), validators=[DataRequired()])
     submit = SubmitField(_l('Place Order'))
 
-@bp.route('/myCart',methods=['GET', 'POST'])
+class changeDiscountCode(FlaskForm):
+    code = StringField(_l('Discount Code'), validators=[DataRequired()])
+    submit = SubmitField(_l('Try Code'))
+
+class usersCode():
+    dCode = "No Code"
+
+@bp.route('/myCart/',methods=['GET', 'POST'])
 def myCart():
     form11 = placeOrder()
-    if request.method == 'GET':
-        form11= placeOrder(formdata = MultiDict({
-            'address': current_user.address
-        }))
+    dform = changeDiscountCode() 
+    DiscountCode = usersCode.dCode
+    print(DiscountCode)
+    #if request.method == 'GET':
+    form11= placeOrder(formdata = MultiDict({
+        'address': current_user.address
+    }))
     empty = False
     if current_user.is_authenticated:
         balance = User.get(current_user.id).balance
         totalcost = 0
         ido = Cartesian.get(current_user.id)
         save_for_later = Cartesian.getSaved(current_user.id)
+        if save_for_later is None:
+            any_saved = False 
+        else:
+            any_saved = True
+            for item in save_for_later:
+                item.price, _ = discount(DiscountCode, item.pid, item.price)
         if ido is None:
             empty = True
             return render_template('myCart.html',
@@ -57,12 +73,25 @@ def myCart():
                             empty = empty,
                             balance = balance,
                             saved = save_for_later,
-                            any_saved = len(save_for_later))
+                            any_saved = any_saved,
+                            savings = 0,
+                            dform = dform)
+        savings = 0
         for element in ido:
-            totalcost += element.price*element.quantity
+            if DiscountCode != "No Code":
+                element.price, item_savings = discount(DiscountCode, element.pid, element.price)
+                savings += item_savings*element.quantity
+            totalcost += Decimal(element.price*element.quantity)
         hasEnough = True
         if balance < totalcost:
             hasEnough = False
+        if dform.validate_on_submit and good_code(dform.code.data):
+            DiscountCode = dform.code.data
+            usersCode.dCode = dform.code.data
+        else:
+            DiscountCode = "No Code"
+            usersCode.dCode = "No Code"
+
         if form11.validate_on_submit:
             if form11.confirm.data == '2' and hasEnough:
                 albert = Cartesian.placeOrder(current_user.id, form11.address.data)
@@ -80,8 +109,6 @@ def myCart():
                     Product.adjustWithOrder(gangarang.pid,gangarang.quantity)
                     Cartesian.removeFromCart(gangarang.pid,current_user.id)
                 return redirect(url_for('BuyerOrders.buyer_orders', uid = current_user.id))
-
-        
        
     return render_template('myCart.html',
                             form = form11,
@@ -91,7 +118,11 @@ def myCart():
                             totalcost=totalcost,
                             hasEnough=hasEnough,
                             saved = save_for_later,
-                            any_saved = len(save_for_later))
+                            any_saved = any_saved,
+                            code = DiscountCode,
+                            savings = savings,
+                            dform = dform)
+
 
 @bp.route('/myCart/<uid>/<pid>/<quantity>',methods=['GET', 'POST'])
 def saveForLater(uid, pid, quantity):

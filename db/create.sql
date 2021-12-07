@@ -99,14 +99,13 @@ CREATE TABLE SaveForLater (
     CHECK(quantity > 0)
 );
 
--- Make check before insertion of reviews that user has purchase product/product from seller
-
--- Make check which prevents update of who a review is on.
-
--- Make check which prevents update of price per unit.
-
-
--- Added saved for later (same schema as )
+CREATE TABLE DiscountCode (
+    code VARCHAR(63) NOT NULL PRIMARY KEY,
+    pid INTEGER REFERENCES Products(pid),
+    seller INT REFERENCES Sellers(sid),
+    allItems BOOLEAN DEFAULT(False),
+    discount_amount FLOAT not NULL
+);
 
 CREATE VIEW ProductSummary(pid, name, description, category, price, review, rating, picture) AS
 SELECT Products.pid, Products.name, Products.description, Products.category, Products.price, 
