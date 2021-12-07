@@ -47,20 +47,20 @@ class usersCode():
 @bp.route('/myCart/',methods=['GET', 'POST'])
 def myCart():
     form11 = placeOrder()
-    unread = num_unread()
     if request.method == 'GET':
         form11= placeOrder(formdata = MultiDict({
             'address': current_user.address
         }))
     dform = changeDiscountCode() 
     DiscountCode = usersCode.dCode
-    print(DiscountCode)
     #if request.method == 'GET':
     form11= placeOrder(formdata = MultiDict({
         'address': current_user.address
     }))
     empty = False
+    unread = None
     if current_user.is_authenticated:
+        unread = num_unread()
         balance = User.get(current_user.id).balance
         totalcost = 0
         ido = Cartesian.get(current_user.id)
@@ -74,6 +74,7 @@ def myCart():
         if ido is None:
             empty = True
             return render_template('myCart.html',
+                            unread = unread,
                             form = form11,
                             currcart = ido,
                             empty = empty,
@@ -116,6 +117,7 @@ def myCart():
                 return redirect(url_for('BuyerOrders.buyer_orders', uid = current_user.id))
        
     return render_template('myCart.html',
+                            unread=unread,
                             form = form11,
                             currcart = ido,
                             empty = empty,
