@@ -77,6 +77,12 @@ def myCart():
                             savings = 0,
                             dform = dform)
         savings = 0
+        if dform.validate_on_submit and good_code(dform.code.data):
+            DiscountCode = dform.code.data
+            usersCode.dCode = dform.code.data
+        else:
+            DiscountCode = "No Code"
+            usersCode.dCode = "No Code"
         for element in ido:
             if DiscountCode != "No Code":
                 element.price, item_savings = discount(DiscountCode, element.pid, element.price)
@@ -85,12 +91,7 @@ def myCart():
         hasEnough = True
         if balance < totalcost:
             hasEnough = False
-        if dform.validate_on_submit and good_code(dform.code.data):
-            DiscountCode = dform.code.data
-            usersCode.dCode = dform.code.data
-        else:
-            DiscountCode = "No Code"
-            usersCode.dCode = "No Code"
+
         
 
         if form11.validate_on_submit:
