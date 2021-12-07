@@ -193,7 +193,8 @@ WHERE Carts.uid = :uid AND pid = :pid
             AND SaveForLater.pid = Products.pid
             ORDER BY pid
             """,uid = uid)
-            return rows
+            #return rows
+            return [Cartesian(*row) for row in rows] if rows else None
         except:
             print("None")
         

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h2>{{current_user.firstname}} {{current_user.lastname}}'s Inventory </h2>
+<h2>{{current_user.firstname}} {{current_user.lastname}}'s Discounts </h2>
 
 <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
@@ -11,6 +11,7 @@
         <th scope="col">Price</th>
         <th scope="col">Quantity Available</th> 
         <th scope="col">Edit Item</th>
+        <th scope="col">Add Discount Code</th> 
         <th scope="col">Delete Item</th> 
       </tr>
     </thead>
@@ -21,7 +22,8 @@
           <td>{{item.name}}</td>
           <td>{{item.price}}</td>
           <td>{{item.quantity_available}}</td>
-          <td><a href="{{ url_for('updateproduct.updateProductPage', pid = item.pid) }}">Edit Product</a></td>
+          <td><a href="{{ url_for('updateproduct.updateProductPage', pid = item.pid)}}">Edit Product</a></td>
+          <td><a href="{{ url_for('addDiscountP.addDiscountP', pid = item.pid, success = True)}}">Add Discount Code</a></td>
           <td><a href="{{ url_for('delete_product.delete_product_page', pid = item.pid) }}">Delete Product</a></td>
         </tr>
       {% endfor %}
@@ -37,7 +39,7 @@
         <th scope="col">Product Name</th>
         <th scope="col">Price</th>
         <th scope="col">Quantity Available</th> 
-        <th scope="col">Edit Item</th>
+        <th scope="col">Edit Item</th>s
         <th scope="col">Restore Item</th> 
       </tr>
     </thead>
@@ -48,11 +50,15 @@
           <td>{{item.price}}</td>
           <td>{{item.quantity_available}}</td>
           <td><a href="{{ url_for('updateproduct.updateProductPage', pid = item.pid) }}">Edit Product</a></td>
+          <td><a href="{{ url_for('addDiscountP.addDiscountP', pid = item.pid, success = True)}}">Add Discount Code</a></td>
           <td><a href="{{ url_for('restore_product.restore_page', pid = item.pid) }}">Undelete Product</a></td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
   {% endif %}
+
+  <br>
+  <a href="{{ url_for('userDiscountPage.userDiscountPage', success = True) }}">Veiw Your Discount Codes</a>
 
 {% endblock %}
