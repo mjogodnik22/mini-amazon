@@ -29,9 +29,8 @@
 
 {% endif %}
 
-<br>
-
 {% if is_seller %}
+<h3>Seller: Yes</h3>
 
 {% if num_reviews > 0 %}
 
@@ -124,9 +123,11 @@
 
 {% else %}
 
-<h2>User not a seller</h2>
+<h3>Seller: No</h3>
 
 {% endif %}
+
+<a href="{{url_for('social_adv.social', id=user.id)}}" type="button" class="btn btn-light">Show {{user.firstname}} {{user.lastname}}'s Reviews</a>
 
 </div>
 <div class = "right">
@@ -177,9 +178,6 @@
 {% if user.id != current_user.id %}
 <h3><a href="{{url_for('messages_email.text', email=user.email)}}">Send a message</a> to this user</h3>
 {% endif %}
-
-<br>
-<p><a href="{{url_for('social_adv.social', id=user.id)}}"> Want to see reviews this user has given?</a><p>
 </div>
 
 {% endblock %}

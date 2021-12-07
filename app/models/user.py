@@ -139,7 +139,7 @@ WHERE email = :email
     @staticmethod
     def get_products(id):
         rows = app.db.execute('''
-            SELECT Products.pid, Products.name, Products.price, Products.quantity_available
+            SELECT Products.pid, Products.name, Products.price, Products.quantity_available, Products.deleted
             FROM Products
             WHERE Products.seller_id = :id
 ''',

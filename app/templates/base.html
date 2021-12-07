@@ -18,14 +18,14 @@
 <div class="navigation_bar">
 	<p class="lead">Duke Data Devils Online Retail</p>
 	<div class="header-bar">
-		<h1 class="logo"><a href="{{ url_for('productPage.productPage') }}">DDD</a></h1>
+		<h1 class="logo"><a class = "link" href="{{ url_for('productPage.productPage') }}">DDD</a></h1>
 		<ul class="slider-menu">
       {% if current_user.is_authenticated %}
-        <li><a href="{{url_for('social.social', id=current_user.id) }}">{{current_user.firstname}}</a></li>
-        <li><a href="{{ url_for('Cart.myCart') }}">My Cart</a></li>
-        <li><a href="{{url_for('users.logout') }}">Log Out</a></li>
+        <li><a class = "link" href="{{url_for('social.social', id=current_user.id) }}">{{current_user.firstname}}</a></li>
+        <li><a class = "link" href="{{ url_for('Cart.myCart') }}">My Cart</a></li>
+        <li><a class = "link" href="{{url_for('users.logout') }}">Log Out</a></li>
       {% else %}
-        <li><a href="{{ url_for('users.login') }}">Login/Register</a></li>
+        <li><a class = "link" href="{{ url_for('users.login') }}">Login/Register</a></li>
       {% endif %}
 		</ul>
 	</div>
@@ -48,7 +48,18 @@
   ul#footer li {
     display:inline;
     position: 100%; 
-    padding: 8px;
+    padding: 10px;
+  }
+  ul#footer li:hover {
+    background-color: #f0d094;
+    font-weight: 700;
+  }
+  a.link {
+    color: #f0eed4;
+  }
+  a.link:hover {
+    text-decoration: none;
+    color: #f0eed4;
   }
   .navigation_bar {
     height: 160px;
@@ -67,10 +78,13 @@
 
 <div class="footer">
   <ul id="footer">
-    <li><a href="{{ url_for('productPage.productPage') }}">Home</a></li>
+    <li><a class = "link" href="{{ url_for('productPage.productPage') }}">Home</a></li>
     {% if current_user.is_authenticated %}
-    <li><a href="{{ url_for('myaccount.myAccountPage') }}">My Account</a></li>
-    <li><a href="{{url_for('messages.messages')}}">Messages</a></li>
+    <li><a class = "link" href="{{ url_for('myaccount.myAccountPage') }}">My Account</a></li>
+    <li><a class = "link" href="{{url_for('messages.messages')}}">Messages</a></li>
+    <li><a class = "link" href="{{ url_for('BuyerOrders.buyer_orders') }}">My Orders</a></li>
+    <li><a class = "link" href="{{ url_for('seller_inventory.seller_inventory') }}">My Inventory</a></li>
+    <li><a class = "link" href="{{ url_for('seller_orders.seller_orders') }}">Orders to Fulfill</a></li>
     {% endif %}
   </ul>
 </div>

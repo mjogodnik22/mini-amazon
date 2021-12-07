@@ -87,4 +87,10 @@ def create_app():
     from .seeSpecificOrder import bp as sSO_bp
     app.register_blueprint(sSO_bp)
 
+    from .seller import deletion_page_bp as delete_pr_bp
+    app.register_blueprint(delete_pr_bp)
+
+    from .seller import restore_bp as restore_bp
+    app.register_blueprint(restore_bp)
+
     return app

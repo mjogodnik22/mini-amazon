@@ -49,6 +49,7 @@
   <p>{{ form1.submit1() }}</p>
 </form>
 
+
 <h2>Reviews:</h2>
 <h3>Number of Reviews: {{num_reviews}}</h3>
 <table class='table table-hover table-bordered container'>
@@ -98,14 +99,13 @@
   </p>
   <p>{{ form3.submit3() }}</p>
 </form>
-<p>Click here if you would like to delete your review.</p>
 <form action="" method="post">
   {{ form4.hidden_tag() }}
   <p>{{ form4.submit4() }}</p>
 </form>
 {% endif %}
 
-<h2>Seller:</h2>
+<h2>All Sellers:</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
@@ -114,28 +114,32 @@
       <th scope="col">Last Name</th>
       <th scope="col">Price</th>
       <th scope="col">Quantity Available</th>
+    <th scope="col">Average Rating</th>
     </tr>
   </thead>
   <tbody>
     {% for seller in all_sellers%}
       <tr>
         <th scope="row"><a href ="{{ url_for('productSummary.product_summaries', pid = seller.pid) }}"> {{seller.pid}}</a></th>
-        <td><a href = "{{ url_for('social.social', id = seller.id) }}">{{seller.firstname}}</a></td>
+        <td><a href = "{{ url_for('social.social', id = seller.seller_id) }}">{{seller.firstname}}</a></td>
         <td>{{seller.lastname}}</td>
         <td>{{"$%.2f" | format(seller.price|float)}}</td>
           <td>{{seller.quantity_available}}</td>
+          {% if seller.avg_rating%}
+            <td>{{"%.2f" | format(seller.avg_rating|float)}}</td>
+        {% else %}
+            <td>N/A</td>
+          {% endif %}
       </tr>
     {% endfor %}
   </tbody>
 </table>
 
 
+
 {% if sold_product %}
 <p>You're currently selling this item! Would you like to update the information <a href="{{ url_for('updateproduct.updateProductPage', pid = pid) }}">here</a>? </p>
 {% endif %}
-
-
-<p><a href="{{ url_for('productPage.productPage') }}">Click here</a> to see the main product page!</p>
 
 
 

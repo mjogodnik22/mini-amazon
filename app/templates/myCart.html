@@ -2,7 +2,6 @@
 
 {% block content %}
 <h2>{{current_user.firstname}}'s Cart:</h2>
-</br>
 <h3>Your Name: {{current_user.firstname}} {{current_user.lastname}}</h3>
 <h3>Your Email: {{current_user.email}}</h3>
 {% if balance == 0%}
@@ -12,7 +11,7 @@
 {% endif %}
 
 {% if empty %}
-<h3>Your Cart is Empty! Go <a href="{{ url_for('productPage.productPage') }}">Add Some Items!</a></h3>
+<h3>Your cart is empty! Go <a href="{{ url_for('productPage.productPage') }}">add some items</a>!</h3>
 {% elif not empty %}
   <table class='table table-hover table-bordered container'>
       <thead class="thead-dark">
@@ -40,7 +39,7 @@
     </table>
     <h4>Total Cost Of Potential Purchase: ${{"%0.2f" % totalcost}}</h4>
     {% if hasEnough == False%}
-    <h4>You Have Insufficient Funds! Click here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">add funds!</a></h4>
+    <h4>You Have insufficient funds! Click here to <a href="{{ url_for('updatebalance.updateBalancePage') }}">add funds</a>!</h4>
     {% else %}
 
     <form action="" method="post">

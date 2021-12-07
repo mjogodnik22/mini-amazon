@@ -17,6 +17,7 @@ class ProductSummary:
 SELECT pid, name, description, category, price, review, rating, picture
 FROM ProductSummary
 WHERE pid = :pid
+ORDER BY rating DESC
 ''',
                               pid=pid)
         return ProductSummary(*(rows[0])) if rows else None

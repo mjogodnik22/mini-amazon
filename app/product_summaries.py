@@ -97,6 +97,7 @@ def product_summaries(pid):
     return render_template('product_summary.html',
                            curr_product=products[0],
                            reviews = products,
+                           num_reviews = len(products),
                            curr_product_2 = product_temp,
                            all_sellers = sellers,
                            bought_product = bought,

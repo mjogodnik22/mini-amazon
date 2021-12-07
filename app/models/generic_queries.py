@@ -94,6 +94,17 @@ def get_seller_products(id):
     SELECT pid, name, price
     FROM Products
     WHERE seller_id=:id
+    AND Deleted = False
+    ''',
+    id=id)
+    return rows
+
+def get_all_seller_products(id):
+    rows = app.db.execute('''
+    SELECT pid, name, price
+    FROM Products
+    WHERE seller_id=:id
+
     ''',
     id=id)
     return rows
@@ -243,7 +254,6 @@ def users_reviews(uid):
     FROM ProductReview, Products 
     WHERE buyer_id= :id AND pid = product_id
     ORDER BY time_rev DESC
-    
     """, 
     id=uid)
     seller_reviews = app.db.execute("""
@@ -254,3 +264,42 @@ def users_reviews(uid):
     """, 
     uid=uid) 
     return (product_reviews, seller_reviews)
+
+
+def delete_product(pid):
+    UpdateProduct = app.db.execute("""
+    UPDATE Products
+    SET deleted = True
+    WHERE pid = :pid AND seller_id = :seller_id
+    RETURNING :pid
+    """,pid = pid, seller_id = current_user.id)
+    RemoveFromSaved = app.db.execute("""
+    DELETE FROM SaveForLater
+    WHERE pid = :pid
+    RETURNING :pid
+    """,
+    pid =pid)
+    RemoveFromCart = app.db.execute("""
+    DELETE FROM Carts
+    WHERE pid = :pid
+    RETURNING :pid
+    """,
+    pid =pid)
+    return 1
+
+def restore_product(pid):
+    UpdateProduct = app.db.execute("""
+    UPDATE Products
+    SET deleted = False
+    WHERE pid = :pid AND seller_id = :seller_id
+    RETURNING :pid
+    """,pid = pid, seller_id = current_user.id)
+    return 1
+
+def is_deleted(pid):
+    val = app.db.execute("""
+    Select deleted
+    From Products
+    WHERE pid = :pid
+    """,pid = pid)
+    return val[0]
