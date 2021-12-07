@@ -9,6 +9,7 @@ from flask_babel import _, lazy_gettext as _l
 from .models.user import User
 from .models.generic_queries import *
 from .models.Carts import Cartesian
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -17,9 +18,10 @@ buyer_bp = Blueprint('BuyerOrders', __name__)
 @buyer_bp.route('/BuyerOrders')
 def buyer_orders():
    empty = False
+   unread = num_unread()
    borders = Cartesian.getOrders(current_user.id)
    print(borders)
    if borders is None:
       empty = True
-   return render_template('buyer.html', orders=borders, empty= empty)
+   return render_template('buyer.html', unread = unread, orders=borders, empty= empty)
 

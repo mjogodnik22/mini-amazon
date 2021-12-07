@@ -81,7 +81,7 @@
     <li><a class = "link" href="{{ url_for('productPage.productPage') }}">Home</a></li>
     {% if current_user.is_authenticated %}
     <li><a class = "link" href="{{ url_for('myaccount.myAccountPage') }}">My Account</a></li>
-    <li><a class = "link" href="{{url_for('messages.messages')}}">Messages</a></li>
+    <li><a class = "link" href="{{url_for('messages.messages')}}">Messages<sup>{{unread}}</sup></a></li>
     <li><a class = "link" href="{{ url_for('BuyerOrders.buyer_orders') }}">My Orders</a></li>
     <li><a class = "link" href="{{ url_for('seller_inventory.seller_inventory') }}">My Inventory</a></li>
     <li><a class = "link" href="{{ url_for('seller_orders.seller_orders') }}">Orders to Fulfill</a></li>

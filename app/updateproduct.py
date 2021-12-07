@@ -13,6 +13,7 @@ import os
 from .models.product import Product
 from .models.product_summary import ProductSummary
 from .models.generic_queries import is_deleted
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -32,6 +33,7 @@ class UpdateProductForm(FlaskForm):
 
 @bp.route('/updateProductPage/<pid>', methods=['GET', 'POST'])
 def updateProductPage(pid):
+    unread = num_unread()
     form = UpdateProductForm()
     form.category.choices = Product.get_categories()
     deleted = is_deleted(pid)
@@ -66,4 +68,4 @@ def updateProductPage(pid):
                                  pid):
             flash('Congratulations, you just updated this product!')
             return redirect(url_for('productSummary.product_summaries', pid = pid))
-    return render_template('updateproduct.html', title='Update Product', form=form, deleted=deleted, pid = pid)
+    return render_template('updateproduct.html', unread=unread,title='Update Product', form=form, deleted=deleted, pid = pid)

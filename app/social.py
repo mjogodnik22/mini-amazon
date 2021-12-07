@@ -14,6 +14,7 @@ from .models.product import Product
 from .models.user import User
 from .models.purchase import Purchase
 from .models.generic_queries import *
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -41,6 +42,9 @@ class DeleteSellerReviewForm(FlaskForm):
     
 @bp.route('/social/<id>', methods=['GET', 'POST'])
 def social(id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    unread = num_unread()
     form = LookupByName()
     form2 = SellerReviewForm()
     form3 = UpdateSellerReviewForm()
@@ -99,6 +103,7 @@ def social(id):
         return redirect(url_for('social.social', id=id)) 
     
     return render_template('social_page.html', 
+    unread=unread,
     user=social, 
     is_seller=seller, 
     reviews=reviews, 
@@ -116,6 +121,7 @@ def social(id):
 
 @bp2.route('/social_adv/<id>', methods=['GET', 'POST'])
 def social(id):
+    unread = num_unread()
     form = LookupByName()
     form2 = SellerReviewForm()
     form3 = UpdateSellerReviewForm()
@@ -175,6 +181,7 @@ def social(id):
         return redirect(url_for('social.social', id=id))
     
     return render_template('social_page_adv.html', 
+    unread=unread,
     user=social, 
     is_seller=seller, 
     reviews=reviews, 

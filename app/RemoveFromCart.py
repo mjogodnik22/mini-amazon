@@ -12,6 +12,7 @@ from .models.product_summary import ProductSummary
 from .models.purchase import Purchase
 from .models.product_sellers import ProductSeller
 from .models.product import Product
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -24,6 +25,7 @@ class UpdateCart(FlaskForm):
 
 @bp.route('/updateCart/<pid>', methods=['GET', 'POST'])
 def updateCart(pid):
+    unread = num_unread()
     ido = Cartesian.getspecific(current_user.id,pid)
     product = ProductSummary.get(pid)
     producto = Product.get(pid)
@@ -63,4 +65,5 @@ def updateCart(pid):
                             currcart = ido,
                             avail=avail,
                             amt = amount,
-                            tpr = totalPrice)
+                            tpr = totalPrice,
+                            unread=unread)

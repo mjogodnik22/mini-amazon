@@ -8,6 +8,7 @@ from flask_babel import _, lazy_gettext as _l
 from werkzeug.datastructures import MultiDict
 
 from .models.user import User
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -23,6 +24,7 @@ class UpdatePasswordForm(FlaskForm):
 
 @bp.route('/updatePasswordPage', methods=['GET', 'POST'])
 def updatePasswordPage():
+    unread = num_unread()
     form = UpdatePasswordForm()
     if current_user.is_authenticated:
         if form.validate_on_submit():
@@ -38,7 +40,7 @@ def updatePasswordPage():
                 flash('Unknown error, contact Matt!!')
     else:
         return redirect(url_for('productPage.productPage'))
-    return render_template('updatepassword.html', title='Update Password', form=form)
+    return render_template('updatepassword.html', unread=unread,title='Update Password', form=form)
 #     balance = 0
 #     if current_user.is_authenticated:
 #         balance = User.get_balance(current_user.id)

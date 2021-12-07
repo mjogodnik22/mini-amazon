@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Re
 from flask_babel import _, lazy_gettext as _l
 from werkzeug.utils import secure_filename
 from .models.product import Product
+from .models.messages import *
 from flask_wtf.file import FileField, FileRequired
 import os
 from flask import Blueprint
@@ -27,6 +28,7 @@ class NewProductForm(FlaskForm):
         
 @bp.route('/new_product', methods=['GET', 'POST'])
 def new_product():
+    unread = num_unread()
     form = NewProductForm()
     form.category.choices = Product.get_categories()
     if form.validate_on_submit():
@@ -46,4 +48,4 @@ def new_product():
                          image_file):
             flash('Congratulations, you just added a product!')
             return redirect(url_for('productPage.productPage'))
-    return render_template('add_product_for_sale.html', title='Add Product', form=form)
+    return render_template('add_product_for_sale.html', title='Add Product', unread = unread, form=form)

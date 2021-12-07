@@ -8,6 +8,7 @@ from flask_babel import _, lazy_gettext as _l
 from werkzeug.datastructures import MultiDict
 
 from .models.user import User
+from .models.messages import *
 
 
 from flask import Blueprint
@@ -23,6 +24,7 @@ class UpdateInformationForm(FlaskForm):
 
 @bp.route('/updateInformationPage', methods=['GET', 'POST'])
 def updateInformationPage():
+    unread = num_unread()
     form = UpdateInformationForm()
     if request.method == 'GET':
         form = UpdateInformationForm(formdata = MultiDict({
@@ -48,7 +50,7 @@ def updateInformationPage():
                 flash('This email is already in use.')
     else:
         return redirect(url_for('productPage.productPage'))
-    return render_template('updateinformation.html', title='Update Information', form=form)
+    return render_template('updateinformation.html', unread=unread,title='Update Information', form=form)
 #     balance = 0
 #     if current_user.is_authenticated:
 #         balance = User.get_balance(current_user.id)

@@ -12,6 +12,7 @@ from .models.purchase import Purchase
 from .models.product_sellers import ProductSeller
 from .models.product import Product
 from .models.Carts import Cartesian
+from .models.messages import *
 from flask import Blueprint
 bp = Blueprint('productSummary', __name__)
 
@@ -37,6 +38,9 @@ class NewDeleteReviewForm(FlaskForm):
 def product_summaries(pid):
     # get all available products for sale:
     products = ProductSummary.get_all(pid)
+    unread=None
+    if current_user.is_authenticated:
+        unread = num_unread()
     product_temp = Product.get(pid)
     product_name = product_temp.name
     sellers = ProductSeller.get_all_name(product_name)
@@ -107,4 +111,5 @@ def product_summaries(pid):
                           form1 = buyform,
                           form2 = reviewform,
                           form3 = updatereviewform,
-                          form4 = deleteform)
+                          form4 = deleteform,
+                          unread = unread)
