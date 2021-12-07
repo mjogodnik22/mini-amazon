@@ -130,18 +130,18 @@ def userDiscountPage(success = True):
    form = AddDiscountCode()
    if form.validate_on_submit():
       success = add_discount_code_seller(form.code.data, current_user.id, form.amount.data/100)
-      print(success)
       return redirect(url_for('userDiscountPage.userDiscountPage', products =products, all=all, form=form, success= success))
-   print(success)
    return render_template('userDiscountPage.html', products =products, all=all, form=form, success = success)
 
 
-@bpDiscountP.route('/addDiscountP/<pid>', methods=['GET', 'POST'])
+@bpDiscountP.route('/addDiscountP/<pid>/<success>', methods=['GET', 'POST'])
 def addDiscountP(pid, success = True):
     form = AddDiscountCode()
     if form.validate_on_submit():
         success = add_discount_code_product(form.code.data, pid, form.amount.data/100)
-        return redirect(url_for('seller_inventory.seller_inventory', form=form, pid = pid, success=success))
+        if success == False:
+           return redirect(url_for('addDiscountP.addDiscountP', pid = pid, success = success))
+        return redirect(url_for('seller_inventory.seller_inventory', form=form, pid = pid, success= success))
     return render_template('add_product_code.html', title='Add Product Code', form=form, pid = pid, success = success)
 
 

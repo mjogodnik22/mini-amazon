@@ -91,6 +91,7 @@ def myCart():
         else:
             DiscountCode = "No Code"
             usersCode.dCode = "No Code"
+        
 
         if form11.validate_on_submit:
             if form11.confirm.data == '2' and hasEnough:

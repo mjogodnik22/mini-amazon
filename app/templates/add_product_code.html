@@ -20,6 +20,13 @@
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>
+  
+  {% if success == "False" %}
+  <span style="color: red;">Sorry that discount code is already in use</span> <br>
+  {% else %}
+  hi
+  {% endif %}
+  
   <p>{{ form.submit() }}</p>
 </form>
 {% endblock %}

@@ -23,7 +23,7 @@
           <td>{{item.price}}</td>
           <td>{{item.quantity_available}}</td>
           <td><a href="{{ url_for('updateproduct.updateProductPage', pid = item.pid)}}">Edit Product</a></td>
-          <td><a href="{{ url_for('addDiscountP.addDiscountP', pid = item.pid)}}">Add Discount Code</a></td>
+          <td><a href="{{ url_for('addDiscountP.addDiscountP', pid = item.pid, success = True)}}">Add Discount Code</a></td>
           <td><a href="{{ url_for('delete_product.delete_product_page', pid = item.pid) }}">Delete Product</a></td>
         </tr>
       {% endfor %}
