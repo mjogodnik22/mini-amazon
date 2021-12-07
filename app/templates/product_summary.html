@@ -49,7 +49,9 @@
   <p>{{ form1.submit1() }}</p>
 </form>
 
-<h2>Reviews ({{num_reviews}}):</h2>
+
+<h2>Reviews:</h2>
+<h3>Number of Reviews: {{num_reviews}}</h3>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
@@ -132,6 +134,7 @@
     {% endfor %}
   </tbody>
 </table>
+
 
 
 {% if sold_product %}

@@ -103,6 +103,7 @@ def product_summaries(pid):
                            bought_product = bought,
                            sold_product = sold,
                             pid = pid,
+                            num_reviews = len(products),
                            left_review = left_review,
                           form1 = buyform,
                           form2 = reviewform,

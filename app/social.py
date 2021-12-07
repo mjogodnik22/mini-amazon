@@ -35,12 +35,16 @@ class LookupByName(FlaskForm):
     lastname = StringField(_l('Last Name'))
     email = StringField(_l('Email'))
     submit = SubmitField(_l('Search'))
+
+class DeleteSellerReviewForm(FlaskForm):
+    submit4 = SubmitField(_l('Delete Review'))
     
 @bp.route('/social/<id>', methods=['GET', 'POST'])
 def social(id):
     form = LookupByName()
     form2 = SellerReviewForm()
     form3 = UpdateSellerReviewForm()
+    deleteform = DeleteSellerReviewForm()
     social = User.get(id)
     seller = User.is_seller(id)
     bought_from = False
@@ -89,6 +93,10 @@ def social(id):
         update_seller_review(current_user.id, int(id), form3.review.data, int(form3.rating.data))
         flash('You have successfully updated your review for this product!')
         return redirect(url_for('social.social', id=id))
+    if deleteform.validate_on_submit():
+        delete_seller_review(current_user.id, int(id))
+        flash('You have successfully deleted your review for this seller!')
+        return redirect(url_for('social.social', id=id)) 
     
     return render_template('social_page.html', 
     user=social, 
@@ -99,6 +107,7 @@ def social(id):
     form = form,
     form2 = form2,
     form3 = form3,
+    form4 = deleteform,
     bought_from = bought_from,
     left_review = left_seller_review,
     num_reviews = len(reviews),
@@ -110,6 +119,7 @@ def social(id):
     form = LookupByName()
     form2 = SellerReviewForm()
     form3 = UpdateSellerReviewForm()
+    deleteform = DeleteSellerReviewForm()
     social = User.get(id)
     seller = User.is_seller(id)
     (product_reviews, seller_reviews) = users_reviews(id)
@@ -144,7 +154,6 @@ def social(id):
                 'review': rev[4],
                 'rating': rev[3]
             }))
-    
     if form.validate_on_submit() and form.submit.data:
         firstname = form.firstname.data
         lastname = form.lastname.data
@@ -160,6 +169,10 @@ def social(id):
         update_seller_review(current_user.id, int(id), form3.review.data, int(form3.rating.data))
         flash('You have successfully updated your review for this product!')
         return redirect(url_for('social.social', id=id))
+    if deleteform.validate_on_submit():
+        delete_seller_review(current_user.id, int(id))
+        flash('You have successfully deleted your review for this seller!')
+        return redirect(url_for('social.social', id=id))
     
     return render_template('social_page_adv.html', 
     user=social, 
@@ -170,6 +183,7 @@ def social(id):
     form = form,
     form2 = form2,
     form3 = form3,
+    form4 = deleteform,
     bought_from = bought_from,
     left_review = left_seller_review,
     num_reviews = len(reviews),

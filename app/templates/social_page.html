@@ -37,6 +37,7 @@
 <h3>Reviews:</h3>
 
 <h2>Average Review: {{avg}} </h2>
+<h2>Number of Reviews: {{num_reviews}}</h2>
 
 <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
@@ -91,6 +92,11 @@
     {{ form3.rating(size=5) }}<br/>
   </p>
   <p>{{ form3.submit3() }}</p>
+</form>
+<p>Click here if you would like to delete your review.</p>
+<form action="" method="post">
+  {{ form4.hidden_tag() }}
+  <p>{{ form4.submit4() }}</p>
 </form>
 {% endif %}
 
